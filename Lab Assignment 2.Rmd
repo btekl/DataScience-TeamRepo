@@ -1,0 +1,29 @@
+---
+title: "Lab Assignment 2"
+date: "9/3/2019"
+output: html_document
+---
+
+### Team Name
+
+<!--![Team Name](Placeholder for team photo)-->
+
+Team Goal(s):
+
+#### About Brian:
+
+![Brian](https://www.earthdatascience.org/images/courses/earth-analytics/lidar-raster-data-r/silly-dog.png)
+
+* I enjoy lifting weights, and I usually record some data on attempted weights/repetitions, as well as my body weight. It would be interesting to know what conclusions could be drawn about the relative effectiveness of exercise routines in regards to various variables, such as weight loss/gain or maximum weights/repetitions.
+
+* Six months after graduation I would like to be working in either a data related field, or in web development in whatever capacity I can find. If not, I'd like to at least have specific insights into what additional skills I need to acquire for such positions.
+
+* 5 years after that, I'd like to have found whatever particular niche within my field of employment appeals to me the most. Ideally I would be working within that specialization after 5 years, but if not, I hope to at least have a handle on what the specialization is, and a path on how to get there.
+
+* For a greatest accomplishment, I would be satisfied with creating some tool/idea/etc. which people are able to find useful in some relevant capacity. Doing something beyond just making myself/company some profit.
+
+* In this course, I hope to gain some insight into the processes behind performing data science, as well as continuing to work on improving my effectiveness at collaboration. Few people work alone, and so improving one's ability to work within a team is always a useful experience.
+
+* Other
+
+1. Team feedback stuff here
