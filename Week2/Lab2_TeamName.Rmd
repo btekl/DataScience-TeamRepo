@@ -6,13 +6,17 @@ output: html_document
 
 ### Team Name
 
+Pick a Team Name 
+
 <!--![Team Name](Placeholder for team photo)-->
 
 Team Goal(s):
 
 #### About Brian:
+<center>
+![This is my enthusiastic face](Brian.jpg){width=400px}
 
-![Brian](https://www.earthdatascience.org/images/courses/earth-analytics/lidar-raster-data-r/silly-dog.png)
+</center>
 
 * I enjoy lifting weights, and I usually record some data on attempted weights/repetitions, as well as my body weight. It would be interesting to know what conclusions could be drawn about the relative effectiveness of exercise routines in regards to various variables, such as weight loss/gain or maximum weights/repetitions.
 
@@ -24,12 +28,21 @@ Team Goal(s):
 
 * In this course, I hope to gain some insight into the processes behind performing data science, as well as continuing to work on improving my effectiveness at collaboration. Few people work alone, and so improving one's ability to work within a team is always a useful experience.
 
+* My favorite type of food is Thai food, either curry or noodles. I like food spicy enough to suffer a little bit, but not so spicy to the point where you can't taste anything else.
+
+##### Feedback
+
+* Andrew:
+
+* Charles:
+
+* Clint: 
+
 ### About Andrew (work in progress)
 
 ![Andrew]
 
 
 
-* Other
 
-1. Team feedback stuff here
+
