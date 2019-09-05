@@ -24,6 +24,12 @@ Team Goal(s):
 
 * In this course, I hope to gain some insight into the processes behind performing data science, as well as continuing to work on improving my effectiveness at collaboration. Few people work alone, and so improving one's ability to work within a team is always a useful experience.
 
+### About Andrew (work in progress)
+
+![Andrew]
+
+
+
 * Other
 
 1. Team feedback stuff here
