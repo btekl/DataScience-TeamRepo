@@ -4,13 +4,11 @@ date: "9/3/2019"
 output: html_document
 ---
 
-### Team Name
+### Team Too
 
-Pick a Team Name 
+![Team Too](Team Too.jpg)
 
-<!--![Team Name](Placeholder for team photo)-->
-
-Team Goal(s):
+Team Goal(s): To do well in the course, gain greater understanding of R and data science as a whole, and to not create any new enemies.
 
 ### About Charles:
 
