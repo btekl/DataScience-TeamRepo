@@ -33,7 +33,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Brian: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
 
-* Clint: 
+* Clint: Your answers provided good insight into your ambitions and mindset. Your responses could have included more of your recreational interests. I found your desire to be someone worthy of learning from to be especially admirable. I would have liked to see more information about what your perceive your strengths to be. 
 
 ### About Brian:
 <center>
@@ -59,11 +59,11 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Charles: I like how curt and straightfoward your section is. I also am developing interest in lifting and exercise so I related strongly in that capacity to what you said. I would like to critique the nature of the experiment you suggested however. Because lifting/biology/nutrition are so strongly connected, it seems impossible to conduct a meaningful investigation without controlling for many features.
 
-* Clint: 
+* Clint: Your response is formated cleanly and is easily undertandable. I appreciate how you used the first question to expound on a passion in your life. I found your career responses to be concise and reasonable. The bio could have been improved by containing more information about your background.
 
 ### About Andrew 
 
-![After I had gone fishing.](AndrewsPhoto.jpg){width=400px}
+![After I had gone fishing.](AndrewsPhoto.jpg)
 
 - Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
 
@@ -81,7 +81,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Charles: I really liked your section because of how lightheartedly it was written. I do like the picture you've drawn up of yourself based upon your answers. My critique is related to the nature of your question you'd like to answer. I wonder how one could model body temp reactions to different climates and weathers.
 
-* Clint: 
+* Clint: I thought your response did a good job of informing on your background . I think your response could have been improved with a bit of length. I found your greatest accomplishment response to be very admirable. 
 
 ### About Clint
 
