@@ -12,7 +12,7 @@ Pick a Team Name
 
 Team Goal(s):
 
-#### About Charles:
+### About Charles:
 
 ![A photo of myself](Charles.jpg)
  
@@ -35,7 +35,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Clint: 
 
-#### About Brian:
+### About Brian:
 <center>
 ![This is my enthusiastic face](Brian.jpg){width=400px}
 
@@ -55,7 +55,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 ##### Feedback
 
-* Andrew:
+* Andrew: Your section gives some good insights into where you come from, and what you enjoy. Since I don't want to critique your (incorrect) choice of NBA team, I will say your section on goals for this course could use a bit more specifics on what exactly you'd like to get from the course.
 
 * Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
 
@@ -63,7 +63,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 ### About Andrew 
 
-https://github.com/btekl/DataScience-TeamRepo/blob/master/Week2/AndrewsPhoto.jpg After I had gone fishing.
+![After I had gone fishing.](AndrewsPhoto.jpg)
 
 - Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
 
