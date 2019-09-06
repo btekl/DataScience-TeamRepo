@@ -31,7 +31,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Andrew:
 
-* Brian:
+* Brian: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
 
 * Clint: 
 
@@ -57,7 +57,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Andrew: Your section speaks a lot about who you are and what you are interested in. I hope to have some conversations with you about lifting and nutrition as those are also a few of my hobbies. I would like to say that you could improve your section and bio if you told a little bit more about where you are from?
 
-* Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
+* Charles: 
 
 * Clint: 
 
@@ -98,7 +98,7 @@ I grew up in Southwest Colorado on a ranch with forty acres and only solar and w
 ### Feedback
 * Andrew: Your section resembles your dedication and passion towards school. I hope to learn more about you as a person with previous knowledge of Colorado. You could improve your bio if you added a few of your hobbies so I could learn more about you as a person.
 
-* Brian:
+* Brian: Your section is interesting in how you present both a wide range of interests, and a wide range in environment while growing up. One critique I have is that, while self reported data is not inherently bad, it could have bias depending on some majors not self reporting as truthfully as others. 
 
 * Charles:
 
