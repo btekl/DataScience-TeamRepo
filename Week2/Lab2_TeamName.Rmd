@@ -63,7 +63,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 ### About Andrew 
 
-![After I had gone fishing.](AndrewsPhoto.jpg)
+![After I had gone fishing.](AndrewsPhoto.jpg){width=400px}
 
 - Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
 
