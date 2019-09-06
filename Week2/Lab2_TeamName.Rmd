@@ -83,8 +83,24 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Clint: 
 
+### About Clint
 
+One question I would like to have answered utilizing data is the effect of self-reported video game consumption on college majors chosen. 
 
+Six months after graduation I would like to be working on my masters in some capacity be that in supply chain management, history, or library science. Five years from then I would love to be working in a management position in logistics or be working my way through a phd in history.
+
+My ideal greatest career achievement would be to write a book that changes the way the world thinks about something. Given that goal I would like to use this course to learn how to code in R and represent data in a easily understandable way as I believe this would be a valuabe career asset.
+
+I grew up in Southwest Colorado on a ranch with forty acres and only solar and wind generators for electricity. Eventually I moved to New Jersey where the size of my high school class was four times what it was in Colorado.
+
+![Me in Rocky Mountain National Park](Clint.png)
+
+### Feedback
+* Andrew:
+
+* Brian:
+
+* Charles:
 
 
 
