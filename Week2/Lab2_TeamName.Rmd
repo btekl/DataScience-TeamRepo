@@ -45,6 +45,18 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * My favorite type of food is Thai food, either curry or noodles. I like food spicy enough to suffer a little bit, but not so spicy to the point where you can't taste anything else.
 
+### About Andrew (work in progress)
+
+- Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
+
+- Six months after I graduate, I hope to find a job back home in California or attending graduate school for my masters in Data Science. Five years after graduation, I hope to be using Data Science as a way for doctors to better diagonsis and treat their patients.
+
+- I hope my greatest accomplistment is helping a cancer patient better treat their illness through Datas Science and possibily save their life.
+
+- I hope that through this course, I will become a better data scientist and programmer. 
+
+- 
+
 ##### Feedback
 
 * Andrew:
@@ -53,9 +65,6 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * Clint: 
 
-### About Andrew (work in progress)
-
-![Andrew]
 
 
 
