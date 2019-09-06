@@ -63,6 +63,8 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 ### About Andrew 
 
+https://github.com/btekl/DataScience-TeamRepo/blob/master/Week2/AndrewsPhoto.jpg After I had gone fishing.
+
 - Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
 
 - Six months after I graduate, I hope to find a job back home in California or attending graduate school for my masters in Data Science. Five years after graduation, I hope to be using Data Science as a way for doctors to better diagonsis and treat their patients.
