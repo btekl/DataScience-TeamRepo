@@ -55,7 +55,7 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 ##### Feedback
 
-* Andrew: Your section gives some good insights into where you come from, and what you enjoy. Since I don't want to critique your (incorrect) choice of NBA team, I will say your section on goals for this course could use a bit more specifics on what exactly you'd like to get from the course.
+* Andrew: Your section speaks a lot about who you are and what you are interested in. I hope to have some conversations with you about lifting and nutrition as those are also a few of my hobbies. I would like to say that you could improve your section and bio if you told a little bit more about where you are from?
 
 * Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
 
@@ -71,13 +71,13 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 - I hope my greatest accomplistment is helping a cancer patient better treat their illness through Datas Science and possibily save their life.
 
-- I hope that through this course, I will become a better data scientist and programmer. 
+- I hope that through this course, I will become a better data scientist and programmer.I hopw to learn how to work well together as team and become better data scientist as a collective group. 
 
 - I'm also a huge Lakers fan and will be praying that my team *cough* Lebron ( who I quite disklike ) will be winning that trophy this year.
 
 ##### Feedback
 
-* Brian:
+* Brian:Your section gives some good insights into where you come from, and what you enjoy. Since I don't want to critique your (incorrect) choice of NBA team, I will say your section on goals for this course could use a bit more specifics on what exactly you'd like to get from the course.
 
 * Charles: 
 
