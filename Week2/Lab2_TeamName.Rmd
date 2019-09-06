@@ -27,6 +27,14 @@ o	I am interested in statistics and probability insofar as they relate to metaph
 -	You must also include something of your own choosing not described above. Anything. Be creative!
 o	Something I am very proud of is the effort that I am taking to improve myself not only as a student but also as an athlete. I am currently in my third year of rowing for Colorado Crew and I have fallen in love with the sport and the community of my team.
 
+##### Feedback
+
+* Andrew:
+
+* Brian:
+
+* Clint: 
+
 #### About Brian:
 <center>
 ![This is my enthusiastic face](Brian.jpg){width=400px}
@@ -45,7 +53,15 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 * My favorite type of food is Thai food, either curry or noodles. I like food spicy enough to suffer a little bit, but not so spicy to the point where you can't taste anything else.
 
-### About Andrew (work in progress)
+##### Feedback
+
+* Andrew:
+
+* Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
+
+* Clint: 
+
+### About Andrew 
 
 - Back home in California I enjoy surfing during the summer, but somedays the water is so cold I have to where a wet-suit in the water. Since I'm poor and can't buy another wet-suit, I can't surf! I would like to know what is the ideal time of the year I can go surfing is without a wet-suit?
 
@@ -55,13 +71,13 @@ o	Something I am very proud of is the effort that I am taking to improve myself 
 
 - I hope that through this course, I will become a better data scientist and programmer. 
 
-- 
+- I'm also a huge Lakers fan and will be praying that my team *cough* Lebron ( who I quite disklike ) will be winning that trophy this year.
 
 ##### Feedback
 
-* Andrew:
+* Brian:
 
-* Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
+* Charles: 
 
 * Clint: 
 
