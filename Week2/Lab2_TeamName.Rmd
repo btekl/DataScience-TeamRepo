@@ -12,6 +12,21 @@ Pick a Team Name
 
 Team Goal(s):
 
+#### About Charles:
+
+![A photo of myself](Charles.jpg)
+ 
+-	At least one (non-statistics) question you would like to know the answer to that could be answered by analyzing data
+o	I would like to know the most effective methods of educative retention and learning (e.g. how to study best, how to communicate between students and teachers best, etc.)
+-	What you would love to be doing six months after graduation and then five years after that (what would make you excited to be doing?)
+o	What I would love to be doing 6 months after graduation would be to study under some of the greatest voices in philosophy (one of my majors) while working towards some meaningful contribution within my fields of interest. 5 years after graduation I would love to be building myself into a great thinker and writer, challenging and being challenged by some of the brightest minds in history.
+-	What you hope your greatest career accomplishment will be
+o	I hope my greatest career accomplishment will be to have pushed forward meaningful and pressing models for new and old questions in metaphysics. I would like to have learned as much as possible from the brightest people possible over my career. I believe I would be especially happy to become a person who it would be meaningful to learn from.
+-	…and given these hopes and goals, what you are hoping to learn/accomplish/do in this course
+o	I am interested in statistics and probability insofar as they relate to metaphysics. In enriching myself as a statistician and mathematician I develop necessary perspectives to succeed in my goals.
+-	You must also include something of your own choosing not described above. Anything. Be creative!
+o	Something I am very proud of is the effort that I am taking to improve myself not only as a student but also as an athlete. I am currently in my third year of rowing for Colorado Crew and I have fallen in love with the sport and the community of my team.
+
 #### About Brian:
 <center>
 ![This is my enthusiastic face](Brian.jpg){width=400px}
@@ -34,7 +49,7 @@ Team Goal(s):
 
 * Andrew:
 
-* Charles:
+* Charles: Your section gives some descriptive insights into what drives you as a person. I look forward to working with someone who comes into the group from a different perspective/angle than myself, who is more focused on the math/programming side of things. My primary critique is that your section was uploaded as a seperate file to the main markdown file and so needed to be copied over/formatted a bit.
 
 * Clint: 
 
