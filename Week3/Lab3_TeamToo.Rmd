@@ -1,6 +1,6 @@
 ---
 title: "Lab 3: Plotting Health Data"
-author: "Brian Teklits, Charles Doremieux"               #add your names
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean"               #add your names
 date: "9/10/2019"
 output: html_document
 ---
