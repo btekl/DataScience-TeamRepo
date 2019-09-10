@@ -1,0 +1,48 @@
+---
+title: "Lab 3: Plotting Health Data"
+author: "Brian Teklits"               #add your names
+date: "9/10/2019"
+output: html_document
+---
+```{r include=FALSE}
+library(tidyverse)
+source("http://www.openintro.org/stat/data/cdc.R")
+cdc <- as_tibble(cdc)
+View(cdc)
+```
+
+### The Overall Question
+
+**The Question:**
+
+**Why the question is important:**
+
+**Why the answer is relevant/important:**
+
+### Team Plot and Conclusions
+
+```{r Team Plot}
+# THE PLOT
+```
+
+**The answer:**
+
+### Recommendations 
+
+Recommendations based on the answer
+
+### Individual Findings and Plots
+
+#### Name Here
+
+```{r "Name's Plot"}
+# Individual Plot
+```
+
+**Individual Findings:**
+How does this support overall conclusion
+ 
+### Summary of Individual Contributions
+
+**Name:**
+
