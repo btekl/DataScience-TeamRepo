@@ -6,6 +6,7 @@ output: html_document
 ---
 ```{r include=FALSE}
 library(tidyverse)
+library(scales)
 source("http://www.openintro.org/stat/data/cdc.R")
 cdc <- as_tibble(cdc)
 ```
@@ -16,7 +17,7 @@ cdc <- as_tibble(cdc)
 
 **Why the question is important:** If they are related, it suggests respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. Why? Which other data vectors relate to this? Healthplan/gender/smoking/age/exercise/height?
 
-**Why the answer is relevant/important:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
+**Why the answer is relevant:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
 
 ### Team Plot and Conclusions
 
@@ -26,15 +27,21 @@ ggplot(cdc)+
   geom_density(aes(x=(wtdesire-weight),y=..density..,fill=genhlth),position="stack")+
   xlim(-75,25)+
   xlab("Desired Change in Weight (lbs)")+
-  ylab("Proportion of Respondents")
+  ylab("Percentage of Respondents")+
+  scale_fill_discrete(name="General Health")+
+  scale_y_continuous(labels=scales::percent) #from https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/
 ```
 
-
-**The answer:**
+**The answer:** 
+Just over 25% of respondents are happy at their current weight. As we move away from this value, we see that respondents in the categories of poor, fair, and good makeup the bulk of the proportion. These people represent those who would like to make a meaningful change in their overall health, but have been unable to do so thus far. This group should be targeted in policy decisions to maximize their effect.
 
 ### Recommendations 
 
-Recommendations based on the answer
+Exercise good
+Healthplan good
+smoke bad?
+
+age or gender to target
 
 ### Individual Findings and Plots
 
@@ -53,7 +60,11 @@ ggplot(cdc)+
 ```
 
 **Individual Findings:**
+Interestingly, we find that people who have a health plan generally want to change their weight more than those who don't. There are both more outliers, and a wider range in the confidence intervals for the health plan data set, compared to the no health plan data. 
 
+This suggests that people who are actively engaged in monitoring their health are better informed on what overall changes they need to make. Engaging the group with no health plan with low cost alternatives, such as health fairs, could help to inform them of what beneficial changes they can make. 
+
+Additionally, for those people with healthcare, encouraging doctors to refer patients to dieticians, when health plans allow, could help them to plot a path to their desired weight and health goals. 
 
 #### Andrew's Plot
 
