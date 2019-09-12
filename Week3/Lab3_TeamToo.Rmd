@@ -49,7 +49,7 @@ Recommendations based on the answer
 **Individual Findings:**
 How does this support overall conclusion
 
-#### Andrew
+#### Andrew's Plot
 
 ```{r Name2 Plot, echo=FALSE, warning=FALSE}
 # Andrew's Plot
@@ -59,12 +59,13 @@ cdc <- as_tibble(cdc)
 ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
   geom_smooth(method = 'lm') +
   geom_point(mapping = aes(color = gender))+
+  ylim(-200,100)+
   facet_grid(genhlth ~ exerany)
 
 ```
 
 **Individual Findings:**
-How does this support overall conclusion
+This graph represents that there is a tendency that people who are of heavier weight and work out on the regular are usually unhappy with their current weight. The trend of the best fit line explains that people of poor health are more likely to be unhappy with their current weight and desire to lose weight. The majority of people no matter their general health usually prefer to gain a few pounds or stay at their current weight. Despite the status of their health, it seems the majority of people who workout only want minimal changes to their weight.
 
 #### Name Here
 
