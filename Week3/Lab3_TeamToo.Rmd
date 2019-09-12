@@ -23,12 +23,10 @@ cdc <- as_tibble(cdc)
 
 ```{r Team Plot,echo=FALSE, warning=FALSE}
 ggplot(cdc)+
-  geom_density(aes(x=(weight-wtdesire),y=..density..,fill=genhlth),position="stack")+
-  #ylim(0,20)+
-  xlim(-25,75)+
-  xlab("Desired Change in Weight(lbs)")+
+  geom_density(aes(x=(wtdesire-weight),y=..density..,fill=genhlth),position="stack")+
+  xlim(-75,25)+
+  xlab("Desired Change in Weight (lbs)")+
   ylab("Proportion of Respondents")
-  #facet_wrap(~exerany)
 ```
 
 
@@ -40,14 +38,22 @@ Recommendations based on the answer
 
 ### Individual Findings and Plots
 
-#### Name Here
+#### Brian
 
-```{r Name1 Plot, echo=FALSE, warning=FALSE}
-# Individual Plot
+```{r Brian, echo=FALSE, warning=FALSE}
+health_plan_label <- as_labeller(c(`0` = "No Health Plan", `1` = "Has a Health Plan")) #from https://ggplot2.tidyverse.org/reference/as_labeller.html
+ggplot(cdc)+
+  geom_boxplot(aes(x=genhlth,y=(wtdesire-weight)),outlier.alpha = .3,outlier.shape = 21,outlier.color = "red")+
+  ylim(-175,125)+
+  coord_flip()+
+  facet_wrap(~hlthplan,labeller = health_plan_label)+
+  ylab("Desired Change in Weight (lbs)")+
+  xlab("General Health")
+
 ```
 
 **Individual Findings:**
-How does this support overall conclusion
+
 
 #### Andrew's Plot
 
