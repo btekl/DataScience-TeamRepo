@@ -49,10 +49,12 @@ Recommendations based on the answer
 **Individual Findings:**
 How does this support overall conclusion
 
-#### Name Here
+#### Andrew
 
 ```{r Name2 Plot, echo=FALSE, warning=FALSE}
-# Individual Plot
+# Andrew's Plot
+
+
 ```
 
 **Individual Findings:**
