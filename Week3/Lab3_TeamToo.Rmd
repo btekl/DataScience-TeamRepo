@@ -8,22 +8,29 @@ output: html_document
 library(tidyverse)
 source("http://www.openintro.org/stat/data/cdc.R")
 cdc <- as_tibble(cdc)
-View(cdc)
 ```
 
 ### The Overall Question
 
-**The Question:**
+**The Question:** How does the amount of weight a person wants to lose relate to their overall current health? 
 
-**Why the question is important:**
+**Why the question is important:** If they are related, it suggests respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. Why? Which other data vectors relate to this? Healthplan/gender/smoking/age/exercise/height?
 
-**Why the answer is relevant/important:**
+**Why the answer is relevant/important:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
 
 ### Team Plot and Conclusions
 
-```{r Team Plot}
-# THE PLOT
+
+```{r Team Plot,echo=FALSE, warning=FALSE}
+ggplot(cdc)+
+  geom_density(aes(x=(weight-wtdesire),y=..density..,fill=genhlth),position="stack")+
+  #ylim(0,20)+
+  xlim(-25,75)+
+  xlab("Desired Change in Weight(lbs)")+
+  ylab("Proportion of Respondents")
+  #facet_wrap(~exerany)
 ```
+
 
 **The answer:**
 
@@ -35,7 +42,34 @@ Recommendations based on the answer
 
 #### Name Here
 
-```{r "Name's Plot"}
+```{r Name1 Plot, echo=FALSE, warning=FALSE}
+# Individual Plot
+```
+
+**Individual Findings:**
+How does this support overall conclusion
+
+#### Name Here
+
+```{r Name2 Plot, echo=FALSE, warning=FALSE}
+# Individual Plot
+```
+
+**Individual Findings:**
+How does this support overall conclusion
+
+#### Name Here
+
+```{r Name3 Plot, echo=FALSE, warning=FALSE}
+# Individual Plot
+```
+
+**Individual Findings:**
+How does this support overall conclusion
+
+#### Name Here
+
+```{r Name4 Plot, echo=FALSE, warning=FALSE}
 # Individual Plot
 ```
 
