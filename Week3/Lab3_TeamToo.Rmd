@@ -21,14 +21,14 @@ cdc <- as_tibble(cdc)
 
 ### Team Plot and Conclusions
 
-```{r Team Plot,echo=FALSE, warning=FALSE}
+```{r Team Plot,echo=TRUE, warning=FALSE}
 ggplot(cdc)+
   geom_density(aes(x=(wtdesire-weight),y=..density..,fill=genhlth),position="stack")+
   xlim(-75,25)+
   xlab("Desired Change in Weight (lbs)")+
   ylab("Percentage of Respondents")+
   scale_fill_discrete(name="General Health")+
-  scale_y_continuous(labels=scales::percent)+ #from https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/
+  scale_y_continuous(labels=scales::percent)+ 
   ggtitle("Desired Weight Change")+
   theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -50,8 +50,8 @@ We found that people who are more engaged in improving their health, either thro
 
 #### Brian's Plot
 
-```{r Brian, echo=FALSE, warning=FALSE}
-health_plan_label <- as_labeller(c(`0` = "No Health Plan", `1` = "Has a Health Plan")) #from https://ggplot2.tidyverse.org/reference/as_labeller.html
+```{r Brian, echo=TRUE, warning=FALSE}
+health_plan_label <- as_labeller(c(`0` = "No Health Plan", `1` = "Has a Health Plan"))
 ggplot(cdc)+
   geom_boxplot(aes(x=genhlth,y=(wtdesire-weight)),outlier.alpha = .3,outlier.shape = 21,outlier.color = "red")+
   ylim(-175,125)+
@@ -71,7 +71,7 @@ Additionally, for those people with healthcare, encouraging doctors to refer pat
 
 #### Andrew's Plot
 
-```{r Name2 Plot, echo=FALSE, warning=FALSE}
+```{r Name2 Plot, echo=TRUE, warning=FALSE}
 # Andrew's Plot
 ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
   geom_smooth(method = 'lm') +
@@ -86,7 +86,7 @@ This graph represents that there is a tendency that people who are of heavier we
 
 #### Clint's plot
 
-```{r Name3 Plot, echo=FALSE, warning=FALSE, message=FALSE}
+```{r Name3 Plot, echo=TRUE, warning=FALSE, message=FALSE}
 # Clint's Plot
 ggplot(data = cdc) + geom_smooth(mapping = aes(x = age, y = (wtdesire-weight), color = genhlth), se = FALSE) + facet_grid(genhlth~.) + xlim(15,90) + ylab("Desired Change in Weight") + scale_color_discrete(name = "Health Level")    
 ```
@@ -96,7 +96,7 @@ This graph is useful because it shows how the desired change in weight is greate
 
 #### Charles' Plot
 
-```{r Name4 Plot, echo=FALSE, warning=FALSE}
+```{r Name4 Plot, echo=TRUE, warning=FALSE}
 #View(cdc)
 # Charles' Plot
 #ggplot(data = cdc, mapping = aes(x = genhlth, fill = gender))+
@@ -118,9 +118,9 @@ How does this support overall conclusion
 
 **Brian Teklits:** I helped formulate the overall question, answer, and team plot, as well as figuring out how to label legends, faceted variables, percentage based axes, and titles. I also helped formulate our data based recommendations.
 
-**Andrew:**
+**Andrew:** I created a data plot that represents the amount of weight someone wants to lose vs how much they already weigh and their current health. It allowed us to see the people who workout and are of heavier weight tend to be un happy with their current weight and want to lose more.
 
 **Clint:** I helped formulate the overall question, and created a data plot which revealed the relationship between age and desired weight change which helped formulate our ultimate data based recomendations. 
 
-**Charles:**
+**Charles:** 
 
