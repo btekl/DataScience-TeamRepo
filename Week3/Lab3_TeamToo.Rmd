@@ -1,10 +1,10 @@
 ---
 title: "Lab 3: Plotting Health Data"
-author: "Brian Teklits, Charles Doremieux, Andrew MacLean"               #add your names
-date: "9/10/2019"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"             
+date: "9/13/2019"
 output: html_document
 ---
-```{r include=FALSE}
+```{r setup,include=FALSE}
 library(tidyverse)
 library(scales)
 source("http://www.openintro.org/stat/data/cdc.R")
@@ -15,9 +15,15 @@ cdc <- as_tibble(cdc)
 
 **The Question:** How does the amount of weight a person wants to lose relate to their overall current health? 
 
+<<<<<<< HEAD
 **Why the question is important:** For these two factors to be related would suggest respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. Exploring this question could suggest which other data vectors relate to stagnation in health. (e.g. Healthplan/gender/smoking/age/exercise/height)
 
 **Why the answer is relevant:** By exploring the topic of awareness of one's health we gain insight into the habits of healthy individuals and how they differ from those in poor health. In-depth analysis opens the door to recommendations for possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
+=======
+**Why the question is important:** If they are related, it suggests that some respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. These people are interested in making a change, and so policies aimed at helping this group of people should be more effective than those focused on people who are more apathetic to change, or are less in need of larger lifestyle changes.  
+
+**Why the answer is relevant:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. We can identify age and gender groups that effective policies should target, and factors that make these policies the most effective.
+>>>>>>> master
 
 ### Team Plot and Conclusions
 
@@ -29,23 +35,28 @@ ggplot(cdc)+
   xlab("Desired Change in Weight (lbs)")+
   ylab("Percentage of Respondents")+
   scale_fill_discrete(name="General Health")+
-  scale_y_continuous(labels=scales::percent) #from https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/
+  scale_y_continuous(labels=scales::percent)+ #from https://sebastiansauer.github.io/percentage_plot_ggplot2_V2/
+  ggtitle("Desired Weight Change")+
+  theme(plot.title = element_text(hjust = 0.5))
 ```
 
 **The answer:** 
-Just over 25% of respondents are happy at their current weight. As we move away from this value, we see that respondents in the categories of poor, fair, and good makeup the bulk of the proportion. These people represent those who would like to make a meaningful change in their overall health, but have been unable to do so thus far. This group should be targeted in policy decisions to maximize their effect.
+Just over 25% of respondents are happy at their current weight. As we move away from this value, we see that respondents in the categories of poor, fair, and good makeup the bulk of the proportion. These people represent those who would like to make a meaningful change in their overall health, but have been unable to do so thus far. This group should be targeted with policy decisions to maximize their effect.
 
 ### Recommendations 
+Who: 
+age: 45-55
+gender: ?
+
+How:
+healthplan: Better engage those w/o healthcare, increase options for those with
 
 Exercise good
-Healthplan good
-smoke bad?
 
-age or gender to target
 
 ### Individual Findings and Plots
 
-#### Brian
+#### Brian's Plot
 
 ```{r Brian, echo=FALSE, warning=FALSE}
 health_plan_label <- as_labeller(c(`0` = "No Health Plan", `1` = "Has a Health Plan")) #from https://ggplot2.tidyverse.org/reference/as_labeller.html
@@ -60,7 +71,7 @@ ggplot(cdc)+
 ```
 
 **Individual Findings:**
-Interestingly, we find that people who have a health plan generally want to change their weight more than those who don't. There are both more outliers, and a wider range in the confidence intervals for the health plan data set, compared to the no health plan data. 
+At all general health levels, we find a larger number of outliers in the health plan group, compared to the no health plan group. Leading us to conclude that people who have a health plan generally want to change their weight more than those who don't. 
 
 This suggests that people who are actively engaged in monitoring their health are better informed on what overall changes they need to make. Engaging the group with no health plan with low cost alternatives, such as health fairs, could help to inform them of what beneficial changes they can make. 
 
@@ -70,9 +81,6 @@ Additionally, for those people with healthcare, encouraging doctors to refer pat
 
 ```{r Name2 Plot, echo=FALSE, warning=FALSE}
 # Andrew's Plot
-library(tidyverse)
-source("http://www.openintro.org/stat/data/cdc.R")
-cdc <- as_tibble(cdc)
 ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
   geom_smooth(method = 'lm') +
   geom_point(mapping = aes(color = gender))+
@@ -84,6 +92,7 @@ ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
 **Individual Findings:**
 This graph represents that there is a tendency that people who are of heavier weight and work out on the regular are usually unhappy with their current weight. The trend of the best fit line explains that people of poor health are more likely to be unhappy with their current weight and desire to lose weight. The majority of people no matter their general health usually prefer to gain a few pounds or stay at their current weight. Despite the status of their health, it seems the majority of people who workout only want minimal changes to their weight.
 
+<<<<<<< HEAD
 #### Charles Doremieux
 
 ```{r Name3 Plot, echo=FALSE, warning=FALSE}
@@ -93,10 +102,17 @@ source("http://www.openintro.org/stat/data/cdc.R")
 cdc <- as_tibble(cdc)
 #ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
   
+=======
+#### Clint's plot
+
+```{r Name3 Plot, echo=FALSE, warning=FALSE, message=FALSE}
+# Clint's Plot
+ggplot(data = cdc) + geom_smooth(mapping = aes(x = age, y = (wtdesire-weight), color = genhlth), se = FALSE) + facet_grid(genhlth~.) + xlim(15,90) + ylab("Desired Change in Weight") + scale_color_discrete(name = "Health Level")    
+>>>>>>> master
 ```
 
 **Individual Findings:**
-How does this support overall conclusion
+This graph is useful because it shows how the desired change in weight is greatest at around fifty years old, after which the desired change in weight decreases as individuals age. This graph also demonstrates visually how people who report their health as less than excellent had larger values for desired weight change providing evidence that people who percieve themselves to be in worse shape generally want to change their weight more. I would advise programs that target people in their middle ages (forty-five through fifty-five) for nutrician and weight loss programs to take advantage of the increased desire.
 
 #### Name Here
 
@@ -108,6 +124,12 @@ How does this support overall conclusion
 How does this support overall conclusion
  
 ### Summary of Individual Contributions
+
+**Name:**
+
+**Name:**
+
+**Name:**
 
 **Name:**
 
