@@ -107,7 +107,7 @@ This graph is useful because it shows how the desired change in weight is greate
 ggplot(data = cdc, mapping = aes(x = height, y = wtdesire-weight))+
   geom_hex()+
   xlim(50,80)+
-  ylim(-250,200)+
+  ylim(-80,80)+
   facet_wrap(~gender)
 ```
 
