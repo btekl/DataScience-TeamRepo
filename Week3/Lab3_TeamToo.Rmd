@@ -120,7 +120,7 @@ How does this support overall conclusion
 
 **Andrew:**
 
-**Clint:**
+**Clint:** I helped formulate the overall question, and created a data plot which revealed the relationship between age and desired weight change which helped formulate our ultimate data based recomendations. 
 
 **Charles:**
 
