@@ -18,10 +18,8 @@ cdc <- as_tibble(cdc)
 **Why the question is important:** If they are related, it suggests that some respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. These people are interested in making a change, and so policies aimed at helping this group of people should be more effective than those focused on people who are more apathetic to change, or are less in need of larger lifestyle changes.  
 
 **Why the answer is relevant:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. We can identify age and gender groups that effective policies should target, and factors that make these policies the most effective.
->>>>>>> master
 
 ### Team Plot and Conclusions
-
 
 ```{r Team Plot,echo=FALSE, warning=FALSE}
 ggplot(cdc)+
@@ -39,15 +37,14 @@ ggplot(cdc)+
 Just over 25% of respondents are happy at their current weight. As we move away from this value, we see that respondents in the categories of poor, fair, and good makeup the bulk of the proportion. These people represent those who would like to make a meaningful change in their overall health, but have been unable to do so thus far. This group should be targeted with policy decisions to maximize their effect.
 
 ### Recommendations 
-Who: 
-age: 45-55
-gender: ?
 
-How:
-healthplan: Better engage those w/o healthcare, increase options for those with
+People around 45-55 years old are most interested in losing weight, so policy changes should be tailored to this group when possible.
 
-Exercise good
+We found that people who are more engaged in improving their health, either through regular exercise or via doctor's visits, were in general more motivated to make positive lifestyle changes. We recommend both:
 
+* Helping engage people who do not have healthcare with low cost alternatives.
+
+* Encouraging doctors to pursue all available avenues for aiding patients in losing weight.
 
 ### Individual Findings and Plots
 
@@ -97,17 +94,16 @@ ggplot(data = cdc) + geom_smooth(mapping = aes(x = age, y = (wtdesire-weight), c
 **Individual Findings:**
 This graph is useful because it shows how the desired change in weight is greatest at around fifty years old, after which the desired change in weight decreases as individuals age. This graph also demonstrates visually how people who report their health as less than excellent had larger values for desired weight change providing evidence that people who percieve themselves to be in worse shape generally want to change their weight more. I would advise programs that target people in their middle ages (forty-five through fifty-five) for nutrician and weight loss programs to take advantage of the increased desire.
 
-#### Name Here
+#### Charles' Plot
 
 ```{r Name4 Plot, echo=FALSE, warning=FALSE}
-View(cdc)
+#View(cdc)
 # Charles' Plot
 #ggplot(data = cdc, mapping = aes(x = genhlth, fill = gender))+
   #geom_bar()+
   #xlim(100,230)+
   #ylim(0,4000)+
   #facet_wrap(~gender)
-install.packages("hexbin")
 ggplot(data = cdc, mapping = aes(x = height, y = wtdesire-weight))+
   geom_hex()+
   xlim(50,80)+
@@ -120,11 +116,11 @@ How does this support overall conclusion
  
 ### Summary of Individual Contributions
 
-**Name:**
+**Brian Teklits:** I helped formulate the overall question, answer, and team plot, as well as figuring out how to label legends, faceted variables, percentage based axes, and titles. I also helped formulate our data based recommendations.
 
-**Name:**
+**Andrew:**
 
-**Name:**
+**Clint:**
 
-**Name:**
+**Charles:**
 
