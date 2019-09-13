@@ -46,6 +46,8 @@ We found that people who are more engaged in improving their health, either thro
 
 * Encouraging doctors to pursue all available avenues for aiding patients in losing weight.
 
+We noticed a trend in the amount of people who worked out, what generel shape they were in, and the amount of weight they wanted to lose. We found that people who regularly work out only want minimal changes in their weight (<20) instead of large (20>) changes.
+
 We also found that gender has little or no bearing on desired weight/gain or loss. Hence, policies meant to increase and improve health should not be tailored to just men or women. Outreach to both is necessary.
 
 ### Individual Findings and Plots
@@ -98,7 +100,7 @@ This graph is useful because it shows how the desired change in weight is greate
 
 #### Charles' Plot
 
-```{r Charles Plot, echo=TRUE, warning=False, message=FALSE}
+```{r Charles Plot, echo=TRUE, warning=FALSE, message=FALSE}
 #View(cdc)
 # Charles' Plot
 #ggplot(data = cdc, mapping = aes(x = genhlth, fill = gender))+
