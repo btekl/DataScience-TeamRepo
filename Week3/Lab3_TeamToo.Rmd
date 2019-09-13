@@ -87,7 +87,12 @@ This graph represents that there is a tendency that people who are of heavier we
 #### Charles Doremieux
 
 ```{r Name3 Plot, echo=FALSE, warning=FALSE}
-# Individual Plot
+# Charles' Plot
+library(tidyverse)
+source("http://www.openintro.org/stat/data/cdc.R")
+cdc <- as_tibble(cdc)
+#ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
+  
 ```
 
 **Individual Findings:**
