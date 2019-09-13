@@ -113,8 +113,7 @@ ggplot(data = cdc, mapping = aes(x = height, y = wtdesire-weight))+
   facet_wrap(~gender)
 ```
 
-**Individual Findings:**
-This graph does a good job of demonstrating that there are high degrees of similarity for the health goals of Men and Women. Both Men and Women have a similar proportion of individuals seeking weight change of +/- 10 lbs, and the hex chart does well to show that the density of individuals seeking weight changes at particular heights are incredibly similar for men and women. The graph demonstrates that there is a higher density of men seeking to gain weight than women, though women also tend to want to gain weight and lose it. Thus, desired weight gain is similarly common in men and women as a desire to lose weight. I would advise that weight gain/loss and health programs target the broader audience of men and women and not simply advertise to one gender.
+**Individual Findings:** This graph does a good job of demonstrating that there are high degrees of similarity for the health goals of Men and Women. Both Men and Women have a similar proportion of individuals seeking weight change of +/- 10 lbs, and the hex chart does well to show that the density of individuals seeking weight changes at particular heights are incredibly similar for men and women. The graph demonstrates that there is a higher density of men seeking to gain weight than women, though women also tend to want to gain weight and lose it. Thus, desired weight gain is similarly common in men and women as a desire to lose weight. I would advise that weight gain/loss and health programs target the broader audience of men and women and not simply advertise to one gender.
  
 ### Summary of Individual Contributions
 
