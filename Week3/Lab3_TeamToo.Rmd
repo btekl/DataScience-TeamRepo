@@ -46,6 +46,8 @@ We found that people who are more engaged in improving their health, either thro
 
 * Encouraging doctors to pursue all available avenues for aiding patients in losing weight.
 
+We also found that gender has little or no bearing on desired weight/gain or loss. Hence, policies meant to increase and improve health should not be tailored to just men or women. Outreach to both is necessary.
+
 ### Individual Findings and Plots
 
 #### Brian's Plot
@@ -96,7 +98,7 @@ This graph is useful because it shows how the desired change in weight is greate
 
 #### Charles' Plot
 
-```{r Name4 Plot, echo=TRUE, warning=FALSE}
+```{r Charles Plot, echo=TRUE, warning=False, message=FALSE}
 #View(cdc)
 # Charles' Plot
 #ggplot(data = cdc, mapping = aes(x = genhlth, fill = gender))+
@@ -107,12 +109,12 @@ This graph is useful because it shows how the desired change in weight is greate
 ggplot(data = cdc, mapping = aes(x = height, y = wtdesire-weight))+
   geom_hex()+
   xlim(50,80)+
-  ylim(-80,80)+
+  ylim(-50,50)+
   facet_wrap(~gender)
 ```
 
 **Individual Findings:**
-How does this support overall conclusion
+This graph does a good job of demonstrating that there are high degrees of similarity for the health goals of Men and Women. Both Men and Women have a similar proportion of individuals seeking weight change of +/- 10 lbs, and the hex chart does well to show that the density of individuals seeking weight changes at particular heights are incredibly similar for men and women. The graph demonstrates that there is a higher density of men seeking to gain weight than women, though women also tend to want to gain weight and lose it. Thus, desired weight gain is similarly common in men and women as a desire to lose weight. I would advise that weight gain/loss and health programs target the broader audience of men and women and not simply advertise to one gender.
  
 ### Summary of Individual Contributions
 
@@ -122,5 +124,4 @@ How does this support overall conclusion
 
 **Clint:** I helped formulate the overall question, and created a data plot which revealed the relationship between age and desired weight change which helped formulate our ultimate data based recomendations. 
 
-**Charles:** 
-
+**Charles:** I helped create data plots that represent relationships between gender, height, and desired weight change. I helped formulate the responses to the prompts of the lab. I overlooked the management of document versions and submission timeline. I also helped construct portions of the overall conclusion of our team.
