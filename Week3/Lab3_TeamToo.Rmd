@@ -100,11 +100,18 @@ This graph is useful because it shows how the desired change in weight is greate
 #### Name Here
 
 ```{r Name4 Plot, echo=FALSE, warning=FALSE}
+View(cdc)
 # Charles' Plot
-ggplot(data = cdc, mapping = aes(x = wtdesire-weight, fill = smoke100))+
-  geom_bar()+
-  xlim(-100,50)+
-  ylim(0,850)+
+#ggplot(data = cdc, mapping = aes(x = genhlth, fill = gender))+
+  #geom_bar()+
+  #xlim(100,230)+
+  #ylim(0,4000)+
+  #facet_wrap(~gender)
+install.packages("hexbin")
+ggplot(data = cdc, mapping = aes(x = height, y = wtdesire-weight))+
+  geom_hex()+
+  xlim(50,80)+
+  ylim(-250,200)+
   facet_wrap(~gender)
 ```
 
