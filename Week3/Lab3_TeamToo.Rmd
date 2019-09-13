@@ -15,11 +15,6 @@ cdc <- as_tibble(cdc)
 
 **The Question:** How does the amount of weight a person wants to lose relate to their overall current health? 
 
-<<<<<<< HEAD
-**Why the question is important:** For these two factors to be related would suggest respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. Exploring this question could suggest which other data vectors relate to stagnation in health. (e.g. Healthplan/gender/smoking/age/exercise/height)
-
-**Why the answer is relevant:** By exploring the topic of awareness of one's health we gain insight into the habits of healthy individuals and how they differ from those in poor health. In-depth analysis opens the door to recommendations for possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
-=======
 **Why the question is important:** If they are related, it suggests that some respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. These people are interested in making a change, and so policies aimed at helping this group of people should be more effective than those focused on people who are more apathetic to change, or are less in need of larger lifestyle changes.  
 
 **Why the answer is relevant:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. We can identify age and gender groups that effective policies should target, and factors that make these policies the most effective.
@@ -92,23 +87,11 @@ ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
 **Individual Findings:**
 This graph represents that there is a tendency that people who are of heavier weight and work out on the regular are usually unhappy with their current weight. The trend of the best fit line explains that people of poor health are more likely to be unhappy with their current weight and desire to lose weight. The majority of people no matter their general health usually prefer to gain a few pounds or stay at their current weight. Despite the status of their health, it seems the majority of people who workout only want minimal changes to their weight.
 
-<<<<<<< HEAD
-#### Charles Doremieux
-
-```{r Name3 Plot, echo=FALSE, warning=FALSE}
-# Charles' Plot
-library(tidyverse)
-source("http://www.openintro.org/stat/data/cdc.R")
-cdc <- as_tibble(cdc)
-#ggplot(data = cdc, mapping = aes(x = weight, y = wtdesire-weight))+
-  
-=======
 #### Clint's plot
 
 ```{r Name3 Plot, echo=FALSE, warning=FALSE, message=FALSE}
 # Clint's Plot
 ggplot(data = cdc) + geom_smooth(mapping = aes(x = age, y = (wtdesire-weight), color = genhlth), se = FALSE) + facet_grid(genhlth~.) + xlim(15,90) + ylab("Desired Change in Weight") + scale_color_discrete(name = "Health Level")    
->>>>>>> master
 ```
 
 **Individual Findings:**
@@ -117,7 +100,12 @@ This graph is useful because it shows how the desired change in weight is greate
 #### Name Here
 
 ```{r Name4 Plot, echo=FALSE, warning=FALSE}
-# Individual Plot
+# Charles' Plot
+ggplot(data = cdc, mapping = aes(x = wtdesire-weight, fill = smoke100))+
+  geom_bar()+
+  xlim(-100,50)+
+  ylim(0,850)+
+  facet_wrap(~gender)
 ```
 
 **Individual Findings:**
