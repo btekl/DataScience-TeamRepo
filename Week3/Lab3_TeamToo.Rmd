@@ -15,9 +15,9 @@ cdc <- as_tibble(cdc)
 
 **The Question:** How does the amount of weight a person wants to lose relate to their overall current health? 
 
-**Why the question is important:** For these two factors to be related would suggest respondents are aware that their health would improve if they reached their desired weight, but are unable to enact change. Exploring this question could suggest which other data vectors relate to stagnation in health. (e.g. Healthplan/gender/smoking/age/exercise/height)
+**Why the question is important:** For these two factors to be related would suggest respondents are aware their health would improve if they reached their desired weight, but are unable to enact change. Exploring this question could suggest which other data vectors relate to stagnation in health. (e.g. Healthplan/gender/smoking/age/exercise/height)
 
-**Why the answer is relevant:** We can gain insights into how the habits of healthier individuals differ from those in poorer health, and use this to make recommendations on possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
+**Why the answer is relevant:** By exploring the topic of awareness of one's health we gain insight into the habits of healthy individuals and how they differ from those in poor health. In-depth analysis opens the door to recommendations for possible change. What factors (healthplan/smoking/exercise) or groups (Age/gender) could be targeted? 
 
 ### Team Plot and Conclusions
 
