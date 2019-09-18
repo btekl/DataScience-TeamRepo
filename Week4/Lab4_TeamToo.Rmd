@@ -39,7 +39,15 @@ babies <- rename(babies, bwtoz = `bwt/oz`)
 #### Analysis of birth weights at gestational ages
 
 ```{r Team Plot2,echo=TRUE, warning=FALSE}
-
+bool_smoke <- as_labeller(c(`0` = "Non Smokers", `1` = "Smokers"))
+ggplot(na.omit(babies))+
+  stat_density_2d(aes(x=gestation,y=bwtoz,fill=..level..),geom = "polygon")+
+  #xlim(200,375)+
+  geom_vline(aes(xintercept=270),color="red")+
+  facet_wrap(~smoke,labeller=bool_smoke)+
+  xlab("Gestation (days)")+
+  ylab("Birth weight (ounces)")+
+  scale_fill_continuous(name="Proportion")
 ```
 
 **Surgeon General's Assertion:** The newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born).
@@ -57,7 +65,12 @@ Summarize individual sections
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
 ```{r Team Plot3,echo=TRUE, warning=FALSE}
-
+plot3 <- ggplot(na.omit(babies))
+#plot3+geom_bar(aes(med))+facet_wrap(~smoke) less higher education among smokers also plot3+geom_bar(aes(ded))+facet_wrap(~smoke)
+# plot3+geom_density(aes(mage))+facet_wrap(~smoke) maybe mother age
+#plot3+geom_bar(aes(parity))+facet_wrap(~smoke) fewer smokers with low num of pregnancies
+# plot3+geom_density(aes(mpregwt))+facet_wrap(~smoke) maybe something
+#plot3+geom_density(aes(dwt))+facet_wrap(~smoke) similar to mothers
 ```
 
 
