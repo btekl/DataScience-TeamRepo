@@ -33,12 +33,23 @@ babies <- rename(babies, bwtoz = `bwt/oz`)
 #### Analysis of premature births
 
 ```{r Team Plot1,echo=TRUE, warning=FALSE}
-
+prem <- filter(babies,Premature==1,!is.na(smoke))
+ggplot(prem,aes(smoke))+
+  geom_bar(aes(fill=factor(smoke)))+
+  geom_text(stat='count', aes(label=..count..),color='white', vjust=2)+
+  ggtitle("Premature Births for Non-Smokers and Smokers")+
+  scale_fill_discrete(name = "Smoking Usage", labels = c("Non-Smokers", "Smokers"))+
+  theme(axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank())+
+  ylab("Number of Mothers")
 ```
 
 **Surgeon General's Assertion:** Mothers who smoke have increased rates of premature delivery (before 270 days).
 
-**The answer:** 
+**The answer:** There are 194 premature births for which we have data on the mother's smoking habits, and in 103 cases the mother was smoking during the pregnancy, accounting for about 53% of premature births.
+
+This supports the Surgeon General's claim, as we have a notable disparity which seems to relate to smoking habits. However, 47% of mothers did not smoke, but still gave birth prematurely, suggesting there are other factors which influence premature births, some of which we'll investigate later.
 
 #### Analysis of birth weights at gestational ages
 
@@ -71,9 +82,9 @@ Summarize individual sections
 ```{r Team Plot3,echo=TRUE, warning=FALSE}
 plot3 <- ggplot(na.omit(babies))
 #plot3+geom_bar(aes(med))+facet_wrap(~smoke) less higher education among smokers also plot3+geom_bar(aes(ded))+facet_wrap(~smoke)
-# plot3+geom_density(aes(mage))+facet_wrap(~smoke) maybe mother age
+plot3+geom_boxplot(aes(smoke,mage,group=smoke)) 
 #plot3+geom_bar(aes(parity))+facet_wrap(~smoke) fewer smokers with low num of pregnancies
-# plot3+geom_density(aes(mpregwt))+facet_wrap(~smoke) maybe something
+#plot3+geom_density(aes(mpregwt))+facet_wrap(~smoke) maybe something
 #plot3+geom_density(aes(dwt))+facet_wrap(~smoke) similar to mothers
 ```
 
