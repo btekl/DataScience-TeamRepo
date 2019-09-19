@@ -18,8 +18,12 @@ babies <- rename(babies, bwtoz = `bwt/oz`)
 
 **Why the question is important:** 
 
+  It is important to ask such questions in order to fully understand the affects of smoking to babies. By researching and analyzing data we can notice trends that will allows us to clearly see the results of smoking. We want to analyze this data in order to warn and inform women of the consequences. If smoking truly leads to premature birth than women should be aware of their choices and morale obligations. 
+
 **Why the answer is relevant:**
 
+  We focus on this question in order to change the future of pregnant smoking. By analyzing trends and examining these questions, we can inform women about the dangers of smoking while pregnant and hopefully prevent any unwarrented problems with new borns.
+  
 #### Birth weight
 
 **Why the question is important:** 
