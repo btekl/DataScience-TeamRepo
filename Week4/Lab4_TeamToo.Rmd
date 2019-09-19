@@ -1,0 +1,123 @@
+---
+title: "Lab 4: Smoking and Low Birth Weight?"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"             
+date: "9/20/2019"
+output: html_document
+---
+```{r setup,include=FALSE}
+library(tidyverse)
+babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
+babies <- rename(babies, bwtoz = `bwt/oz`)
+```
+
+### The Main Questions
+
+**The Question:** Does Smoking Lead to Babies Born Prematurely and with Low Birth Weight?
+
+#### Premature births
+
+**Why the question is important:** 
+
+**Why the answer is relevant:**
+
+#### Birth weight
+
+**Why the question is important:** 
+
+**Why the answer is relevant:**
+
+#### Analysis of premature births
+
+```{r Team Plot1,echo=TRUE, warning=FALSE}
+
+```
+
+**Surgeon General's Assertion:** Mothers who smoke have increased rates of premature delivery (before 270 days).
+
+**The answer:** 
+
+#### Analysis of birth weights at gestational ages
+
+```{r Team Plot2,echo=TRUE, warning=FALSE}
+bool_smoke <- as_labeller(c(`0` = "Non Smokers", `1` = "Smokers"))
+ggplot(na.omit(babies))+
+  stat_density_2d(aes(x=gestation,y=bwtoz,fill=..level..),geom = "polygon")+
+  #xlim(200,375)+
+  geom_vline(aes(xintercept=270),color="red")+
+  facet_wrap(~smoke,labeller=bool_smoke)+
+  xlab("Gestation (days)")+
+  ylab("Birth weight (ounces)")+
+  scale_fill_continuous(name="Proportion")
+```
+
+**Surgeon General's Assertion:** The newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born).
+
+**The answer:** 
+
+### Recommendations 
+
+Summarize answers to surgeon general's assertions above
+
+Summarize individual sections
+
+### Preliminary Question
+
+**The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
+
+```{r Team Plot3,echo=TRUE, warning=FALSE}
+plot3 <- ggplot(na.omit(babies))
+#plot3+geom_bar(aes(med))+facet_wrap(~smoke) less higher education among smokers also plot3+geom_bar(aes(ded))+facet_wrap(~smoke)
+# plot3+geom_density(aes(mage))+facet_wrap(~smoke) maybe mother age
+#plot3+geom_bar(aes(parity))+facet_wrap(~smoke) fewer smokers with low num of pregnancies
+# plot3+geom_density(aes(mpregwt))+facet_wrap(~smoke) maybe something
+#plot3+geom_density(aes(dwt))+facet_wrap(~smoke) similar to mothers
+```
+
+
+### Individual Findings and Plots
+
+#### Individual Plot
+
+```{r  echo=TRUE, warning=FALSE}
+
+
+```
+
+**Individual Findings:**
+
+#### Individual Plot
+
+```{r  echo=TRUE, warning=FALSE}
+
+
+```
+
+**Individual Findings:**
+
+#### Individual Plot
+
+```{r  echo=TRUE, warning=FALSE}
+
+
+```
+
+**Individual Findings:**
+
+#### Individual Plot
+
+```{r  echo=TRUE, warning=FALSE}
+
+
+```
+
+**Individual Findings:**
+ 
+### Summary of Individual Contributions
+<!--Note what non default aesthetics and layers used--> 
+**Brian Teklits:** 
+
+**Andrew:** 
+
+**Clint:** 
+
+**Charles:** 
