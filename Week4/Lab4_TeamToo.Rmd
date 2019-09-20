@@ -29,7 +29,11 @@ babies2 <- filter(babies,!is.na(smoke))
 
 **Why the question is important:** 
 
+For the sake of humanity and morality, babies shoukd not be born with defects because of the choices of their parents. For research sakes and to inform mothers of these defects, this questions is important because the results could be used to prevent babies being born prematurely or underweight. 
+
 **Why the answer is relevant:**
+
+This question is relevant because everyday babies are being born prematurely and underweight because their mothers smoked during pregnancy. We hope that by addressing this question and informing the general public that smoking while pregnant can have after-lasting effects on new borns.
 
 #### Analysis of premature births
 
