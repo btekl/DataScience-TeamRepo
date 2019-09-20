@@ -67,7 +67,11 @@ ggplot(babies2)+
 
 **Surgeon General's Assertion:** The newborns of mothers who smoke have smaller birth weights at every gestational age (number of days into pregnancy when child is born).
 
-**The answer:** 
+**The answer:** The red line indicates 270 days gestation, the cutoff date for premature births. We find that for non-smokers, births are most common at about 125 ounces, and just over 280 days. As we move away from this area, outliers are fairly evenly distributed on both ends of birth weight and gestational age. Notable outliers are the cluster of very premature births, a seperate island from the main distribution.
+
+For smokers, the births are most common at around 120 ounces, and just under 280 days. Birth weights are lower at almost all ages, except in a handful of cases of postmature birth, with over 300 days gestation. In particular, we note that the smoker dataset is much more spread out on the lower end of birth weights, with lower occurances on the high end. Premature and underweight babies are much more common, and the weights of the premature babies are much lower than in the non-smoker dataset.
+
+Our data supports the Surgeon General's assertion, outside a possible exception for very postmature births at over 300 days.
 
 ### Recommendations 
 
@@ -79,12 +83,16 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
+Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
+
+Similar: Father's ages, not identical
+Unsure: races, marital
+
 ```{r Team Plot3,echo=TRUE, warning=FALSE}
-plot3 <- ggplot(na.omit(babies))
+plot3 <- ggplot(babies2)
 #plot3+geom_bar(aes(med))+facet_wrap(~smoke) less higher education among smokers also plot3+geom_bar(aes(ded))+facet_wrap(~smoke)
 plot3+geom_boxplot(aes(smoke,mage,group=smoke)) 
 #plot3+geom_bar(aes(parity))+facet_wrap(~smoke) fewer smokers with low num of pregnancies
-#plot3+geom_density(aes(mpregwt))+facet_wrap(~smoke) maybe something
 #plot3+geom_density(aes(dwt))+facet_wrap(~smoke) similar to mothers
 ```
 
