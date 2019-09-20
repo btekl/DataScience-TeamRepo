@@ -8,6 +8,7 @@ output: html_document
 library(tidyverse)
 babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
 babies <- rename(babies, bwtoz = `bwt/oz`)
+babies2 <- filter(babies,!is.na(smoke))
 ```
 
 ### The Main Questions
@@ -33,7 +34,7 @@ babies <- rename(babies, bwtoz = `bwt/oz`)
 #### Analysis of premature births
 
 ```{r Team Plot1,echo=TRUE, warning=FALSE}
-prem <- filter(babies,Premature==1,!is.na(smoke))
+prem <- filter(babies2,Premature==1)
 ggplot(prem,aes(smoke))+
   geom_bar(aes(fill=factor(smoke)))+
   geom_text(stat='count', aes(label=..count..),color='white', vjust=2)+
@@ -47,7 +48,7 @@ ggplot(prem,aes(smoke))+
 
 **Surgeon General's Assertion:** Mothers who smoke have increased rates of premature delivery (before 270 days).
 
-**The answer:** There are 194 premature births for which we have data on the mother's smoking habits, and in 103 cases the mother was smoking during the pregnancy, accounting for about 53% of premature births.
+**The answer:** There are 194 premature births for which we have data on the mother's smoking habits. In 103 cases the mother was smoking during the pregnancy, accounting for about 53% of premature births.
 
 This supports the Surgeon General's claim, as we have a notable disparity which seems to relate to smoking habits. However, 47% of mothers did not smoke, but still gave birth prematurely, suggesting there are other factors which influence premature births, some of which we'll investigate later.
 
@@ -55,9 +56,8 @@ This supports the Surgeon General's claim, as we have a notable disparity which 
 
 ```{r Team Plot2,echo=TRUE, warning=FALSE}
 bool_smoke <- as_labeller(c(`0` = "Non Smokers", `1` = "Smokers"))
-ggplot(na.omit(babies))+
+ggplot(babies2)+
   stat_density_2d(aes(x=gestation,y=bwtoz,fill=..level..),geom = "polygon")+
-  #xlim(200,375)+
   geom_vline(aes(xintercept=270),color="red")+
   facet_wrap(~smoke,labeller=bool_smoke)+
   xlab("Gestation (days)")+
@@ -73,7 +73,7 @@ ggplot(na.omit(babies))+
 
 Summarize answers to surgeon general's assertions above
 
-Summarize individual sections
+In this dataset, the group of women considered underweight by BMI is largely made up of smokers. Underweight women need to pay special attention to their weight to avoid complications during pregnancy. Without additional data on the mother's weight throughout the pregnancy, we cannot say for certain what effect this has on birth weight or premature birth. So, BMI may be a factor influencing our determinations that smoking increases the chance of premature birth and leads to lower birth weights.
 
 ### Preliminary Question
 
@@ -91,14 +91,32 @@ plot3+geom_boxplot(aes(smoke,mage,group=smoke))
 
 ### Individual Findings and Plots
 
-#### Individual Plot
+#### Brian's Plot
 
-```{r  echo=TRUE, warning=FALSE}
-
-
+```{r Brian, echo=TRUE, warning=FALSE}
+with_bmi <- mutate(babies, BMI =703*(mpregwt/(mht)^2))
+without_na <- filter(with_bmi, !is.na(smoke))
+ggplot((without_na))+
+  geom_density(aes(BMI,group=smoke,fill=factor(smoke)), position="stack")+
+  geom_vline(xintercept=18.5,color = 'black')+
+  geom_vline(xintercept=25,color = 'black')+
+  geom_vline(xintercept=30,color = 'black')+
+  scale_fill_discrete(name = "Smoking Usage", labels = c("Non-Smokers", "Smokers"))
 ```
 
-**Individual Findings:**
+**Individual Findings:** The black lines denote relevant categories of BMI for women. A BMI less than 18.5 is considered underweight, between 18.5 and 25 is healthy, over 25 is overweight, and over 30 is obese. 
+
+There are a few interesting things to note:
+
+* Most underweight women are smokers
+* A similar proportion of non-smokers and smokers are overweight
+* Few women in either category are obese
+
+Since the underweight population is the most notable difference between the two groups, we'll focus on this subset.
+
+Being underweight can cause issues, in particular premature birth[^1]. Mothers must take care to gain enough weight, and at an appropriate rate. Without further data on the mother's overall weight gain and rates of weight gain during the pregnancy, we cannot say for certain the effect of being underweight pre-pregnancy. However, this is a potential factor which could explain the higher rates of premature births among smokers.
+
+[^1]:[Does being underweight pose any risks to me or my baby?](https://americanpregnancy.org/pregnancy-health/eating-for-two/)
 
 #### Individual Plot
 
