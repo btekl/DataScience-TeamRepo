@@ -89,7 +89,7 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
-There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar for parents who smoke and those who dont have been smoking to baby weight, gestation, race, age, education, height (for mother and father), and birthday of the baby.
+There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar for parents who smoke and those who dont have been smoking to baby weight, gestation, race, age, height (for mother and father), and birthday of the baby.
 
 ```{r Team Plot3, echo=TRUE, warning=FALSE}
 ggplot(data = babies)+
@@ -139,6 +139,10 @@ ggplot(data = babies)+
 ggplot(data = babies)+
   geom_bar(mapping = aes(x = dwt, color = smoke))+
   facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = date, color = smoke))+
+  facet_wrap(~smoke)
 ```
 
 Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
@@ -184,7 +188,7 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 
 [^1]:[Does being underweight pose any risks to me or my baby?](https://americanpregnancy.org/pregnancy-health/eating-for-two/)
 
-#### Individual Plot
+#### Charles' Plot
 
 ```{r  echo=TRUE, warning=FALSE}
 
