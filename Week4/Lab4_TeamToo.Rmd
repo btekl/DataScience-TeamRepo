@@ -91,7 +91,7 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 
 There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar for parents who smoke and those who dont have been smoking to baby weight, gestation, race, age, height (for mother and father), and birthday of the baby.
 
-```{r Team Plot3, echo=TRUE, warning=FALSE}
+```{r Team Plot, echo=TRUE, warning=FALSE}
 ggplot(data = babies)+
   geom_bar(mapping = aes(x = bwtoz, color = smoke))+
   facet_wrap(~smoke)
@@ -190,8 +190,10 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 
 #### Charles' Plot
 
-```{r  echo=TRUE, warning=FALSE}
-
+```{r Charles echo=TRUE, warning=FALSE}
+cor.test(babies$Premature,babies$time)
+ggplot(data = babies, mapping = aes(x = mpregwt, y = gestation, color = Premature))+
+  geom_point()
 
 ```
 
