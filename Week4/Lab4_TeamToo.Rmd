@@ -90,24 +90,7 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
 ```{r}
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
-cor(babies$,babies$)
+cor(babies$smoke, babies$premature)
 ```
 
 Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
