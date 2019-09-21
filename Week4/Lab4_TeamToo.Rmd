@@ -90,19 +90,40 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
 ```{r}
-cor.test(babies$smoke, babies$gestation)
-cor.test(babies$smoke, babies$bwtoz)
-cor.test(babies$smoke, babies$parity)
-cor.test(babies$smoke, babies$mrace)
-cor.test(babies$smoke, babies$mage)
-cor.test(babies$smoke, babies$med)
-cor.test(babies$smoke, babies$mht)
-cor.test(babies$smoke, babies$mpregwt)
-cor.test(babies$smoke, babies$drace)
-cor.test(babies$smoke, babies$dage)
-cor.test(babies$smoke, babies$ded)
-cor.test(babies$smoke, babies$dht)
-cor.test(babies$smoke, babies$dwt)
+# cor.test(babies$smoke, babies$gestation) #-0.05199957
+# cor.test(babies$smoke, babies$bwtoz) #-0.2391704
+# cor.test(babies$smoke, babies$parity) #-0.01139381 
+# cor.test(babies$smoke, babies$mrace) #-0.1142484 
+# cor.test(babies$smoke, babies$mage) #-0.07929847 
+# cor.test(babies$smoke, babies$med) #-0.1259615
+# cor.test(babies$smoke, babies$mht) #0.03448153
+# cor.test(babies$smoke, babies$mpregwt) #-0.06906512
+# cor.test(babies$smoke, babies$drace) #-0.08036823
+# cor.test(babies$smoke, babies$dage) #-0.09138941
+# cor.test(babies$smoke, babies$ded) #-0.04533623
+# cor.test(babies$smoke, babies$dht) #0.07334144
+# cor.test(babies$smoke, babies$dwt) #0.01554045
+# cor.test(babies$smoke, babies$marital) #0.01327127
+# cor.test(babies$smoke, babies$inc) #0.01275076
+# cor.test(babies$smoke, babies$time)
+# cor.test(babies$smoke, babies$number) #0.8096594
+# cor.test(babies$smoke, babies$Premature) #0.05775238
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mht, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mht, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mht, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mht, color = smoke))+
+  facet_wrap(~smoke)
 
 ```
 
