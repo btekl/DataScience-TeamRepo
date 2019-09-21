@@ -9,6 +9,8 @@ library(tidyverse)
 babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
 babies <- rename(babies, bwtoz = `bwt/oz`)
 babies2 <- filter(babies,!is.na(smoke))
+#View(babies)
+View(babies2)
 ```
 
 ### The Main Questions
@@ -86,6 +88,27 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 ### Preliminary Question
 
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
+
+```{r}
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+cor(babies$,babies$)
+```
 
 Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
 
