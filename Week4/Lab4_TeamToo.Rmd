@@ -110,7 +110,23 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 # cor.test(babies$smoke, babies$Premature) #0.05775238
 
 ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mht, color = smoke))+
+  geom_bar(mapping = aes(x = bwtoz, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = gestation, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mrace, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = mage, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = med, color = smoke))+
   facet_wrap(~smoke)
 
 ggplot(data = babies)+
@@ -118,13 +134,28 @@ ggplot(data = babies)+
   facet_wrap(~smoke)
 
 ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mht, color = smoke))+
+  geom_bar(mapping = aes(x = mpregwt, color = smoke))+
   facet_wrap(~smoke)
 
 ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mht, color = smoke))+
+  geom_bar(mapping = aes(x = drace, color = smoke))+
   facet_wrap(~smoke)
 
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = dage, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = ded, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = dht, color = smoke))+
+  facet_wrap(~smoke)
+
+ggplot(data = babies)+
+  geom_bar(mapping = aes(x = dwt, color = smoke))+
+  facet_wrap(~smoke)
 ```
 
 Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
