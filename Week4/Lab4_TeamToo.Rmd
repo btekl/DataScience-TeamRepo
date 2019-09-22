@@ -150,8 +150,15 @@ These findings call to importance the dangers of underweight and prematurely bor
 
 #### Individual Plot
 
-```{r  echo=TRUE, warning=FALSE}
-
+```{r Andrew, echo=TRUE, warning=FALSE}
+ggplot(data = babies)+
+  geom_point(mapping = aes(x= gestation, y= bwtoz))+
+  geom_smooth(mapping = aes(x= gestation, y = bwtoz), method = lm)+
+  facet_grid(smoke~.)+
+  ggtitle("Birth Weight vs Time of Birth Period")+
+  xlim(200,350)+
+  xlab("Birth Period")+
+  ylab("Birth Weight (Ounce)")
 
 ```
 
