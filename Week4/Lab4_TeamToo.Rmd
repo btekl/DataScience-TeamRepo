@@ -9,8 +9,6 @@ library(tidyverse)
 babies <- read_csv("https://raw.githubusercontent.com/ervance1/Sp2018-Data-Science-repo/master/babies2a.dat")
 babies <- rename(babies, bwtoz = `bwt/oz`)
 babies2 <- filter(babies,!is.na(smoke))
-#View(babies)
-View(babies2)
 ```
 
 ### The Main Questions
@@ -73,83 +71,34 @@ Our data supports the Surgeon General's assertion, outside a possible exception 
 
 ### Recommendations 
 
-Summarize answers to surgeon general's assertions above
+In general, our findings support the Surgeon General's conclusions. Premature births occur at a higher rate among smokers, and birth weights are lower for nearly all gestational ages. A notable exception is postmature births, for which our data shows non-smokers have lower birth weights.
+
+However, there are a number of factors which differ between smokers and non-smokers, which could be influencing these conclusions. 
 
 In this dataset, the group of women considered underweight by BMI is largely made up of smokers. Underweight women need to pay special attention to their weight to avoid complications during pregnancy. Without additional data on the mother's weight throughout the pregnancy, we cannot say for certain what effect this has on birth weight or premature birth. So, BMI may be a factor influencing our determinations that smoking increases the chance of premature birth and leads to lower birth weights.
+
+Additionally, we've found that non-smokers were older on average, smokers on average had one additional prior pregnancy, and a greater proportion of of non-smoking parents completed college. 
+
+The effects of these differences are difficult to measure. Generally, older mothers have more difficulties than younger mothers. Mothers who have had many pregnancies can experience more complications giving birth than those with only a few. However, in our data, we've found a difference of 2 prior pregnancies on average for smokers, versus 1 for non-smokers--both are on the lower end. Finally, educational differences, in our study, are unlikely to influence the decision for mothers to smoke. This data was collected in the 1960's, when the effects of smoking were not as well known in general, and thus are less likely to be influenced by the parent's education.
 
 ### Preliminary Question
 
 **The Question:** Which variables are similar between smokers and nonsmokers? Which are different?
 
-There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar for parents who smoke and those who dont have been smoking to baby weight, gestation, race, age, height (for mother and father), and birthday of the baby.
+There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar between smokers and non-smokers are race, height (for mother and father), mother's marital status, and birthday of the baby.
+
+Notable differences between smokers and non-smokers are the age of the mother (non-smokers are slightly older on average), BMI (shown in individual section), parity (smokers on average have had one additional pregnancy), and the level of education of both the mother and father (a larger proportion of non-smokers graduated college).
+
+The exact effects of these differences are difficult to gauge, but they present possible unaccounted for variables which may be influencing our determination on the effects of smoking.
 
 ```{r Team Plot, echo=TRUE, warning=FALSE}
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = bwtoz, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = gestation, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mrace, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mage, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = med, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mht, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = mpregwt, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = drace, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = dage, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = ded, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = dht, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = dwt, color = smoke))+
-  facet_wrap(~smoke)
-
-ggplot(data = babies)+
-  geom_bar(mapping = aes(x = date, color = smoke))+
-  facet_wrap(~smoke)
-```
-
-Different: Mother's age, Mother's and Father's education, income (not median) but higher quartile, parity (more avg children among smokers), 
-
-Similar: Father's ages, not identical
-Unsure: races, marital
-
-```{r Team Plot3,echo=TRUE, warning=FALSE}
 plot3 <- ggplot(babies2)
-#plot3+geom_bar(aes(med))+facet_wrap(~smoke) less higher education among smokers also plot3+geom_bar(aes(ded))+facet_wrap(~smoke)
-plot3+geom_boxplot(aes(smoke,mage,group=smoke)) 
-#plot3+geom_bar(aes(parity))+facet_wrap(~smoke) fewer smokers with low num of pregnancies
-#plot3+geom_density(aes(dwt))+facet_wrap(~smoke) similar to mothers
-```
+plot3+geom_histogram(aes(ded),bins=8)+facet_wrap(~smoke,labeller=bool_smoke)+xlab("Father's level of Education") 
+plot3+geom_histogram(aes(med),bins=8)+facet_wrap(~smoke,labeller=bool_smoke)+xlab("Mother's level of Education") 
+plot3+geom_boxplot(aes(smoke,mage,group=smoke,middle=mean(mage)))+ylab("Mother's age")
+plot3+geom_boxplot(aes(smoke,parity,group=smoke,middle=mean(parity)))+ylab("Number of prior Pregnancies")
 
+```
 
 ### Individual Findings and Plots
 
@@ -183,7 +132,7 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 #### Charles' Plot
 
 ```{r Charles, echo=TRUE, warning=FALSE}
-cor.test(babies$Premature,babies$time)
+#cor.test(babies$Premature,babies$time)
 ggplot(data = babies, mapping = aes(x = bwtoz, group = smoke, color = smoke))+
   ggtitle("Count of Babyweights for Smokers and Nonsmokers")+
   geom_bar()+
@@ -219,7 +168,7 @@ These findings call to importance the dangers of underweight and prematurely bor
  
 ### Summary of Individual Contributions
 <!--Note what non default aesthetics and layers used--> 
-**Brian Teklits:** 
+**Brian Teklits:** I helped formulate the team plots, in particular using the vline and text geoms to bring additional clarity to the plots. I also implemented the theme method to reduce clutter on the first team plot, as well as the use of filters and mutates to remove NA values and focus plots on particular subsets of data.
 
 **Andrew:** 
 
