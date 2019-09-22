@@ -193,11 +193,19 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 ```{r Charles echo=TRUE, warning=FALSE}
 cor.test(babies$Premature,babies$time)
 ggplot(data = babies, mapping = aes(x = bwtoz, group = smoke, color = smoke))+
+  ggtitle("Count of Babyweights for Smokers and Nonsmokers")+
   geom_bar()+
   facet_wrap(~Premature)
 ```
 
 **Individual Findings:**
+
+This graph demonstrates both the high presence of smokers in premature baby deliveries, but also the large amount of smoking parents present for lighter babies born in-term. The graph is divided by on schedule and premature births and depicts the presence of smokers in each 'count' in blue. The things to note within this graph are that: 1. Many premature births are delivered by smokers and 2. The larger portion of "light" babies are delivered by smokers.
+
+These findings call to importance the dangers of underweight and prematurely born children. Stanford's Children Health suggests that the babies that are at risk for low-birth-weight are commonly the children of parents who smoke use alcohol/drugs. Low birth weight is associated with low oxygen levels, infection, SIDS, etc.[^2] We lack the required data to qualify smoking as the cause of underweight/premature births, though they may play a role in explaining those factors.
+
+[^2]:[Low Birth Weight](https://www.stanfordchildrens.org/en/topic/default?id=low-birthweight-90-P02382)
+
 
 #### Individual Plot
 
