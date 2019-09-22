@@ -19,23 +19,15 @@ View(babies2)
 
 #### Premature births
 
-**Why the question is important:** 
+**Why the question is important:** It is important to ask such questions in order to fully understand the affects of smoking on babies. By researching and analyzing data we can notice trends that will allows us to clearly see the results of smoking during pregnancy. We want to analyze this data in order to warn and inform women of the consequences. If smoking truly leads to premature birth than women should be aware of their choices and moral obligations. 
 
-It is important to ask such questions in order to fully understand the affects of smoking to babies. By researching and analyzing data we can notice trends that will allows us to clearly see the results of smoking. We want to analyze this data in order to warn and inform women of the consequences. If smoking truly leads to premature birth than women should be aware of their choices and morale obligations. 
-
-**Why the answer is relevant:**
-
-We focus on this question in order to change the future of pregnant smoking. By analyzing trends and examining these questions, we can inform women about the dangers of smoking while pregnant and hopefully prevent any unwarrented problems with new borns.
+**Why the answer is relevant:** By analyzing trends and examining these questions, we can inform women about the dangers of smoking while pregnant and hopefully prevent any unwarranted problems with newborns. In particular, premature births are linked to a myriad of physical, neurological, behavioral, and social developmental issues which can extend well beyond infancy, potentially becoming life long issues. Preventing any such issues before they occur is of paramount importance.
   
 #### Birth weight
 
-**Why the question is important:** 
+**Why the question is important:** For the sake of humanity and morality, babies should not be born with defects because of the choices of their parents. Birth weight is of particular concern because it is linked to many serious health issues. Low birth weight babies have greater troubles fighting infection, can require incubation to stay warm, as well as a variety of nervous system issues, respiratory issues, difficulties gaining weight, and increased rates of sudden infant death syndrome.
 
-For the sake of humanity and morality, babies shoukd not be born with defects because of the choices of their parents. For research sakes and to inform mothers of these defects, this questions is important because the results could be used to prevent babies being born prematurely or underweight. 
-
-**Why the answer is relevant:**
-
-This question is relevant because everyday babies are being born prematurely and underweight because their mothers smoked during pregnancy. We hope that by addressing this question and informing the general public that smoking while pregnant can have after-lasting effects on new borns.
+**Why the answer is relevant:** This question is relevant because everyday babies are being born prematurely and underweight because their mothers smoked during pregnancy. By addressing this question and demonstrating the link between smoking while pregnant and low birth weight, parents can be motivated to make better choices for their babies and themselves.
 
 #### Analysis of premature births
 
@@ -190,11 +182,12 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 
 #### Charles' Plot
 
-```{r Charles echo=TRUE, warning=FALSE}
+```{r Charles, echo=TRUE, warning=FALSE}
 cor.test(babies$Premature,babies$time)
-ggplot(data = babies, mapping = aes(x = bwtoz, group = smoke, color = smoke))+
-  geom_bar()+
-  facet_wrap(~Premature)
+ggplot(data = babies, mapping = aes(x = bwtoz, group = smoke, color = smoke))+ 
+  geom_bar()+ 
+  facet_wrap(~Premature) 
+
 ```
 
 **Individual Findings:**
