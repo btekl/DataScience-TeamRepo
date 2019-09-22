@@ -164,14 +164,15 @@ ggplot(data = babies)+
 
 **Individual Findings:**
 
-#### Individual Plot
+#### Clint's Plot
 
 ```{r  echo=TRUE, warning=FALSE}
-
-
+ggplot(data = babies) + geom_histogram(mapping = aes(x= med, group= smoke, fill = smoke)) + facet_grid(Premature~.) + xlab("Mother's Education Level") + ggtitle("Mother's Education Level in relation to Premature Birth") + scale_fill_gradient(low = "purple", high = "red")  + ylab("Number of Mothers") + ylim(0,225) + coord_flip()
 ```
 
 **Individual Findings:**
+This graph demonstrates the relationship between the mother's education level, smoking, and premature birth of the child. As the education level of the mother increases, the proportion of mothers who smoke decreases suggesting a relationship between education level and likelyhood of smoking. Additionally, the ration of premature births to on term births was lower amongst the college educated and trade school graduate mothers when compared to mothers of lower education levels. These findings suggest that education could be a factor in women choosing to smoke in the first place and related variable to the likelyhood of premature birth. A study conducted by Columbia University researchers for Drug and Alcohol Dependence (a peer reviewed journal) suggests that not only is education a contributing factor in women choosing to smoke at all, but that education is also related to how likely a woman is to smoke during pregnancy. [^3] 
+[^3]:[Educational Attainment and Smoking Among Women: Risk Factors and Consequences for Offspring]https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2774716/
  
 ### Summary of Individual Contributions
 <!--Note what non default aesthetics and layers used--> 
@@ -179,6 +180,6 @@ ggplot(data = babies)+
 
 **Andrew:** 
 
-**Clint:** 
+**Clint:** Initially sought to create a pie chart which compared the percentage of babies born prematurely out of the total number of babies born at each income level but I was unable to figure out how to get R to calculate the percentage of a variable in relation to another variable so I scrapped that idea. Then I examined the functions avaible to me and decided to create a histogram which used the amount of women at each education level and filled in by whether or not they smoked. I then needed to relate this data to the primary questions so I faceted the graph by premature birth. I wanted the proportion of the bars that is either smoking or non-smoking to be as visable as possible so I changed the colors of the scale and flipped the graphs so as to have the chart horizontal. 
 
 **Charles:** Helped formulate plots to determine significance of connections between variables and smoking (e.g. is smoking linked to education?) and formulated a method to compare birthweights of babies from smoking and nonsmoking families. From that point was able to create a connection between mothers smoking and possible health complications.
