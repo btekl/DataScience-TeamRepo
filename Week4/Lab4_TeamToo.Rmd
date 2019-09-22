@@ -192,9 +192,9 @@ Being underweight can cause issues, in particular premature birth[^1]. Mothers m
 
 ```{r Charles echo=TRUE, warning=FALSE}
 cor.test(babies$Premature,babies$time)
-ggplot(data = babies, mapping = aes(x = mpregwt, y = gestation, color = Premature))+
-  geom_point()
-
+ggplot(data = babies, mapping = aes(x = bwtoz, group = smoke, color = smoke))+
+  geom_bar()+
+  facet_wrap(~Premature)
 ```
 
 **Individual Findings:**
