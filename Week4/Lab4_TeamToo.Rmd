@@ -174,7 +174,9 @@ The interesting features of this graph to take notes of are:
 
 2. The difference between the best fit line between the different sets of mothers that display drastic differences between baby birth weight.
 
-From this we can see now that we must inform mothers of their choices and teach future parents that smoking is bad for babies.
+From this we can see now that we must inform mothers of their choices and teach future parents that smoking is bad for babies. A study done by Valerie S. Knopik that smoke had a smoke of bad effects towards babies who had parents who smoked such as issues with birth weight and ADHD[^4].
+
+[^4]:[Maternal smoking during pregnancy and child outcomes?](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3581055/)
 #### Individual Plot
 
 ```{r  echo=TRUE, warning=FALSE}
