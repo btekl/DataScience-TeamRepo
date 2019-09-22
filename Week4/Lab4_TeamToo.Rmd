@@ -154,9 +154,9 @@ These findings call to importance the dangers of underweight and prematurely bor
 ggplot(data = babies)+
   geom_point(mapping = aes(x= gestation, y= bwtoz))+
   geom_smooth(mapping = aes(x= gestation, y = bwtoz), method = lm)+
-  facet_grid(smoke~.)+
+  facet_grid(.~smoke)+
+  xlim(225,325)+
   ggtitle("Birth Weight vs Time of Birth Period")+
-  xlim(200,350)+
   xlab("Birth Period")+
   ylab("Birth Weight (Ounce)")
 
@@ -164,7 +164,18 @@ ggplot(data = babies)+
 
 **Individual Findings:**
 
-#### Clint's Plot
+When looking at the data of current smoking parents and the birth weight of their child, you can see that mothers who currently smoked had higher chances for a premature birth, as well as a higher chance of the baby being born at a lower weight.
+
+The graph can see from the graph labeled "1" that there is stronger postive correlation between birth weight and birth period with mothers who did smoke than mothers who did not currently smoke. If we compare the do at around 270 day in the gestation period, we can see that with mother who do smoke have baby birth avearges just under 100 ounces. Compare to parents who don't smoke and you can tell that their babies' birth weight averages is closer to 117 ounces. There is about a 17 ounce difference between babies born at 270 days into the gestation period between mothers who did or did not smoke cigarettes.
+
+The interesting features of this graph to take notes of are:
+
+1. The stronger correlation between birth weight and birth period for mothers who smoke than those who do not.
+
+2. The difference between the best fit line between the different sets of mothers that display drastic differences between baby birth weight.
+
+From this we can see now that we must inform mothers of their choices and teach future parents that smoking is bad for babies.
+#### Individual Plot
 
 ```{r  echo=TRUE, warning=FALSE}
 ggplot(data = babies) + geom_histogram(mapping = aes(x= med, group= smoke, fill = smoke)) + facet_grid(Premature~.) + xlab("Mother's Education Level") + ggtitle("Mother's Education Level in relation to Premature Birth") + scale_fill_gradient(low = "purple", high = "red")  + ylab("Number of Mothers") + ylim(0,225) + coord_flip()
