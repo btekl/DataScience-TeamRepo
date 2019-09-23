@@ -79,7 +79,7 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 
 Additionally, we've found that non-smokers were older on average, smokers on average had one additional prior pregnancy, and a greater proportion of of non-smoking parents completed college. 
 
-The effects of these differences are difficult to measure. Generally, older mothers have more difficulties during and after labor than younger mothers. Mothers who have had many pregnancies can experience more complications giving birth than those with only a few. However, in our data, we've found a difference of 2 prior pregnancies on average for smokers, versus 1 for non-smokers--both are on the lower end. Finally, educational differences between these groups could also be influencing our conclusions. Studies suggest a possible link suggesting decreased premature birth rates among mothers with college/trade school education (see [Clint's Plot]). This discrepancy in education levels presents another potential factor which may bias our conclusions.
+The effects of these differences are difficult to measure. Generally, older mothers have more difficulties during and after labor than younger mothers. Mothers who have had many pregnancies can experience more complications giving birth than those with only a few. However, in our data, we've found a difference of 2 prior pregnancies on average for smokers, versus 1 for non-smokers--both are on the lower end. Finally, educational differences between these groups could also be influencing our conclusions. Studies suggest premature birth rates are lower among mothers with college/trade school education compared to those whose education stopped at high school (see [Clint's Plot]). This discrepancy in education levels presents another potential factor which may bias our conclusions.
 
 ### Preliminary Question
 
@@ -92,10 +92,12 @@ Notable differences between smokers and non-smokers are the age of the mother (n
 The exact effects of these differences are difficult to gauge, but they present possible unaccounted connections between variables which may be influencing our determination on the effects of smoking.
 
 ```{r Team Plot, echo=TRUE, warning=FALSE}
-plot3 <- ggplot(babies2)
+plot3 <- ggplot(data=babies2)
 plot3+geom_histogram(aes(ded),bins=8)+facet_wrap(~smoke,labeller=bool_smoke)+xlab("Father's level of Education") 
-plot3+geom_boxplot(aes(smoke,mage,group=smoke,middle=mean(mage)))+ylab("Mother's age")
-plot3+geom_boxplot(aes(smoke,parity,group=smoke,middle=mean(parity)))+ylab("Number of prior Pregnancies")
+plot3+geom_boxplot(aes(factor(smoke),mage,group=smoke,middle=mean(mage)))+ylab("Mother's age")+scale_x_discrete(breaks=c("0","1"),
+        labels=c("Non-Smokers","Smokers"))+theme(axis.title.x=element_blank())
+plot3+geom_boxplot(aes(factor(smoke),parity,group=smoke,middle=mean(parity)))+ylab("Number of prior Pregnancies")+scale_x_discrete(breaks=c("0","1"),
+        labels=c("Non-Smokers","Smokers"))+theme(axis.title.x=element_blank())
 
 ```
 
@@ -147,10 +149,10 @@ These findings call to importance the dangers of underweight and prematurely bor
 [^2]:[Low Birth Weight](https://www.stanfordchildrens.org/en/topic/default?id=low-birthweight-90-P02382)
 
 
-#### Individual Plot
+#### Andrew's Plot
 
 ```{r Andrew, echo=TRUE, warning=FALSE}
-ggplot(data = babies)+
+ggplot(data = babies2)+
   geom_point(mapping = aes(x= gestation, y= bwtoz))+
   geom_smooth(mapping = aes(x= gestation, y = bwtoz), method = lm)+
   facet_grid(.~smoke)+
@@ -176,9 +178,10 @@ The interesting features of this graph to take notes of are:
 From this we can see now that we must inform mothers of their choices and teach future parents that smoking is bad for babies. A study done by Valerie S. Knopik that smoke had a smoke of bad effects towards babies who had parents who smoked such as issues with birth weight and ADHD[^4].
 
 [^4]:[Maternal smoking during pregnancy and child outcomes?](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3581055/)
-#### Individual Plot
 
-```{r  echo=TRUE, warning=FALSE}
+#### Clint's Plot
+
+```{r  echo=TRUE, warning=FALSE,message=FALSE}
 ggplot(data = babies) + geom_histogram(mapping = aes(x= med, group= smoke, fill = smoke)) + facet_grid(Premature~.) + xlab("Mother's Education Level") + ggtitle("Mother's Education Level in relation to Premature Birth") + scale_fill_gradient(low = "purple", high = "red")  + ylab("Number of Mothers") + ylim(0,225) + coord_flip()
 ```
 
