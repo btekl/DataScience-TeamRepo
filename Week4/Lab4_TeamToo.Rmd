@@ -79,7 +79,7 @@ In this dataset, the group of women considered underweight by BMI is largely mad
 
 Additionally, we've found that non-smokers were older on average, smokers on average had one additional prior pregnancy, and a greater proportion of of non-smoking parents completed college. 
 
-The effects of these differences are difficult to measure. Generally, older mothers have more difficulties than younger mothers. Mothers who have had many pregnancies can experience more complications giving birth than those with only a few. However, in our data, we've found a difference of 2 prior pregnancies on average for smokers, versus 1 for non-smokers--both are on the lower end. Finally, educational differences, in our study, are unlikely to influence the decision for mothers to smoke. This data was collected in the 1960's, when the effects of smoking were not as well known in general, and thus are less likely to be influenced by the parent's education.
+The effects of these differences are difficult to measure. Generally, older mothers have more difficulties during and after labor than younger mothers. Mothers who have had many pregnancies can experience more complications giving birth than those with only a few. However, in our data, we've found a difference of 2 prior pregnancies on average for smokers, versus 1 for non-smokers--both are on the lower end. Finally, educational differences between these groups could also be influencing our conclusions. Studies suggest a possible link suggesting decreased premature birth rates among mothers with college/trade school education (see [Clint's Plot]). This discrepancy in education levels presents another potential factor which may bias our conclusions.
 
 ### Preliminary Question
 
@@ -87,14 +87,13 @@ The effects of these differences are difficult to measure. Generally, older moth
 
 There are several variables within the babies data set that are not strongly connected to the smoking of the mother. Variables that we have found to be similar between smokers and non-smokers are race, height (for mother and father), mother's marital status, and birthday of the baby.
 
-Notable differences between smokers and non-smokers are the age of the mother (non-smokers are slightly older on average), BMI (shown in individual section), parity (smokers on average have had one additional pregnancy), and the level of education of both the mother and father (a larger proportion of non-smokers graduated college).
+Notable differences between smokers and non-smokers are the age of the mother (non-smokers are slightly older on average), BMI (see [Brian's Plot]), parity (smokers on average have had one additional pregnancy), and the level of education of both the mother (see [Clint's Plot]) and father (a larger proportion of non-smokers graduated college).
 
-The exact effects of these differences are difficult to gauge, but they present possible unaccounted for variables which may be influencing our determination on the effects of smoking.
+The exact effects of these differences are difficult to gauge, but they present possible unaccounted connections between variables which may be influencing our determination on the effects of smoking.
 
 ```{r Team Plot, echo=TRUE, warning=FALSE}
 plot3 <- ggplot(babies2)
 plot3+geom_histogram(aes(ded),bins=8)+facet_wrap(~smoke,labeller=bool_smoke)+xlab("Father's level of Education") 
-plot3+geom_histogram(aes(med),bins=8)+facet_wrap(~smoke,labeller=bool_smoke)+xlab("Mother's level of Education") 
 plot3+geom_boxplot(aes(smoke,mage,group=smoke,middle=mean(mage)))+ylab("Mother's age")
 plot3+geom_boxplot(aes(smoke,parity,group=smoke,middle=mean(parity)))+ylab("Number of prior Pregnancies")
 
@@ -171,11 +170,12 @@ ggplot(data = babies) + geom_histogram(mapping = aes(x= med, group= smoke, fill 
 ```
 
 **Individual Findings:**
-This graph demonstrates the relationship between the mother's education level, smoking, and premature birth of the child. As the education level of the mother increases, the proportion of mothers who smoke decreases suggesting a relationship between education level and likelyhood of smoking. Additionally, the ration of premature births to on term births was lower amongst the college educated and trade school graduate mothers when compared to mothers of lower education levels. These findings suggest that education could be a factor in women choosing to smoke in the first place and related variable to the likelyhood of premature birth. A study conducted by Columbia University researchers for Drug and Alcohol Dependence (a peer reviewed journal) suggests that not only is education a contributing factor in women choosing to smoke at all, but that education is also related to how likely a woman is to smoke during pregnancy. [^3] 
-[^3]:[Educational Attainment and Smoking Among Women: Risk Factors and Consequences for Offspring]https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2774716/
+This graph demonstrates the relationship between the mother's education level, smoking, and premature birth of the child. As the education level of the mother increases, the proportion of mothers who smoke decreases suggesting a relationship between education level and likelyhood of smoking. Additionally, the ration of premature births to on term births was lower amongst the college educated and trade school graduate mothers when compared to mothers of lower education levels. These findings suggest that education could be a factor in women choosing to smoke in the first place and related variable to the likelyhood of premature birth. A study conducted by Columbia University researchers for Drug and Alcohol Dependence (a peer reviewed journal) suggests that not only is education a contributing factor in women choosing to smoke at all, but that education is also related to how likely a woman is to smoke during pregnancy.[^3] 
+
+[^3]:[Educational Attainment and Smoking Among Women: Risk Factors and Consequences for Offspring](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2774716/)
  
 ### Summary of Individual Contributions
-<!--Note what non default aesthetics and layers used--> 
+
 **Brian Teklits:** I helped formulate the team plots, in particular using the vline and text geoms to bring additional clarity to the plots. I also implemented the theme method to reduce clutter on the first team plot, as well as the use of filters and mutates to remove NA values and focus plots on particular subsets of data.
 
 **Andrew:** 
