@@ -1,0 +1,134 @@
+---
+title: "Lab 5"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "9/25/2019"
+output: html_document
+---
+
+```{r setup,include=FALSE}
+library(tidyverse)
+milk <- read.csv('state_milk_production.csv')
+```
+
+All the writeup starter code:
+```{r}
+milk <- milk %>%
+  mutate(milk_million = milk_produced/1000000)
+```
+```{r}
+milk1970 <- milk %>%
+  filter(year == 1970)
+```
+
+```{r}
+ggplot(data = milk1970, aes(x = milk_million)) +
+  geom_histogram(bins = 15) + 
+  ggtitle('Histogram of milk produced in 1970 by state')
+```
+```{r}
+ggplot(data = milk1970, aes(x = milk_million)) +
+  geom_density() + 
+  ggtitle('Distribution estimate of milk produced in 1970 by state')
+```
+```{r}
+boxMilk <- milk %>%
+  filter(year %in% c('1970','1990','2010'))
+```
+
+```{r}
+ggplot(data = boxMilk, aes(x = as.factor(year), y = milk_million, fill = as.factor(year))) +
+  geom_boxplot() + 
+  ggtitle('Pounds of milk produced at the state-level') + 
+  scale_fill_discrete(name = 'Year') + 
+  xlab('Year') +
+  ylab('Milk Produced (Millions lb)')
+```
+
+```{r}
+milksub <- milk %>%
+  filter(state %in% c('New York','Wyoming','Maryland','Maine','Florida')) %>%
+  select(state, year, milk_million)
+```
+```{r}
+ggplot(data = milksub, aes(x = year, y = milk_million, color = state)) +
+  geom_point() + 
+  ggtitle('Pounds of milk over time by state') +
+  xlab('Year') +
+  ylab('Milk Produced (Million lb)')
+```
+```{r}
+cor_sum <- milksub %>%
+  group_by(state) %>%
+  summarise(Correlation = cor(year,milk_million)) %>%
+  as_tibble()
+cor_sum
+```
+Lab Starts here, remove above before submitting
+
+### Team Plot
+```{r}
+# At least 5 states we've lived in: Colorado, California, New York
+# For these states, plot a yearly time series for the milk production (in millions of pounds). On this plot, display a line showing the average milk produced each year for all states
+```
+
+**What does this plot convey:**
+
+#### Reflections
+
+**What was most helpful in learning about this data:**
+
+**Who could benefit the most from this analysis? Who could be harmed by it?:**
+
+### Individual Sections
+
+#### Name's Plot
+
+```{r}
+# Yearly milk production for birth year
+```
+
+```{r}
+# summarize data for birth year
+ 
+```
+
+report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
+
+#### Name's Plot
+
+```{r}
+# Yearly milk production for birth year
+```
+
+```{r}
+# summarize data for birth year
+ 
+```
+
+report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
+
+#### Name's Plot
+
+```{r}
+# Yearly milk production for birth year
+```
+
+```{r}
+# summarize data for birth year
+ 
+```
+
+report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
+
+#### Name's Plot
+
+```{r}
+# Yearly milk production for birth year
+```
+
+```{r}
+# summarize data for birth year
+ 
+```
+
+report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
