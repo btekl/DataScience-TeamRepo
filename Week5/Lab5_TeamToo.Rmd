@@ -23,7 +23,9 @@ milk1970 <- milk %>%
 ```{r}
 ggplot(data = milk1970, aes(x = milk_million)) +
   geom_histogram(bins = 15) + 
-  ggtitle('Histogram of milk produced in 1970 by state')
+  ggtitle('Histogram of Milk Produced in 1970 by State')+
+  xlab("millions of gallons of milk")
+  
 ```
 ```{r}
 ggplot(data = milk1970, aes(x = milk_million)) +
