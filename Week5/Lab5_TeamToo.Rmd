@@ -30,7 +30,8 @@ ggplot(data = milk1970, aes(x = milk_million)) +
 ```{r}
 ggplot(data = milk1970, aes(x = milk_million)) +
   geom_density() + 
-  ggtitle('Distribution estimate of milk produced in 1970 by state')
+  ggtitle('Distribution estimate of milk produced in 1970 by state')+
+  xlab("millions of gallons of milk")
 ```
 ```{r}
 boxMilk <- milk %>%
