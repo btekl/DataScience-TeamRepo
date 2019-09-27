@@ -32,7 +32,7 @@ ggplot(data = milkteam, aes(x = year, y = milk_million)) +
   ylab('Milk Produced (Million lb)')
 ```
 
-**What does this plot convey:**
+**What does this plot convey:** The average milk production per year across the entire US has increased substantially since 1970. California, in particular, has increased its milk production by almost 4 times since 1970. New Jersey appears to have had a slight decrease in production, while the other 3 states have increased production at a modest rate.
 
 #### Team Data Summary
 
@@ -40,15 +40,15 @@ ggplot(data = milkteam, aes(x = year, y = milk_million)) +
 ```{r}
 milk %>%
   group_by(year) %>%
-  summarise(avg = mean((milk_million))) %>% 
-  filter(avg == max(avg))
+  summarise(total_production = sum((milk_million))) %>% 
+  filter(total_production == max(total_production))
 ```
 **The year with the least milk produced: 1975**
 ```{r}
 milk %>%
   group_by(year) %>%
-  summarise(avg = mean((milk_million))) %>% 
-  filter(avg == min(avg))
+  summarise(total_production = sum((milk_million))) %>% 
+  filter(total_production == min(total_production))
 ```
 **The top 5 milk producers of 2017:**
 ```{r}
