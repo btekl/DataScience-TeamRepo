@@ -8,19 +8,78 @@ output: html_document
 ```{r setup,include=FALSE}
 library(tidyverse)
 milk <- read.csv('state_milk_production.csv')
-```
-
-All the writeup starter code:
-```{r}
 milk <- milk %>%
   mutate(milk_million = milk_produced/1000000)
 ```
+
+
+### Team Plot
 ```{r}
-milk1970 <- milk %>%
-  filter(year == 1970)
+milkteam <- milk %>%
+  filter(state %in% c('New York','Colorado','California','New Jersey','Washington')) %>%
+  select(state, year, milk_million)
+by_year <- milkteam %>%
+  group_by(year) %>%
+  summarise(avg = mean(milk_million))
 ```
 
 ```{r}
+ggplot(data = milkteam, aes(x = year, y = milk_million)) +
+  geom_point(aes(color = state)) +
+  geom_smooth(data=by_year,aes(year, avg),method='lm',se=FALSE)+
+  ggtitle('Pounds of milk over time by state') +
+  xlab('Year') +
+  ylab('Milk Produced (Million lb)')
+```
+
+**What does this plot convey:**
+
+#### Team Data Summary
+
+**The year with the most milk produced: 2017**
+```{r}
+milk %>%
+  group_by(year) %>%
+  summarise(avg = mean((milk_million))) %>% 
+  filter(avg == max(avg))
+```
+**The year with the least milk produced: 1975**
+```{r}
+milk %>%
+  group_by(year) %>%
+  summarise(avg = mean((milk_million))) %>% 
+  filter(avg == min(avg))
+```
+**The top 5 milk producers of 2017:**
+```{r}
+milk %>%
+  filter(year==2017) %>%
+  select(state,milk_million) %>%
+  arrange(desc(milk_million)) %>%
+  filter(min_rank(desc(milk_million)) < 6)
+```
+**The bottom 5 milk producers of 2017:**
+```{r}
+milk %>%
+  filter(year==2017) %>%
+  select(state,milk_million) %>%
+  arrange((milk_million)) %>%
+  filter(min_rank((milk_million)) < 6)
+```
+
+#### Reflections
+
+**What was most helpful in learning about this data:**
+
+**Who could benefit the most from this analysis? Who could be harmed by it?:**
+
+### Individual Sections
+
+#### Charles' Plot
+
+```{r}
+milk1970 <- milk %>%
+  filter(year == 1970)
 ggplot(data = milk1970, aes(x = milk_million)) +
   geom_histogram(bins = 15) + 
   ggtitle('Histogram of Milk Produced in 1970 by State')+
@@ -34,113 +93,105 @@ ggplot(data = milk1970, aes(x = state, y = milk_million)) +
   ylab("millions of gallons of milk")+
   theme(axis.text.x = element_text(angle=60, hjust=1))+
   geom_text(aes(label = milk_million), vjust = -0.5)
-  
 ```
+
+**The average milk produced in year:**
 ```{r}
-ggplot(data = milk1970, aes(x = milk_million)) +
-  geom_density() + 
-  ggtitle('Distribution estimate of milk produced in 1970 by state')+
-  xlab("millions of gallons of milk")
+#calc avg
 ```
+**The median milk produced in year:**
 ```{r}
-boxMilk <- milk %>%
-  filter(year %in% c('1970','1990','2010'))
+#calc median
 ```
+**The top producing state of year:**
+```{r}
+#calc max
+```
+**The state that produced the least in year:**
+```{r}
+#calc min
+```
+
+
+#### Brian's Plot
 
 ```{r}
-ggplot(data = boxMilk, aes(x = as.factor(year), y = milk_million, fill = as.factor(year))) +
-  geom_boxplot() + 
-  ggtitle('Pounds of milk produced at the state-level') + 
-  scale_fill_discrete(name = 'Year') + 
-  xlab('Year') +
-  ylab('Milk Produced (Millions lb)')
+milk1995 <- milk %>%
+  filter(year == 1995)
+ggplot(data = milk1995, aes(x = milk_million)) +
+  geom_density()+
+  xlab("Pounds produced in millions")+
+  ggtitle('Milk produced in 1995 by state')
 ```
 
+**The average milk produced in 1995:**
 ```{r}
-milksub <- milk %>%
-  filter(state %in% c('New York','Wyoming','Maryland','Maine','Florida')) %>%
-  select(state, year, milk_million)
+milk1995 %>%
+  summarise(avg = mean(milk_million))
 ```
+**The median milk produced in 1995:**
 ```{r}
-ggplot(data = milksub, aes(x = year, y = milk_million, color = state)) +
-  geom_point() + 
-  ggtitle('Pounds of milk over time by state') +
-  xlab('Year') +
-  ylab('Milk Produced (Million lb)')
+milk1995 %>%
+  summarise(middle = median(milk_million))
 ```
+**The top producing state of 1995:**
 ```{r}
-cor_sum <- milksub %>%
-  group_by(state) %>%
-  summarise(Correlation = cor(year,milk_million)) %>%
-  as_tibble()
-cor_sum
+milk1995 %>% 
+  select(state,milk_million) %>% 
+  filter(milk_million == max(milk_million))
 ```
-Lab Starts here, remove above before submitting
-
-### Team Plot
+**The state that produced the least in 1995:**
 ```{r}
-# At least 5 states we've lived in: Colorado, California, New York
-# For these states, plot a yearly time series for the milk production (in millions of pounds). On this plot, display a line showing the average milk produced each year for all states
+milk1995 %>% 
+  select(state,milk_million) %>%
+  filter(milk_million == min(milk_million))
 ```
 
-**What does this plot convey:**
-
-#### Reflections
-
-**What was most helpful in learning about this data:**
-
-**Who could benefit the most from this analysis? Who could be harmed by it?:**
-
-### Individual Sections
 
 #### Name's Plot
 
 ```{r}
-# Yearly milk production for birth year
+#plot here
 ```
 
+**The average milk produced in year:**
 ```{r}
-# summarize data for birth year
- 
+#calc avg
+```
+**The median milk produced in year:**
+```{r}
+#calc median
+```
+**The top producing state of year:**
+```{r}
+#calc max
+```
+**The state that produced the least in year:**
+```{r}
+#calc min
 ```
 
-report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
 
 #### Name's Plot
 
 ```{r}
-# Yearly milk production for birth year
+#plot here
 ```
 
+**The average milk produced in year:**
 ```{r}
-# summarize data for birth year
- 
+#calc avg
 ```
-
-report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
-
-#### Name's Plot
-
+**The median milk produced in year:**
 ```{r}
-# Yearly milk production for birth year
+#calc median
 ```
-
+**The top producing state of year:**
 ```{r}
-# summarize data for birth year
- 
+#calc max
 ```
-
-report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
-
-#### Name's Plot
-
+**The state that produced the least in year:**
 ```{r}
-# Yearly milk production for birth year
+#calc min
 ```
 
-```{r}
-# summarize data for birth year
- 
-```
-
-report using summarise: avg milk produced per state, median milk produced by each state, state that produced the most milk, state that produced the least milk
