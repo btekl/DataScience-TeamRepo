@@ -36,14 +36,14 @@ ggplot(data = milkteam, aes(x = year, y = milk_million)) +
 
 #### Team Data Summary
 
-**The year with the most milk produced: 2017**
+**The year with the most milk produced:** 2017
 ```{r}
 milk %>%
   group_by(year) %>%
   summarise(total_production = sum((milk_million))) %>% 
   filter(total_production == max(total_production))
 ```
-**The year with the least milk produced: 1975**
+**The year with the least milk produced:** 1975
 ```{r}
 milk %>%
   group_by(year) %>%
@@ -69,10 +69,16 @@ milk %>%
 
 #### Reflections
 
-**What was most helpful in learning about this data:**
+**What was most helpful in learning about this data:** Exploring the various data transformation functions and how to use them in conjunction with each other made the pipe operator a lot easier to understand.
 
-**Who could benefit the most from this analysis? Who could be harmed by it?:**
+**Who could benefit the most from this analysis? Who could be harmed by it?:** We could use this data to determine states which are candidates for increasing their milk production. Increasing production in specific locations may lead to greater profits for farmers/investors. 
 
+However, the environmental effects of dairy farming are substantial. Livestock are responsible for roughly 14.5% of greenhouse gas emissions globally[^1]. Additionally, the dairy industry uses a substantial amount of water when raising livestock, around 40-50 gallons per day per cow[^2].
+
+So, while increasing milk production in a state may lead to increased revenue, residents of that state may see increasing water costs, as well as the global negative effects of increased greenhouse gas emissions.
+
+[^1]:[source](http://www.fao.org/news/story/en/item/197623/icode/)
+[^2]:[source](http://wdmc.org/2013/Scientific%20Data%20for%20Developing%20Water%20Budgets%20on%20a%20Dairy.pdf)
 ### Individual Sections
 
 #### Charles' Plot
