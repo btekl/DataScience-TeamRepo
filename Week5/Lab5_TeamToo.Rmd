@@ -155,27 +155,42 @@ milk1995 %>%
 ```
 
 
-#### Name's Plot
+#### Clint's Plot
 
 ```{r}
-#plot here
+milk1999 <- milk %>%
+  mutate(milk_million = milk_produced/1000000) %>%
+  filter(year == 1999)
+ggplot(data = milk1999, mapping = aes(x = milk_million)) + geom_density() + xlab("Amount of milk produced in millions of gallons") + ggtitle("Milk Production by State in the Year 1999")
 ```
 
 **The average milk produced in year:**
 ```{r}
-#calc avg
+mean_year <- milk1999 %>%
+  group_by(year) %>%
+  summarise(Mean = mean(milk_million)) %>%
+  as_tibble()
+mean_year
 ```
 **The median milk produced in year:**
 ```{r}
-#calc median
+median_year <- milk1999 %>%
+  group_by(year) %>%
+  summarise(Med = median(milk_million)) %>%
+  as_tibble()
+median_year
 ```
 **The top producing state of year:**
 ```{r}
-#calc max
+milk1999 %>% 
+  select(state,milk_million) %>%
+  filter(milk_million == max(milk_million))
 ```
 **The state that produced the least in year:**
 ```{r}
-#calc min
+milk1999 %>% 
+  select(state,milk_million) %>%
+  filter(milk_million == min(milk_million))
 ```
 
 
