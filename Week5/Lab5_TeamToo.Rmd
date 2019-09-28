@@ -97,6 +97,7 @@ ggplot(data = milk1970, aes(x = state, y = milk_million)) +
   ggtitle('Histogram of Milk Produced in 1970 by State')+
   xlab("State")+
   ylab("millions of gallons of milk")+
+  #facet_wrap(~region)+
   theme(axis.text.x = element_text(angle=60, hjust=1))+
   geom_text(aes(label = milk_million), vjust = -0.5)
 ```
