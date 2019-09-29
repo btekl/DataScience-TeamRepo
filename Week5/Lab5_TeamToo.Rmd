@@ -26,13 +26,13 @@ by_year <- milkteam %>%
 ```{r}
 ggplot(data = milkteam, aes(x = year, y = milk_million)) +
   geom_point(aes(color = state)) +
-  geom_smooth(data=by_year,aes(year, avg),method='lm',se=FALSE)+
+  geom_smooth(data=by_year,aes(year, avg),se=FALSE)+
   ggtitle('Pounds of milk over time by state') +
   xlab('Year') +
   ylab('Milk Produced (Million lb)')
 ```
 
-**What does this plot convey:** The average milk production per year across the entire US has increased substantially since 1970. California, in particular, has increased its milk production by almost 4 times since 1970. New Jersey appears to have had a slight decrease in production, while the other 3 states have increased production at a modest rate.
+**What does this plot convey:** The blue line represents the average production of all 50 states for a given year. The average milk production per year across the entire US has increased substantially since 1970. California, in particular, has increased its milk production by almost 4 times since 1970. New Jersey appears to have had a slight decrease in production, while the other 3 states have increased production at a modest rate.
 
 #### Team Data Summary
 
@@ -143,7 +143,7 @@ milk1999 %>%
 milk1995 <- milk %>%
   filter(year == 1995)
 ggplot(data = milk1995, aes(x = milk_million)) +
-  geom_density()+
+  geom_histogram(bins = 15)+
   xlab("Pounds produced in millions")+
   ggtitle('Milk produced in 1995 by state')
 ```
