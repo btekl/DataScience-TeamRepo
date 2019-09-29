@@ -128,12 +128,16 @@ milk1999 %>%
 #calc max
 
 milk1999 %>%
-  group_by(state, milk_million) %>%
+  select(state, milk_million) %>%
   filter(milk_million == max(milk_million))
 ```
 **The state that produced the least in year:**
 ```{r}
 #calc min
+
+milk1999 %>%
+  select(state, milk_million) %>%
+  filter(milk_million == min(milk_million))
 ```
 
 
