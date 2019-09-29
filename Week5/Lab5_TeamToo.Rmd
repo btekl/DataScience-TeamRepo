@@ -84,35 +84,52 @@ So, while increasing milk production in a state may lead to increased revenue, r
 #### Charles' Plot
 
 ```{r}
-milk1970 <- milk %>%
-  filter(year == 1970)
-ggplot(data = milk1970, aes(x = milk_million)) +
-  geom_histogram(bins = 15) + 
-  ggtitle('Histogram of Milk Produced in 1970 by State')+
-  xlab("millions of gallons of milk")
+milk1999 <- milk %>%
+  filter(year == 1999)
+ggplot(data = milk1999, aes(x = milk_million)) +
+  geom_density() + 
+  ggtitle('Milk Produced in 1999 by State')+
+  xlab("millions of pounds of milk")
+  
 
-
-ggplot(data = milk1970, aes(x = state, y = milk_million)) +
-  geom_col() + 
-  ggtitle('Histogram of Milk Produced in 1970 by State')+
-  xlab("State")+
-  ylab("millions of gallons of milk")+
-  #facet_wrap(~region)+
-  theme(axis.text.x = element_text(angle=60, hjust=1))+
-  geom_text(aes(label = milk_million), vjust = -0.5)
+# ggplot(data = milk1999, aes(x = state, y = milk_million)) +
+#   geom_col() + 
+#   ggtitle('Density of Milk Produced in 1999 by State')+
+#   xlab("State")+
+#   ylab("millions of gallons of milk")+
+#   #facet_wrap(~region)+
+#   theme(axis.text.x = element_text(angle=60, hjust=1))+
+#   geom_text(aes(label = milk_million), vjust = -0.5)
 ```
 
 **The average milk produced in year:**
 ```{r}
 #calc avg
+# View(milk)
+
+milk1999 %>%
+  group_by(year) %>%
+  summarise(average_milk_mill = mean(milk_million))
+
+
 ```
 **The median milk produced in year:**
 ```{r}
 #calc median
+
+milk1999 %>%
+  group_by(year) %>%
+  summarise(median_milk_mill = median(milk_million))
+
+
 ```
 **The top producing state of year:**
 ```{r}
 #calc max
+
+milk1999 %>%
+  group_by(state, milk_million) %>%
+  filter(milk_million == max(milk_million))
 ```
 **The state that produced the least in year:**
 ```{r}
