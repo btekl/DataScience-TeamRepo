@@ -1,0 +1,73 @@
+---
+title: 'Lab 6: Airport Data Science'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "10/4/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+COflights <- read_csv("COflights.csv")
+```
+
+### What Factors Lead to On-time Arrivals in Denver?
+
+**Why this question is important:**
+
+**Why the answer is relevant:**
+
+### Team Plot and Findings
+
+```{r}
+#Team Plot
+```
+
+### Recommendations
+
+How to reduce flight delays/why implement this change
+
+### Individual Sections
+
+#### Name's Plot
+
+```{r}
+
+```
+
+Identify 2 factors from the data that lead to more or less delayed flights
+
+#### Name's Plot
+
+```{r}
+
+```
+
+Identify 2 factors from the data that lead to more or less delayed flights
+
+#### Name's Plot
+
+```{r}
+
+```
+
+Identify 2 factors from the data that lead to more or less delayed flights
+
+#### Name's Plot
+
+```{r}
+
+```
+
+Identify 2 factors from the data that lead to more or less delayed flights
+
+
+
+#### Individual Contributions
+
+**Name:**
+
+**Name:**
+
+**Name:**
+
+**Name:**
