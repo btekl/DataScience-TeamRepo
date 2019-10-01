@@ -12,6 +12,7 @@ COflights <- read_csv("COflights.csv")
 
 ### What Factors Lead to On-time Arrivals in Denver?
 
+
 **Why this question is important:**
 This question is important when trying to study which facotrs affect a delated flight. Undertsnading these factors allows airports or carriers to adapt and make changes based on the factors we found..... needs more
 
@@ -30,9 +31,14 @@ How to reduce flight delays/why implement this change
 
 ### Individual Sections
 
-#### Name's Plot
+#### Andrew's Plot
 
 ```{r}
+delfli <- COflights%>%
+  filter(DEST == "DEN", WEATHER_DELAY > 14)
+
+ggplot(data = COflights, mapping = aes( ))
+
 
 ```
 
