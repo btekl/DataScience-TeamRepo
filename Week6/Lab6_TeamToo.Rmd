@@ -35,12 +35,12 @@ How to reduce flight delays/why implement this change
 
 ```{r}
 by_carrier <- COflights %>%
-  group_by(CARRIER)%>%
+  group_by(MONTH)%>%
   filter(DEST == "DEN", WEATHER_DELAY >14)%>%
   summarise(count = n(), delay = mean(WEATHER_DELAY, na.rm = TRUE))
 
-ggplot(data = by_carrier, mapping = aes(x = delay, y= count, color = CARRIER))+
-  geom_point()
+ggplot(data = by_carrier, aes(by_carrier$MONTH))+
+  geom_bar()
 
 
 ```
