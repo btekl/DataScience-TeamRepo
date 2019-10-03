@@ -43,10 +43,9 @@ month_day_to_days <- function(month){
   return(days)
 }
 
-#count total days in year, mod 7 to get day of week (1st of 2017 is sunday, so remainder 1 = sunday, remainder 2 = monday etc.)
+#count total days in year
 days <- DEN_flights %>%
-  mutate(days = mapply(month_day_to_days,MONTH)+DAY_OF_MONTH) %>%
-  mutate(week_day=days %% 7)
+  mutate(days = mapply(month_day_to_days,MONTH)+DAY_OF_MONTH)
 
 # Count total flights for all 365 days
 flights_per_Day <- days %>%
@@ -59,21 +58,20 @@ delays_per_Day <- days %>%
   summarise(flightcount = n()) 
 # combine above data frames into new data frame with days and probability of delay per day
 P_daily_delay <- cbind(flights_per_Day[1],(delays_per_Day[-1]/flights_per_Day[-1]))
-
 ```
 
 ### What Factors Lead to On-time Arrivals in Denver?
 
 
 **Why this question is important:**
-This question is important when trying to study which facotrs affect a delated flight. Undertsnading these factors allows airports or carriers to adapt and make changes based on the factors we found..... needs more
+Delayed flights cause a snowball effect of negative outcomes, affecting everyone at an airport. Travelers can miss flights altogether, runway traffic builds up, stressing both airport employees and air travelers. Analyzing the causes of flight delays can help us reduce the overall strain they cause on an airport.
 
 **Why the answer is relevant:**
-This question is relavant for the DIA managers who want to increase the amount of on-time arrivals and which factors lead to delayed flights. These factors could include either the weather or the carriers fault, but the managers want to know how to minimize these delayed arrivals and increase the amount of on-time flights. 
+Understanding the causes of delayed flights allows us to make predictions on when to expect future delays, as well as informing decisions on how to prevent delays when possible. Eliminating preventable delays and anticipating predictable delays can lead to a smoother airport experience for both travelers and employees.
 
 ### Team Plot and Findings
 
-```{r, WARNING=FALSE}
+```{r, MESSAGE=FALSE}
 # Data frame built in setup chunk
 ggplot(P_daily_delay,aes(days,flightcount))+
   geom_line()+
@@ -82,6 +80,8 @@ ggplot(P_daily_delay,aes(days,flightcount))+
   ylab("Probability of Delayed Flight")+
   ggtitle("Probability of Delayed Flights throughout 2017")
 ```
+
+This plot shows a few interesting features. First, we note that the time of year predicts periodic increases and decreases in delays. Delays are more common towards the end/beginning of year holidays, and during the summer months, when overall travel increases. Second, there are periodic changes on a smaller scale as well, suggesting delays may relate to day of the week, or time of month. Finally, the spikes which fall outside the periodic structure indicate non-time related factors which cause delays. 
 
 ### Recommendations
 
@@ -108,24 +108,27 @@ Identify 2 factors from the data that lead to more or less delayed flights
 #### Brian's Plot
 
 ```{r}
+# take days mod 7 to get day of week (1st of 2017 is sunday, so remainder 1 = sunday, remainder 2 = monday etc.)
 P_weekday_delay <- P_daily_delay %>%
   mutate(week_day=days %% 7)
 
-#map integers to weekday names
+# map integers to weekday names 
 P_weekday_delay$week_dayname <- plyr::mapvalues(P_weekday_delay$week_day,
-                           from = trans <- c(0,1,2,3,4,5,6),
+                           from = c(0,1,2,3,4,5,6),
                            to = c("Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"))
 
 ggplot(P_weekday_delay,aes(days,flightcount,color=factor(week_dayname)))+
   geom_smooth(se=FALSE)+
-  ggtitle("Probability of a Delayed flight by day of week")+
-  ylab("Probability a flight is Delayed")+
-  xlab("Day of the year")+
+  ggtitle("Probability of a Delayed flight by Day of Week")+
+  ylab("Probability a Flight is Delayed")+
+  xlab("Day of the Year")+
   scale_color_discrete("Day of the Week")
 ```
 
+Day of the week affects delays both positively and negatively. We see that Thursday, Friday, and Monday consistently have higher probability of delays compared to the other days. Saturday and Sunday have a consistently low probability of delay, with Tuesday and Wednesday generally lying between the two extremes.
 
-Identify 2 factors from the data that lead to more or less delayed flights
+We also see how the time of year influences delays throughout the week. During the summer months, Thursday, Friday and Monday delays are substantially higher than other days of the week: travelers going on vacation fly out ahead of the weekend, returning on Monday. The beginning and end of year see greater delays on average, both from increased holiday travel and from winter weather.
+
 
 #### Name's Plot
 
