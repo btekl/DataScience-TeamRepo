@@ -8,6 +8,58 @@ output: html_document
 ```{r setup, include=FALSE}
 library(tidyverse)
 COflights <- read_csv("COflights.csv")
+
+# Remove non-DIA flights
+DEN_flights  <- COflights %>%
+  filter(ORIGIN == 'DEN'|DEST=='DEN') 
+
+# function to convert from month/day to total days in year
+month_day_to_days <- function(month){
+  if(month==1){
+    days = 0
+  } else if(month==2){
+    days = 31
+  } else if(month==3){
+    days = 31+28 
+  } else if(month==4){
+    days = 31+28+31
+  } else if(month==5){
+    days = 31+28+31+30
+  } else if(month==6){
+    days = 31+28+31+30+31
+  } else if(month==7){
+    days = 31+28+31+30+31+30
+  } else if(month==8){
+    days = 31+28+31+30+31+30+31
+  } else if(month==9){
+    days = 31+28+31+30+31+30+31+31
+  } else if(month==10){
+    days = 31+28+31+30+31+30+31+31+30
+  } else if(month==11){
+    days = 31+28+31+30+31+30+31+31+30+31
+  } else {
+    days = 31+28+31+30+31+30+31+31+30+31+30
+  }
+  return(days)
+}
+
+#count total days in year, mod 7 to get day of week (1st of 2017 is sunday, so remainder 1 = sunday, remainder 2 = monday etc.)
+days <- DEN_flights %>%
+  mutate(days = mapply(month_day_to_days,MONTH)+DAY_OF_MONTH) %>%
+  mutate(week_day=days %% 7)
+
+# Count total flights for all 365 days
+flights_per_Day <- days %>%
+  group_by(days) %>%
+  summarise(flightcount = n())
+# Count total delayed flights for 365 days
+delays_per_Day <- days %>%
+  group_by(days) %>%
+  filter(ARR_DELAY >= 15) %>%
+  summarise(flightcount = n()) 
+# combine above data frames into new data frame with days and probability of delay per day
+P_daily_delay <- cbind(flights_per_Day[1],(delays_per_Day[-1]/flights_per_Day[-1]))
+
 ```
 
 ### What Factors Lead to On-time Arrivals in Denver?
@@ -21,8 +73,14 @@ This question is relavant for the DIA managers who want to increase the amount o
 
 ### Team Plot and Findings
 
-```{r}
-#Team Plot
+```{r, WARNING=FALSE}
+# Data frame built in setup chunk
+ggplot(P_daily_delay,aes(days,flightcount))+
+  geom_line()+
+  geom_smooth(se=FALSE)+
+  xlab("Day of the Year (out of 365)")+
+  ylab("Probability of Delayed Flight")+
+  ggtitle("Probability of Delayed Flights throughout 2017")
 ```
 
 ### Recommendations
@@ -47,11 +105,25 @@ ggplot(data = by_carrier, aes(by_carrier$MONTH))+
 
 Identify 2 factors from the data that lead to more or less delayed flights
 
-#### Name's Plot
+#### Brian's Plot
 
 ```{r}
+P_weekday_delay <- P_daily_delay %>%
+  mutate(week_day=days %% 7)
 
+#map integers to weekday names
+P_weekday_delay$week_dayname <- plyr::mapvalues(P_weekday_delay$week_day,
+                           from = trans <- c(0,1,2,3,4,5,6),
+                           to = c("Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"))
+
+ggplot(P_weekday_delay,aes(days,flightcount,color=factor(week_dayname)))+
+  geom_smooth(se=FALSE)+
+  ggtitle("Probability of a Delayed flight by day of week")+
+  ylab("Probability a flight is Delayed")+
+  xlab("Day of the year")+
+  scale_color_discrete("Day of the Week")
 ```
+
 
 Identify 2 factors from the data that lead to more or less delayed flights
 
@@ -70,7 +142,6 @@ Identify 2 factors from the data that lead to more or less delayed flights
 ```
 
 Identify 2 factors from the data that lead to more or less delayed flights
-
 
 
 #### Individual Contributions
