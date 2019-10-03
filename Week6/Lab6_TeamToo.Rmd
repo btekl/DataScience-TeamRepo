@@ -11,8 +11,9 @@ COflights <- read_csv("COflights.csv")
 
 # Remove non-DIA flights
 DEN_flights  <- COflights %>%
-  filter(ORIGIN == 'DEN'|DEST=='DEN') 
-
+  filter(ORIGIN == 'DEN'| DEST=='DEN') 
+```
+```{r}
 # function to convert from month/day to total days in year
 month_day_to_days <- function(month){
   if(month==1){
@@ -43,20 +44,20 @@ month_day_to_days <- function(month){
   return(days)
 }
 
-#count total days in year
+# Apply function to the dataset
 days <- DEN_flights %>%
-  mutate(days = mapply(month_day_to_days,MONTH)+DAY_OF_MONTH)
+  mutate(day_of_year = mapply(month_day_to_days,MONTH)+DAY_OF_MONTH)
 
 # Count total flights for all 365 days
 flights_per_Day <- days %>%
-  group_by(days) %>%
+  group_by(day_of_year) %>%
   summarise(flightcount = n())
 # Count total delayed flights for 365 days
 delays_per_Day <- days %>%
-  group_by(days) %>%
+  group_by(day_of_year) %>%
   filter(ARR_DELAY >= 15) %>%
   summarise(flightcount = n()) 
-# combine above data frames into new data frame with days and probability of delay per day
+# combine above data frames into new data frame containing days and probability of delay per day
 P_daily_delay <- cbind(flights_per_Day[1],(delays_per_Day[-1]/flights_per_Day[-1]))
 ```
 
@@ -71,9 +72,8 @@ Understanding the causes of delayed flights allows us to make predictions on whe
 
 ### Team Plot and Findings
 
-```{r, MESSAGE=FALSE}
-# Data frame built in setup chunk
-ggplot(P_daily_delay,aes(days,flightcount))+
+```{r message=FALSE}
+ggplot(P_daily_delay,aes(day_of_year,flightcount))+
   geom_line()+
   geom_smooth(se=FALSE)+
   xlab("Day of the Year (out of 365)")+
@@ -81,7 +81,7 @@ ggplot(P_daily_delay,aes(days,flightcount))+
   ggtitle("Probability of Delayed Flights throughout 2017")
 ```
 
-This plot shows a few interesting features. First, we note that the time of year predicts periodic increases and decreases in delays. Delays are more common towards the end/beginning of year holidays, and during the summer months, when overall travel increases. Second, there are periodic changes on a smaller scale as well, suggesting delays may relate to day of the week, or time of month. Finally, the spikes which fall outside the periodic structure indicate non-time related factors which cause delays. 
+This plot shows a few interesting features. First, we note that the time of year predicts periodic increases and decreases in delays. Delays are more common towards the beginning and end of the year and during the summer months, when overall travel increases. Second, there are periodic changes on a smaller scale as well, suggesting delays may relate to day of the week, or time of month. Finally, there are random spikes throughout, either from specific days of the year (Christmas), or due to other non-time related factors.
 
 ### Recommendations
 
@@ -107,17 +107,17 @@ Identify 2 factors from the data that lead to more or less delayed flights
 
 #### Brian's Plot
 
-```{r}
+```{r message=FALSE}
 # take days mod 7 to get day of week (1st of 2017 is sunday, so remainder 1 = sunday, remainder 2 = monday etc.)
 P_weekday_delay <- P_daily_delay %>%
-  mutate(week_day=days %% 7)
+  mutate(week_day=day_of_year %% 7)
 
 # map integers to weekday names 
 P_weekday_delay$week_dayname <- plyr::mapvalues(P_weekday_delay$week_day,
                            from = c(0,1,2,3,4,5,6),
                            to = c("Saturday","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday"))
 
-ggplot(P_weekday_delay,aes(days,flightcount,color=factor(week_dayname)))+
+ggplot(P_weekday_delay,aes(day_of_year,flightcount,color=factor(week_dayname)))+
   geom_smooth(se=FALSE)+
   ggtitle("Probability of a Delayed flight by Day of Week")+
   ylab("Probability a Flight is Delayed")+
@@ -149,7 +149,7 @@ Identify 2 factors from the data that lead to more or less delayed flights
 
 #### Individual Contributions
 
-**Name:**
+**Brian:** I made the function to convert to total day of the year, as well as figuring out how to apply it to the data frame, and using cbind to be able to plot probabilities calculated from summarise. I used the non default scale_color_discrete to edit the title of my plot's legend.
 
 **Name:**
 
