@@ -151,6 +151,33 @@ We also see how the time of year influences delays throughout the week. During t
 #### Charles' Plot
 
 ```{r}
+### what is the probability that a flight is cancelled?
+
+# flights cancelled
+flights_c <- COflights %>%
+  filter(!is.na(CANCELLED), CANCELLED == 1) %>%
+  summarize(total = n())
+
+# total flights
+total_flights <- COflights %>%
+  filter(!is.na(CANCELLED)) %>%
+  summarize(total = n())
+
+flights_c/total_flights
+#there is a .767% probability that a flight is cancelled
+
+### what probability is there that January flights are cancelled?
+# flights cancelled
+jfc <- COflights %>%
+  filter(MONTH == 1, !is.na(CANCELLED), CANCELLED == 1) %>%
+  summarize(total = n())
+
+# total flights
+total_jan <- COflights %>%
+  filter(MONTH == 1, !is.na(CANCELLED)) %>%
+  summarize(total = n())
+
+jfc/total_jan
 
 ```
 
