@@ -130,7 +130,7 @@ Day of the week affects delays both positively and negatively. We see that Thurs
 We also see how the time of year influences delays throughout the week. During the summer months, Thursday, Friday and Monday delays are substantially higher than other days of the week: travelers going on vacation fly out ahead of the weekend, returning on Monday. The beginning and end of year see greater delays on average, both from increased holiday travel and from winter weather.
 
 
-#### Name's Plot
+#### Charles' Plot
 
 ```{r}
 
