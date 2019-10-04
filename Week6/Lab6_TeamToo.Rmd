@@ -180,6 +180,10 @@ ggplot(a_cancel)+
 
 Identify 2 factors from the data that lead to more or less delayed flights
 
+This graph demonstrates which cancellation 'codes' (i.e. Carrier, National Air System, Security, and Weather) are most likely to cause a flight cancellation. The rotated column graph demonstrates that the most common reasons for cancellation are weather problems and carrier causes (carrier chooses to cancel a flight).
+
+National Air System and Security are only scantily responsible for a cancelled flight. Hence, if a cancellation is to be avoided, flights should be selected first by weather and then by the airline. Because weather cannot entirely be controlled, broad inclusions and exclusions for flight scheduling should be used. As the team chart suggests, flights are less likely delayed and cancelled from weather at ~100 days into the year and at ~280 days in the year. Those are the times at which passengers should fly.
+
 #### Name's Plot
 
 ```{r}
@@ -196,6 +200,8 @@ Identify 2 factors from the data that lead to more or less delayed flights
 **Andrew:**
 I created a function to display the percentage that a flight carrier will have a flight delayed by the weather. I found that some carriers may be less trustworthy to delay a flight based off the weather than others. I also found that over weather flights are not that common but still affect many flights.
 
-**Name:**
+**Charles:**
+I compiled data structures related to the graphs involved in the lab. I generated a function which demonstrates that weather is the factor most predominantly linked to flight cancelation. From these results we were able to suggest that periods of travel should be determined mostly by period in the calendar year.
+
 
 **Name:**
