@@ -102,6 +102,7 @@ delays_overall <- DEN_flights %>%
   filter(ARR_TIME > 14) %>%
   summarise(overallcount = n()) 
 
+
 P_weather_delay <- cbind(delays_overall[1],(delays_by_weather[-1]/delays_overall[-1]))
 
 
