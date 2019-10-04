@@ -89,6 +89,8 @@ Time of week, time of year, and carrier all influence the probability a flight i
 
 The primary cause of delays at DIA is weather related. Certain carriers are better able to minimize delays from inclement weather. While cutting ties with an airline is not feasible, focusing on increasing partnerships with airlines such as Frontier, who sees a small percentage of their delays due to weather compared to other carriers, can help to minimize flight delays.
 
+Finally, certain airports tend to send more delayed flights than others. Flights which arrive late to DIA will in turn leave DIA late as well. While we cannot control what other airports are doing, we've identified certain locations which send more delayed flights than others. Among these airports are: TWF, AMA, ALB, EGE, CHS, DAL, SFO, TYS, JFK, and LAX. We recommend adding a slight additional buffer to departure times for flights coming from these locations when conditions warrant, to increase the accuracy of departure times.
+
 ### Individual Sections
 
 #### Andrew's Plot
@@ -177,8 +179,6 @@ ggplot(a_cancel)+
   scale_fill_discrete("Reasons")
 ```
 
-Identify 2 factors from the data that lead to more or less delayed flights
-
 This graph demonstrates which cancellation 'codes' (i.e. Carrier, National Air System, Security, and Weather) are most likely to cause a flight cancellation. The rotated column graph demonstrates that the most common reasons for cancellation are weather problems and carrier causes (carrier chooses to cancel a flight).
 
 National Air System and Security are only scantily responsible for a cancelled flight. Hence, if a cancellation is to be avoided, flights should be selected first by weather and then by the airline. Because weather cannot entirely be controlled, broad inclusions and exclusions for flight scheduling should be used. As the team chart suggests, flights are less likely delayed and cancelled from weather at ~100 days into the year and at ~280 days in the year. Those are the times at which passengers should fly.
@@ -190,7 +190,7 @@ National Air System and Security are only scantily responsible for a cancelled f
 late_flights <- DEN_flights %>%
   filter( ARR_DELAY >= 15) %>%
   filter( DEP_DELAY >= 15)
-Prob_late <- nrow(late_flights) / nrow(den_flights)
+Prob_late <- nrow(late_flights) / nrow(DEN_flights)
 
 #Then I decided to see if there was a relationship between the distance of a flight and the probability of that flight being late
 Late_flights_by_distance <- late_flights %>%
@@ -238,6 +238,7 @@ ggplot(top_P_origin_delay)+
   ylab("Probability")+
   xlab("Origin airport")
 ```
+
 The first graph represents the probability of a flight being late by distance with a line included which represent the average probability of a flight being late accross all distance. The second graph represents the top ten probabilities of a flight being late based off of the airport of origin.  
 
 Based on these findings I would suggest that the following ten airports be targeted for plans created to specifically help reduce lateness, TWF, AMA, ALB, EGE, CHS, DAL, SFO, TYS, JFK, LAX. Additionally, the probability by distance graph suggests that flights which travel long distances (>2000 mile) are not as likely to be late and thus these flights do not need to be a focus for reform.
