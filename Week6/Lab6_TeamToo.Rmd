@@ -92,18 +92,35 @@ How to reduce flight delays/why implement this change
 #### Andrew's Plot
 
 ```{r}
-by_carrier <- COflights %>%
-  group_by(MONTH)%>%
-  filter(DEST == "DEN", WEATHER_DELAY >14)%>%
-  summarise(count = n(), delay = mean(WEATHER_DELAY, na.rm = TRUE))
+delays_by_weather <- DEN_flights %>%
+  group_by(CARRIER) %>%
+  filter(WEATHER_DELAY > 14) %>%
+  summarise(count = n()) 
 
-ggplot(data = by_carrier, aes(by_carrier$MONTH))+
-  geom_bar()
+delays_overall <- DEN_flights %>%
+  group_by(CARRIER) %>%
+  filter(ARR_TIME > 14) %>%
+  summarise(overallcount = n()) 
+
+P_weather_delay <- cbind(delays_overall[1],(delays_by_weather[-1]/delays_overall[-1]))
+
+
+ggplot(P_weather_delay, mapping = aes(y= count*100, x = CARRIER))+
+  geom_col(aes(fill = CARRIER))+
+  scale_fill_discrete("Flight Carriers")+
+  ylab("Percentage of Weather Delay")+
+  xlab("Flight Carriers")+
+  ggtitle("Percentage of Delay by Weather Based by Carrier")
+  
 
 
 ```
 
 Identify 2 factors from the data that lead to more or less delayed flights
+
+Based off of this graph, you can tell which flights carriers were more likely to have weather delay on their flights. Weather delays are not a common occurence but based off this graph the difference between carrier could be massive. For example, the difference between carrier F9 and VX is about 700 flights. The factors that lead to more delays are based off the chance a flight carrier will have a weather delay. Our two factor are weather delays specifically and the flight carriers.
+
+We can tell from this graph that some carriers might be more trustworthy to not have weather delays wither because of carrier policy or flight frequency. The other factor is weather delays and although they do not occur often, the differnce between around 1% in the plot is about 700 flights. That information displays that weather delays still affect amny flights.
 
 #### Brian's Plot
 
@@ -151,7 +168,8 @@ Identify 2 factors from the data that lead to more or less delayed flights
 
 **Brian:** I made the function to convert to total day of the year, as well as figuring out how to apply it to the data frame, and using cbind to be able to plot probabilities calculated from summarise. I used the non default scale_color_discrete to edit the title of my plot's legend.
 
-**Name:**
+**Andrew:**
+I created a function to display the percentage that a flight carrier will have a flight delayed by the weather. I found that some carriers may be less trustworthy to delay a flight based off the weather than others. I also found that over weather flights are not that common but still affect many flights.
 
 **Name:**
 
