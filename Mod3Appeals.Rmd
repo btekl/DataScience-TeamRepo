@@ -1,0 +1,49 @@
+---
+title: "tRAT3 Appeals"
+author: "Brian Teklits"
+date: "10/8/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+### #33
+For #33, c is the correct answer.
+The code for c:
+```{r}
+p_33 <- read_csv("a,b,c\n1,2,4\n1,2,3", col_names = TRUE)
+p_33
+is_tibble(p_33)
+```
+We see that it is indeed a 2x3 tibble.
+
+### #39
+For #39, b is correct.
+
+Building the dataframe and running the code from b, we get a tidy tibble which allows us to use the first and last names individually.
+```{r}
+tb <- tibble(
+  person = c("Nelson, Jacqi","Nelson, Jacqi","Nelson, Jacqi","Winfield, Ron", "Winfield, Ron", "Winfield, Ron", "Zhao, Julia"),
+  treatment = c(1.00,2.00,3.00,1.00,2.00,3.00,1.00),
+  response = c(7.00, 10.0, 9.00, 4.00, 5.00, 8.00, 4.5)
+)
+tb
+separate(tb,person, into=c("last","first"),sep = ",")
+```
+
+
+
+### #40
+
+The tibble:
+```{r}
+tb <- tibble(
+  country = c("Afghanistan","Brazil","China"),
+  `1999` = c(745, 37737, 212258),
+  `2000` = c(2666, 80488, 213766)
+)
+gather(tb,`1999`,`2000`,key = "year",value = "cases")
+```
+
