@@ -19,6 +19,9 @@ is_tibble(p_33)
 ```
 We see that it is indeed a 2x3 tibble.
 
+### #38
+For #38, the answer is b because gender should be gathered into one column and the other answer do not make sense. Gender is one observation and thus in optimal tidy data would have its own column. 
+
 ### #39
 For #39, b is correct.
 
