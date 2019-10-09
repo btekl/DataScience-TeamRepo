@@ -1,7 +1,7 @@
 ---
 title: "tRAT3 Appeals"
-author: "Brian Teklits"
-date: "10/8/2019"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "10/9/2019"
 output: html_document
 ---
 
@@ -19,8 +19,11 @@ is_tibble(p_33)
 ```
 We see that it is indeed a 2x3 tibble.
 
+### #37
+For 37, c is correct. A, b, and d are the defining characteristics of tidy data. E is arguably correct as well, as tibbles are not mandatory for tidy data, though they do make it easier to tidy up data, and to use tidy data. We argue that c is correct as it is the most wrong: in tidy data, each row contains one observation, which may (and almost always will) consist of many variables. 
+
 ### #38
-For #38, the answer is b because gender should be gathered into one column and the other answer do not make sense. Gender is one observation and thus in optimal tidy data would have its own column. 
+For #38, the answer is b because gender should be gathered into one column. Gender is one observation and thus in optimal tidy data would have its own column. A and c are wrong as they are characteristics of tidy data, d is wrong as it prints that it is indeed a tibble. E is wrong, as the missing values are present in the table and therefore are explicit, not implicit.
 
 ### #39
 For #39, b is correct.
@@ -37,16 +40,4 @@ separate(tb,person, into=c("last","first"),sep = ",")
 ```
 
 
-
-### #40
-
-The tibble:
-```{r}
-tb <- tibble(
-  country = c("Afghanistan","Brazil","China"),
-  `1999` = c(745, 37737, 212258),
-  `2000` = c(2666, 80488, 213766)
-)
-gather(tb,`1999`,`2000`,key = "year",value = "cases")
-```
 
