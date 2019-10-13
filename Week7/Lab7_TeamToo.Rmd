@@ -118,7 +118,9 @@ In the early morning, before waking up, the only energy usage is central heating
 
 #### Clint
 
-**Question:** state question, state how it was addressed. 
+**Question:** What does the proportion of total average energy use by each group of metered appliances tell us about the energy use of the household? 
+
+**Answer** The miscellaneous power drain which likely represents heating for the home was consistently using the most electricity. Interestingly, during the summer months the proportion of power use consumed by this subsection decreases and the proportion of power consumed by the water heater and air conditioner rise accordingly.  
 ```{r}
 data1 <- hpc %>% mutate(year=substr(Date,1,4), month=substr(Date, 6,7), day=substr(Date, 9,10))
 
@@ -137,7 +139,6 @@ data1 <- hpc %>% mutate( day=as.integer(day),
 data1 <- hpc %>% 
   mutate(datetime=make_datetime(year, month, day, hour, minute, second))
 ```
-converting watt hours to kilowat minutes = *60/1000 
 
 ```{r}
 mean_global <- hpc %>%
@@ -174,7 +175,6 @@ avg_other <- miss_energy %>%
   mutate(prep_other= (mean_other*60)/1000)
 ```
 
-prop experiment
 
 ```{r}
 experiment <- cbind(avg_other,mean_1,mean_2,mean_3,mean_global)
@@ -188,15 +188,25 @@ prop_test <- experiment%>%
   mutate(prop_other = prep_other/Mean_global)
 
 prop_test_graph <- prop_test%>%
-  select(month,prop_1, prop_2, prop_3, prop_other)%>%
-  as.tibble()
+  select(month,prop_1, prop_2, prop_3, prop_other)
+  
+ggplot(data = prop_test_graph, mapping =  aes(x = month)) +
+  geom_smooth(mapping = aes(y= prop_1, color = 'kitchen'), se=FALSE) +
+  geom_smooth(mapping = aes(y = prop_2, color = 'laundry room'), se=FALSE) +
+  geom_smooth(mapping = aes(y= prop_3, color = 'water heater and air conditioner'), se=FALSE) +
+  geom_smooth(mapping = aes(y = prop_other, color = 'other energy drain'), se=FALSE) +
+  xlab("month of the year") +
+  ylab("proportion of average total power usage") +
+  ggtitle("Proportion of average total power use by meter")+
+  xlim(0,12)
 
 ```
 **Why the Question is interesting:**
+This question is interesting because it shows how the amount of power each group of metered appliances related to the total amount of electricity consumed by the household. 
 
-**How did you formulate the question:** Describe Exploratory Data Analysis techniques used
+**How did you formulate the question:** Initially I was curious to know how much power each metered group of appliances was using in comparison to each other, so I first converted each set into the same unit type as the global active power. After this I decided to use months as my grouping for analysis as this would yeild only 12 values which seemed more managable while still providing a useful frame for analysis. From there I found the average energy consumption for each month and then divided the average use for each metered group by the mean global energy use. 
 
-**Benefit/harm of this analysis:** One sentence
+**Benefit of this analysis:** This analysis revealed that the kitchen and laundry room consume a relatively small proportion of the electricty used by the home, which may be useful in deciding on whether or not to purchase more energy efficient appliances in those rooms as opposed to the water heater and air conditioner or heating apparatus. 
 
 #### Name
 
