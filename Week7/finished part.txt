@@ -1,0 +1,28 @@
+**Question:** Building from the observation that central heating is most likely the most resource expensive utility, my goal is to track which elements of the house are the lease resource costly. How often is the laundry room, which contains a washing-machine, a tumble-drier, a refrigerator and a light more resource expensive than the kitchen and climate control? why?
+
+```{r Charles, message=FALSE, warning=FALSE}
+# Include Plot and Summary Statistic
+sub_1 <- hpc_other_energy %>% 
+  filter(Sub_metering_2 > Sub_metering_1, Sub_metering_2 > Sub_metering_3) %>%
+  group_by(month) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count))
+sub_1
+```
+This shows that the months where laundry room usage and refregirator usage surpass climate control are typically fairer months of the year. This makes intuitive sense because those months require less climate control, and kitchen usage (oven, dishwasher) are limited typically to imediately after food is prepared or eaten. Hence, on months where heat and ac are not always running, consumption is comprised in great part by the second class of submetering.
+
+```{r}
+hpc <- hpc %>% mutate(active_energy = Global_active_power * 1000/60)
+hpc <- hpc %>% mutate(sub_1 = Sub_metering_1/active_energy)
+hpc <- hpc %>% mutate(sub_2 = Sub_metering_2/active_energy)
+hpc <- hpc %>% mutate(sub_3 = Sub_metering_3/active_energy)
+
+ggplot(hpc) +
+        geom_smooth(mapping = aes(x = month, y = Sub_metering_2)) + ggtitle("Laundry/Fridge Power Usage as Percent of Total Power Usage") + xlab("Month") + ylab("Laundry Room, Fridge, Light") + theme_minimal() + scale_x_continuous(breaks = seq(0, 12, 1))
+```
+
+**Why the Question is interesting:** This question is interesting because it provides perspective on which aspects of our home-lives should be the focus of scrutiny when it comes to resource costs. If the cost of cooking and food production is minimal compared to other resources, perhaps this can guide what solutions are available to households planning to cut down costs.
+
+**How did you formulate the question:** I created new variables to determine the consumption of each room for each minute. Then I was able to graph my variable of interest, which was the submetering of 2. From that I was able to receive insight into my question.
+
+**Benefit of this analysis:** The analysis provides the benefit of understanding for the consumption of the second sub metering. It develops further how consumption changes each month.
