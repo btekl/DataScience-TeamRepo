@@ -212,12 +212,37 @@ prop_test_graph <- prop_test%>%
 
 #### Andrew
 
-**Question:** state question, state how it was addressed. 
+**Question:** 
+How does the range of values for Voltage change between winter and summer months through all 4 years.
 ```{r}
-# Include Plot and Summary Statistic
-```
-**Why the Question is interesting:**
+Summermonths <- hpc2 %>%
+  filter(month >= 6 & month <=9)
 
-**How did you formulate the question:** Describe Exploratory Data Analysis techniques used
+Wintermonths <- hpc2 %>%
+  filter(month ==12 | month <= 2)
+  
+ggplot(Summermonths)+
+  geom_line(mapping = aes(x= Date, y = Voltage))+
+  ggtitle("Voltage used During Summer Months") +
+  ylab("Voltage") +
+  xlab("Timeline")+
+  geom_hline(aes(yintercept=250),color="red")+
+  geom_hline(aes(yintercept=230),color="red")
+
+ggplot(Wintermonths)+
+  geom_line(mapping = aes(x= Date, y = Voltage))+
+  ggtitle("Voltage used During Winter Months")+
+  ylab("Voltage") +
+  xlab("Timeline")+
+  geom_hline(aes(yintercept=250),color="red")+
+  geom_hline(aes(yintercept=230),color="red")
+```
+**Answer**
+We can see that durong the Winter, the voltage varies more often than it does during the summer. This could be do to more electricity being used during the winter due to weather or other circumstances. We can also notice that the winter months usual go past either of the red lines each year but during the summer, the values for the voltage became narrower between the red lines as time went on. Not once did the voltage of the house go over 250 volts from 2008-2010. We can tell now that winter often uses more electricity than the summmer while also ranging over a large scale of values.
+
+**Why the Question is interesting:**
+This question is interesting because Summer and Winter are often the two seasons where voltage is used the most often due to extreme weather.This test will allow us to compare the range of values of Voltage depending on the year and months.
+**How did you formulate the question:** 
+After exploring through the data I noticed that over time the house was able to limit the range of voltage values during summer months past year 2009. This led me to question how the voltage differed depending on the year. I created the horizontal red lines in order to display that the range of values for Winter months is often larger than those of summer months. You can also compare each year by year and notice that the range of values for voltage also narrows down as the years go on.
 
 
