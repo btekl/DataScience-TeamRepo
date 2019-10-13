@@ -58,7 +58,7 @@ outages
 We split these into two groups: those with more than 6 minutes of lost data in a day, and those under that threshold. We guessed that the shorter gaps in data might represent measurement malfunctions or errors, which could be filled in from the previous minute's measurements without substantially changing the data. Longer delays could indicate power outages: these could be dropped if desired.
 
 We decided to handle these cases individually based on the questions we looked to answer. 
-```{r}
+```{r, include=FALSE}
 # Use these to plot times on a smaller dataset, takes forever to run on the entire dataset
 
 hpc2 <- hpc2 %>% mutate(year=substr(Date,1,4), month=substr(Date, 6,7), day=substr(Date, 9,10))
@@ -76,7 +76,7 @@ hpc2 <- hpc2 %>% mutate(datetime=make_datetime(year, month, day, hour, minute, s
 ```
 
 
-### Individual Section
+### Individual Sections
 
 #### Brian
 
@@ -84,7 +84,7 @@ From the UCI website, we're given a formula which can calculate the energy consu
 
 **Question:** What conclusions can we reach about this other energy usage? What appliances might it measure?
 
-**Answer:** Other energy usage likely measures central heating. The fall and winter months are all of the top 6 months in terms of high usage. High usage is defined as minutes measured at over 30 watt-hours, roughly representing the top 5% of measurements.
+**Answer:** The largest contribution to other energy usage is likely central heating. Defining high usage as minutes measured at over 30 watt-hours, roughly representing the top 5% of measurements, I found that the 6 Fall and Winter months (October through March), make up the top 6 in high usage minutes. The top 5 of these are more than double the number of minutes of any Spring or Summer month. 
 
 ```{r}
 hpc_other_energy <- hpc2 %>%
@@ -107,25 +107,14 @@ ggplot(top_day) +
   xlab("")+
   geom_hline(aes(yintercept=36),color="red")
 ```
+
 In the early morning, before waking up, the only energy usage is central heating. Upon waking up, other appliances are put into use, but we still see the same baseline level of usage from the heater throughout the entire day.
 
 **Why the Question is interesting:** Rather than taking a pre-defined quantity where we know what the measurements represent, we do the opposite. We calculate the other energy usage, and attempt to analyse what it represents.
 
-**How did you formulate the question:** 
+**How did you formulate the question:** First, I used a mutate to add the new variable, then ran a few filters to get an idea of what ranges of values it took. Settling on 30 as a reasonable value for high usage, I then ran some summaries on months and days to determine the dates of highest usage. Finally, I plotted a variety of high usage days to get an idea of what similarities they had, settling on the above plot. 
 
-**Benefit/harm of this analysis:** One sentence
-
-#### Name
-
-**Question:** state question, state how it was addressed. 
-```{r}
-# Include Plot and Summary Statistic
-```
-**Why the Question is interesting:**
-
-**How did you formulate the question:** Describe Exploratory Data Analysis techniques used
-
-**Benefit/harm of this analysis:** One sentence
+**Benefit of this analysis:** A frugal homeowner might use this data to justify turning the thermostat down a few extra degrees overnight, in order to save on energy usage.
 
 #### Name
 
@@ -149,8 +138,16 @@ In the early morning, before waking up, the only energy usage is central heating
 
 **How did you formulate the question:** Describe Exploratory Data Analysis techniques used
 
-<<<<<<< HEAD
 **Benefit/harm of this analysis:** One sentence
-=======
-**Benefit/harm of this analysis:** One sentence
->>>>>>> master
+
+#### Name
+
+**Question:** state question, state how it was addressed. 
+```{r}
+# Include Plot and Summary Statistic
+```
+**Why the Question is interesting:**
+
+**How did you formulate the question:** Describe Exploratory Data Analysis techniques used
+
+
