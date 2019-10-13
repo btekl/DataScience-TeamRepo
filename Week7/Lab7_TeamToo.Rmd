@@ -255,6 +255,4 @@ This question is interesting because Summer and Winter are often the two seasons
 **How did you formulate the question:** 
 After exploring through the data I noticed that over time the house was able to limit the range of voltage values during summer months past year 2009. This led me to question how the voltage differed depending on the year. I created the horizontal red lines in order to display that the range of values for Winter months is often larger than those of summer months. You can also compare each year by year and notice that the range of values for voltage also narrows down as the years go on.
 
-**Benefit of Analysis**
-The observation that winter is more likely to use more voltage than summer months gives the homeowner knowledge of when he is more likely to use more voltage and be prepared to try an limit that amount.
 
