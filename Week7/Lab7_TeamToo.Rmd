@@ -140,7 +140,7 @@ In the early morning, before waking up, the only energy usage is central heating
 
 **Benefit/harm of this analysis:** One sentence
 
-#### Name
+#### Andrew
 
 **Question:** state question, state how it was addressed. 
 ```{r}
