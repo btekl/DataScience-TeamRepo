@@ -116,11 +116,81 @@ In the early morning, before waking up, the only energy usage is central heating
 
 **Benefit of this analysis:** A frugal homeowner might use this data to justify turning the thermostat down a few extra degrees overnight, in order to save on energy usage.
 
-#### Name
+#### Clint
 
 **Question:** state question, state how it was addressed. 
 ```{r}
-# Include Plot and Summary Statistic
+data1 <- hpc %>% mutate(year=substr(Date,1,4), month=substr(Date, 6,7), day=substr(Date, 9,10))
+
+data1 <- hpc %>% mutate(hour=substr(Time,1,2), minute=substr(Time, 4,5), second=substr(Time, 7,8))
+
+data1 <- hpc %>% mutate( day=as.integer(day),
+                           month=as.integer(month),
+                           year=as.integer(year),
+                           hour=as.integer(hour),
+                           minute=as.integer(minute),
+                           second=as.integer(second))
+```
+
+```{r}
+
+data1 <- hpc %>% 
+  mutate(datetime=make_datetime(year, month, day, hour, minute, second))
+```
+converting watt hours to kilowat minutes = *60/1000 
+
+```{r}
+mean_global <- hpc %>%
+  group_by(month)%>%
+  summarise(Mean_global= mean(Global_active_power, na.rm = TRUE))
+
+mean_1 <- hpc %>%
+  group_by(month)%>%
+  summarise(Mean_sub_1= mean(Sub_metering_1, na.rm = TRUE))%>%
+  mutate(avg_use_1 = (Mean_sub_1*60)/1000)
+
+
+mean_2 <- hpc %>%
+  group_by(month)%>%
+  summarise(Mean_sub_2= mean(Sub_metering_2, na.rm = TRUE))%>%
+  mutate(avg_use_2 = (Mean_sub_2*60)/1000)
+  
+
+
+mean_3 <- hpc %>%
+  group_by(month) %>%
+  summarise(Mean_sub_3= mean(Sub_metering_3, na.rm = TRUE))%>%
+  mutate(avg_use_3 = (Mean_sub_3*60)/1000)
+```
+
+```{r}
+miss_energy <- hpc %>%
+  select(month, Global_active_power, Sub_metering_1, Sub_metering_2, Sub_metering_3) %>%
+  group_by(month)%>%
+  mutate(other_energy = (Global_active_power*1000/60 - Sub_metering_1 - Sub_metering_2 - Sub_metering_3))
+
+avg_other <- miss_energy %>%
+  summarise(mean_other= mean(other_energy, na.rm = TRUE))%>%
+  mutate(prep_other= (mean_other*60)/1000)
+```
+
+prop experiment
+
+```{r}
+experiment <- cbind(avg_other,mean_1,mean_2,mean_3,mean_global)
+
+experiment <- experiment[, !duplicated(colnames(experiment))]
+
+prop_test <- experiment%>%
+  mutate(prop_1 = avg_use_1/Mean_global)%>%
+  mutate(prop_2 = avg_use_2/Mean_global)%>%
+  mutate(prop_3 = avg_use_3/Mean_global)%>%
+  mutate(prop_other = prep_other/Mean_global)
+
+prop_test_graph <- prop_test%>%
+  select(month,prop_1, prop_2, prop_3, prop_other)%>%
+  as.tibble()
+
 ```
 **Why the Question is interesting:**
 
