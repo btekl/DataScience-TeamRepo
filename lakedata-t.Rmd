@@ -30,5 +30,8 @@ Tang3$year3 <- round(Tang3$year3,0)
 Tang12 <- full_join(Tang1,Tang2,by=c("year1"="year2"))
 Tang <- full_join(Tang12,Tang3, by = c("year1"="year3"))
 
-Tang.skinny <- gather(Tang,key"")
+Tang.skinny <- gather(Tang,key="measurement",value="value",BSi,Charcoal,TEX86)
+
+ggplot(data=Tang.skinny)+
+  geom_line(aes(x=year1,y=value,col=measurement))
 ```
