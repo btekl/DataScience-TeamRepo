@@ -34,4 +34,10 @@ Tang.skinny <- gather(Tang,key="measurement",value="value",BSi,Charcoal,TEX86)
 
 ggplot(data=Tang.skinny)+
   geom_line(aes(x=year1,y=value,col=measurement))
+
+
+ggplot(data=filter(Tang.skinny,measurement=="TEX86"))+
+  geom_point(aes(x=year1,y=value,col=measurement))+
+  geom_smooth(aes(x=year1,y=value,col=measurement))
+
 ```
