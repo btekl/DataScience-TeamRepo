@@ -67,7 +67,9 @@ head(VOI)
 #### Charles' Plot
 ```{r}
 # Challa
+
 #head(Challa)
+# Challa is already nearly tidy, it just needs the units row to be removed, have the columns be put in the right unit (doubles), and have any empty values removed.
 
 Challa2 <- Challa %>%
   filter(`varve thickness` != 'mm')
