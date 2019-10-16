@@ -1,0 +1,67 @@
+---
+title: "Lab 8: Data Science to Solve Problems and Answer Questions, part 1"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "10/18/2019"
+output: html_document
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+### Dataset and Questions
+
+**Who is hiring us?:** A candy company seeking to develop new products.
+
+**Overall question and it's importance:** What candies are the most universally liked? 
+
+Understanding which candies are the most popular informs us of what qualities to keep in mind when designing a new candy.
+
+**Why the answer matters:** There are a variety of conclusions which can be drawn depending on what the company wants their new product to target. Universally liked candies offer a safe bet, universally disliked offer some qualities to avoid, while those in between could represent somewhat effective ideas which can be improved upon.
+
+**Description of Dataset:** The dataset can be found [here.](https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv) It contains information from a survey, with user data on gender, age, and country/state. Users rate candy on a scale of 3: DESPAIR, MEH, JOY. Essentially, these categories translate to dislike, indifferent, or like. 
+
+There are also many other columns describing a variety of things added onto the survey, many of which are unclear what they describe. The candy data corresponds to 104 columns, each describing a different candy and the ratings associated to it from the 2460 respondents to the survey. Mixed in with the candy ratings are a variety of gag questions.
+
+### Individual Questions
+
+Some ideas: 
+genders, age, country/state
+popular/unpopular candy by demographic
+
+**Andrew's Question:**
+
+**Why this question is interesting:**
+
+**Brian's Question:**
+
+**Why this question is interesting:**
+
+**Charles' Question:**
+
+**Why this question is interesting:**
+
+**Clint's Question:**
+
+**Why this question is interesting:**
+
+### East Africa Lake Data Visualizations
+
+#### Andrew's Plot
+```{r}
+# CRU and MAM rainfall
+```
+
+#### Brian's Plot
+```{r}
+# VOI rainfall
+```
+
+#### Charles' Plot
+```{r}
+# Challa
+```
+
+#### Clint's Plot
+```{r}
+# Malawi
+```
