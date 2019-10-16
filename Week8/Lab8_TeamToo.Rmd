@@ -42,9 +42,9 @@ popular/unpopular candy by demographic
 
 **Why this question is interesting:** Understanding how preferences vary among different age groups can provide intersting insights. Perhaps some candies are universally popular among all ages, while others appeal only to certain groups.
 
-**Charles' Question:**
+**Charles' Question:** Are there any candies which are predominantly popular to a particular sex/gender? Which candies, if any, are preferred predominantly by men or women?
 
-**Why this question is interesting:**
+**Why this question is interesting:** Understanding which candies appeal predominantly to men or women provides meaningful data to market researchers and advertisers who seek to maximize sales within their markets. Hence, such data can be invaluable.
 
 **Clint's Question:**
 
@@ -89,7 +89,7 @@ ggplot(data = Challa2)+
   #geom_smooth(aes(x=`Age AD`,y=`varve thickness`))
   
 ```
-By measuring the frequency of varve thickness, which is directly associated with the 
+By measuring the frequency of varve thickness, which is directly associated with the rainfall each year, a conclusion can be made on what was the most common depth of rainfall each year. Because most varve thickness was slightly less than 1mm in thickness we know that historically most rain has been around that quantity.
 
 
 #### Clint's Plot
