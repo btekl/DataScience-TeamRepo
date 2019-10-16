@@ -67,7 +67,14 @@ head(VOI)
 #### Charles' Plot
 ```{r}
 # Challa
-head(Challa)
+#head(Challa)
+
+Challa2 <- Challa %>%
+  filter(`varve thickness` != 'mm')
+
+Challa2$`varve thickness` <- as.double(Challa2$`varve thickness`)
+Challa2$`dark layer` <- as.double(Challa2$`dark layer`)
+Challa2$`light layer`<- as.double(Challa2$`light layer`)
 ```
 
 #### Clint's Plot
