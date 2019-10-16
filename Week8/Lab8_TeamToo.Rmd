@@ -72,12 +72,25 @@ head(VOI)
 # Challa is already nearly tidy, it just needs the units row to be removed, have the columns be put in the right unit (doubles), and have any empty values removed.
 
 Challa2 <- Challa %>%
-  filter(`varve thickness` != 'mm')
+  filter(!is.na(Challa$`Age AD`))
+
+Challa2 <- Challa2 %>%
+  filter(!is.na(`varve thickness`))
 
 Challa2$`varve thickness` <- as.double(Challa2$`varve thickness`)
 Challa2$`dark layer` <- as.double(Challa2$`dark layer`)
 Challa2$`light layer`<- as.double(Challa2$`light layer`)
+
+ggplot(data = Challa2)+
+  geom_density(aes(x=`varve thickness`))+
+  xlab('Varve Thickness (mm)')+
+  ylab('Frequency')+
+  ggtitle('Frequency of Measured Varve Thickness')
+  #geom_smooth(aes(x=`Age AD`,y=`varve thickness`))
+  
 ```
+By measuring the frequency of varve thickness, which is directly associated with the 
+
 
 #### Clint's Plot
 ```{r}
