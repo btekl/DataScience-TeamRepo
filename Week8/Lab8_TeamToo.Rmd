@@ -54,8 +54,8 @@ popular/unpopular candy by demographic
 
 #### Andrew's Plot
 ```{r}
-# CRU and MAM rainfall
-head(CRU_MAM)
+# Malawi
+head(Malawi)
 ```
 
 #### Brian's Plot
@@ -72,6 +72,7 @@ head(Challa)
 
 #### Clint's Plot
 ```{r}
-# Malawi
-head(Malawi)
+# CRU and MAM rainfall
+
+head(CRU_MAM)
 ```
