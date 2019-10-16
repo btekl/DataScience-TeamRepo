@@ -6,6 +6,12 @@ output: html_document
 ---
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(readxl)
+candy <- read_csv("https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv")
+Challa <- read_excel("../East Africa lake data.xlsx",sheet = 1)
+Malawi <- read_excel("../East Africa lake data.xlsx",sheet = 3)
+VOI <- read_excel("../East Africa lake data.xlsx",sheet = 8)
+CRU_MAM <- read_excel("../East Africa lake data.xlsx",sheet = 9)
 ```
 
 ### Dataset and Questions
@@ -16,7 +22,7 @@ library(tidyverse)
 
 Understanding which candies are the most popular informs us of what qualities to keep in mind when designing a new candy.
 
-**Why the answer matters:** There are a variety of conclusions which can be drawn depending on what the company wants their new product to target. Universally liked candies offer a safe bet, universally disliked offer some qualities to avoid, while those in between could represent somewhat effective ideas which can be improved upon.
+**Why the answer matters:** There are a variety of conclusions which can be drawn depending on who the company wants their new product to target. Universally liked candies offer a safe bet, universally disliked offer some qualities to avoid, while those in between could represent somewhat effective ideas which can be improved upon.
 
 **Description of Dataset:** The dataset can be found [here.](https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv) It contains information from a survey, with user data on gender, age, and country/state. Users rate candy on a scale of 3: DESPAIR, MEH, JOY. Essentially, these categories translate to dislike, indifferent, or like. 
 
@@ -25,16 +31,16 @@ There are also many other columns describing a variety of things added onto the 
 ### Individual Questions
 
 Some ideas: 
-genders, age, country/state
+general candy consumer demographics: gender, age, country/state
 popular/unpopular candy by demographic
 
 **Andrew's Question:**
 
 **Why this question is interesting:**
 
-**Brian's Question:**
+**Brian's Question:** Which candies are the most/least popular among different age groups? Which candy, if any, is the most polarizing (Liked by one group and disliked by another)?
 
-**Why this question is interesting:**
+**Why this question is interesting:** Understanding how preferences vary among different age groups can provide intersting insights. Perhaps some candies are universally popular among all ages, while others appeal only to certain groups.
 
 **Charles' Question:**
 
@@ -49,19 +55,23 @@ popular/unpopular candy by demographic
 #### Andrew's Plot
 ```{r}
 # CRU and MAM rainfall
+head(CRU_MAM)
 ```
 
 #### Brian's Plot
 ```{r}
 # VOI rainfall
+head(VOI)
 ```
 
 #### Charles' Plot
 ```{r}
 # Challa
+head(Challa)
 ```
 
 #### Clint's Plot
 ```{r}
 # Malawi
+head(Malawi)
 ```
