@@ -46,9 +46,9 @@ popular/unpopular candy by demographic
 
 **Why this question is interesting:** Understanding which candies appeal predominantly to men or women provides meaningful data to market researchers and advertisers who seek to maximize sales within their markets. Hence, such data can be invaluable.
 
-**Clint's Question:**
+**Clint's Question:** Does the popularity of candy vary by region or state? Are some candies unviversally popular? 
 
-**Why this question is interesting:**
+**Why this question is interesting:** By understanding where certain candies are most popular corporations can direct their marketing resources to ensure opitmize sales in already dmoinated market or to grow sales in a emerging market. 
 
 ### East Africa Lake Data Visualizations
 
@@ -96,5 +96,24 @@ By measuring the frequency of varve thickness, which is directly associated with
 ```{r}
 # CRU and MAM rainfall
 
+tidy_lakes_9 <- CRU_MAM %>%
+  select(Year, `GPCC MAM Normalized`, `CRU MAM Normalized`, `GPCC OND Normalized`, `CRU OND Normalized`) %>%
+  rename(MAM =`GPCC MAM Normalized`, OND = 'GPCC OND Normalized')%>%
+  gather(MAM, OND, key = 'months', value = 'GPCC_Normalized')
+
+fin_lake <- tidy_lakes_9%>%
+  rename(MAM = 'CRU MAM Normalized', OND = `CRU OND Normalized`)%>%
+  gather('MAM', 'OND', key = 'months_2', value = 'CRU_Normalized') %>%
+  filter(months == months_2)%>%
+  select('Year', 'months', `GPCC_Normalized`, 'CRU_Normalized')
+  
+ ggplot() + 
+  geom_smooth(data = fin_lake, mapping= aes(x= Year, y = GPCC_Normalized, color = 'GPCC')) +
+  geom_smooth(data = fin_lake, mapping= aes(x= Year, y = CRU_Normalized, color = 'CRU')) +
+  facet_grid(.~months) +
+  ggtitle("CRU and GPCC Normalized by year faceted by month")+
+  ylab("GPCC and CRU")
+
 head(CRU_MAM)
 ```
+By looking at the rainfall data over time faceted by the rainy season it is possible to observe the difference in rainfall between CRU and GPCC. Once the data was graphed you can see that the March April May rainy season has higher rainfall over time then the October November December rainy season. CRU has consistently higher rainfall during the MAM rainy season but during the OND rainy season the rainfall leader varies over the years.
