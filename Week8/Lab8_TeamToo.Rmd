@@ -78,7 +78,7 @@ Malawi2$BSi2 <- round(Malawi2$BSi2,2)
 ```
 
 
-```{r}
+```{r,warning=FALSE, error=FALSE, message=FALSE}
 MalawiAD <- Malawi1 %>%
   filter(Age1 >0)
 
@@ -90,7 +90,7 @@ ggplot(MalawiAD, mapping = aes(x = Age1, y= BSi1))+
 ```
 
 #### Brian's Plot
-```{r}
+```{r,warning=FALSE, error=FALSE, message=FALSE}
 # VOI rainfall
 VOI <- VOI %>%
   gather(Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,key = "Month", value = "Rainfall")
@@ -101,7 +101,7 @@ ggplot(VOI)+
 ```
 
 #### Charles' Plot
-```{r}
+```{r,warning=FALSE, error=FALSE, message=FALSE}
 # Challa
 
 #head(Challa)
@@ -129,7 +129,7 @@ By measuring the frequency of varve thickness, which is directly associated with
 
 
 #### Clint's Plot
-```{r}
+```{r,warning=FALSE, error=FALSE, message=FALSE}
 # CRU and MAM rainfall
 
 tidy_lakes_9 <- CRU_MAM %>%
