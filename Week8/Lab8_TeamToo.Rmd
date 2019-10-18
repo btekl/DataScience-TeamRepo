@@ -34,9 +34,9 @@ Some ideas:
 general candy consumer demographics: gender, age, country/state
 popular/unpopular candy by demographic
 
-**Andrew's Question:**
+**Andrew's Question:** Are certain candies more likely to be popularized by Country?
 
-**Why this question is interesting:**
+**Why this question is interesting:** This would be an interesting question because it would explain which candies are most popular by each country and allow us to compare culture between nations.
 
 **Brian's Question:** Which candies are the most/least popular among different age groups? Which candy, if any, is the most polarizing (Liked by one group and disliked by another)?
 
@@ -55,7 +55,38 @@ popular/unpopular candy by demographic
 #### Andrew's Plot
 ```{r}
 # Malawi
-head(Malawi)
+Malawi <- Filter(function(x)!all(is.na(x)), Malawi)
+
+Malawi <- rename(Malawi,ybp1=`Age, ybp`, Age1 = `Age (calender)...2`, BSi1 = `BSi MAR (mgSiO2/cm2y)...3`, ybp2 = `Age, cal ybp`, Age2 = `Age (calender)...7`,BSi2 = `BSi MAR (mgSiO2/cm2y)...8`)
+
+Malawi <- Malawi%>%
+  filter(!is.na(BSi1))
+
+Malawi1 <- Malawi %>%
+  select(ybp1, Age1, BSi1)
+Malawi1$ybp1 <- parse_double(Malawi1$ybp1)
+Malawi1$ybp1 <- round(Malawi1$ybp1)
+Malawi1$Age1 <- round(Malawi1$Age1)
+Malawi1$BSi1 <- round(Malawi1$BSi1,2)
+
+Malawi2 <- Malawi %>%
+  select(ybp2, Age2, BSi2)
+Malawi2$ybp2 <- parse_double(Malawi2$ybp2)
+Malawi2$ybp2 <- round(Malawi2$ybp2)
+Malawi2$Age2 <- round(Malawi2$Age2)
+Malawi2$BSi2 <- round(Malawi2$BSi2,2)
+```
+
+
+```{r}
+MalawiAD <- Malawi1 %>%
+  filter(Age1 >0)
+
+ggplot(MalawiAD, mapping = aes(x = Age1, y= BSi1))+
+  geom_smooth()+
+  xlab("Year AD")+
+  ylab("BSI MAR ")+
+  ggtitle("Levels of BSI MAR versus Year in AD for Malawi")
 ```
 
 #### Brian's Plot
