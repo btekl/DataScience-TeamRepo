@@ -24,11 +24,15 @@ Understanding which candies are the most popular informs us of what qualities to
 
 **Why the answer matters:** There are a variety of conclusions which can be drawn depending on who the company wants their new product to target. Universally liked candies offer a safe bet, universally disliked offer some qualities to avoid, while those in between could represent somewhat effective ideas which can be improved upon.
 
-**Description of Dataset:** The dataset can be downloaded [here.](https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv) It contains information from a survey, with user data on gender, age, and country/state. Users rate candy on a scale of 3: DESPAIR, MEH, JOY. Essentially, these categories translate to dislike, indifferent, or like. 
+**Description of Dataset:** The dataset can be found [here.](https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv) It contains information from a survey, with user data on gender, age, and country/state. Users rate candy on a scale of 3: DESPAIR, MEH, JOY. Essentially, these categories translate to dislike, indifferent, or like. 
 
 There are also many other columns describing a variety of things added onto the survey, many of which are unclear what they describe. The candy data corresponds to 104 columns, each describing a different candy and the ratings associated to it from the 2460 respondents to the survey. Mixed in with the candy ratings are a variety of gag questions.
 
 ### Individual Questions
+
+Some ideas: 
+general candy consumer demographics: gender, age, country/state
+popular/unpopular candy by demographic
 
 **Andrew's Question:** Are certain candies more likely to be popularized by Country?
 
@@ -73,6 +77,7 @@ Malawi2$Age2 <- round(Malawi2$Age2)
 Malawi2$BSi2 <- round(Malawi2$BSi2,2)
 ```
 
+
 ```{r,warning=FALSE, error=FALSE, message=FALSE}
 MalawiAD <- Malawi1 %>%
   filter(Age1 >0)
@@ -83,21 +88,18 @@ ggplot(MalawiAD, mapping = aes(x = Age1, y= BSi1))+
   ylab("BSI MAR ")+
   ggtitle("Levels of BSI MAR versus Year in AD for Malawi")
 ```
+When looking at how the BSI MAR levels have change since 0 AD, we can notice that since around 1200 AD, the BSI MAR levels of Malawi are increasing drastically as time moves forward. There were no data points from 1847 - 2019 AD so we are unable to analyze how trends are changing since 1847, however; from the results we do have, we would expect the average BSI levels to increase.
 
 #### Brian's Plot
-```{r,warning=FALSE, message=FALSE}
+```{r,warning=FALSE, error=FALSE, message=FALSE}
 # VOI rainfall
 VOI <- VOI %>%
   gather(Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,key = "Month", value = "Rainfall")
 VOI <- VOI %>%
   select(-`...14`,-`...15`)
 ggplot(VOI)+
-  geom_smooth(aes(Year,Rainfall,color=Month),se = FALSE)+
-  ylab("Rainfall in cm")+
-  ggtitle("VOI Station Rainfall")
+  geom_smooth(aes(Year,Rainfall,color=Month),se = FALSE)
 ```
-
-Rainfall is highest in March, April, November, and December across the entire 20th century. There is also a notable shift in the 1950's, when rainfall occurred earlier than in other years. March and November see a rise in recorded rainfall, while April and December see reduced amounts of rainfall. This trend holds for November and December for the rest of the century. In the late 70's/early 80's, the trend reverses for March: rainfall drops considerably, and April again sees higher totals of rainfall.
 
 #### Charles' Plot
 ```{r,warning=FALSE, error=FALSE, message=FALSE}
@@ -121,8 +123,9 @@ ggplot(data = Challa2)+
   xlab('Varve Thickness (mm)')+
   ylab('Frequency')+
   ggtitle('Frequency of Measured Varve Thickness')
+  #geom_smooth(aes(x=`Age AD`,y=`varve thickness`))
+  
 ```
-
 By measuring the frequency of varve thickness, which is directly associated with the rainfall each year, a conclusion can be made on what was the most common depth of rainfall each year. Because most varve thickness was slightly less than 1mm in thickness we know that historically most rain has been around that quantity.
 
 
@@ -148,6 +151,6 @@ fin_lake <- tidy_lakes_9%>%
   ggtitle("CRU and GPCC Normalized by year faceted by month")+
   ylab("GPCC and CRU")
 
+head(CRU_MAM)
 ```
-
 By looking at the rainfall data over time faceted by the rainy season it is possible to observe the difference in rainfall between CRU and GPCC. Once the data was graphed you can see that the March April May rainy season has higher rainfall over time then the October November December rainy season. CRU has consistently higher rainfall during the MAM rainy season but during the OND rainy season the rainfall leader varies over the years.
