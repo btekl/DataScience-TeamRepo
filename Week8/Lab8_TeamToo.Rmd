@@ -40,7 +40,7 @@ popular/unpopular candy by demographic
 
 **Brian's Question:** Which candies are the most/least popular among different age groups? Which candy, if any, is the most polarizing (Liked by one group and disliked by another)?
 
-**Why this question is interesting:** Understanding how preferences vary among different age groups can provide intersting insights. Perhaps some candies are universally popular among all ages, while others appeal only to certain groups.
+**Why this question is interesting:** Understanding how preferences vary among different age groups can provide interesting insights. Perhaps some candies are universally popular among all ages, while others appeal only to certain groups.
 
 **Charles' Question:** Are there any candies which are predominantly popular to a particular sex/gender? Which candies, if any, are preferred predominantly by men or women?
 
@@ -61,7 +61,12 @@ head(Malawi)
 #### Brian's Plot
 ```{r}
 # VOI rainfall
-head(VOI)
+VOI <- VOI %>%
+  gather(Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec,key = "Month", value = "Rainfall")
+VOI <- VOI %>%
+  select(-`...14`,-`...15`)
+ggplot(VOI)+
+  geom_smooth(aes(Year,Rainfall,color=Month),se = FALSE)
 ```
 
 #### Charles' Plot
