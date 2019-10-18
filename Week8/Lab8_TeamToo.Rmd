@@ -53,7 +53,7 @@ popular/unpopular candy by demographic
 ### East Africa Lake Data Visualizations
 
 #### Andrew's Plot
-```{r}
+```{r, warning=FALSE, error=FALSE, message=FALSE}
 # Malawi
 Malawi <- Filter(function(x)!all(is.na(x)), Malawi)
 
