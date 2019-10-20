@@ -1,0 +1,155 @@
+---
+title: "Lab 9: Data Science to Solve Problems and Answer Questions, part 2"
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "10/25/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+candy <- read_csv("https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv")
+# Fix non UTF characters
+names(candy) <- iconv(names(candy), to='ASCII', sub='')
+
+candy <- select(candy,-`Internal ID`,-`X114`)
+
+# Regex to simplify column names
+colnames(candy) <- str_replace(colnames(candy), regex("^Q[\\d]+:?[\\s]*\\|?(.*)$"),"\\1")
+candy <- rename(candy, "State" = `STATE, PROVINCE, COUNTY, ETC`)
+USA_Names <- c("'merica", "Ahem....Amerca", "Alaska", "america","America","California", "Murica", "murrika","I pretend to be from Canada, but I am really from the United States.","New Jersey","New York",	"North Carolina", "Pittsburgh","The United States","The United States of America","Trumpistan", "U S",	"u s a","u.s.","U.S.","u.s.a.","U.S.A.","unhinged states","Unied States","unite states","United Sates","United staes","United State","United Statea","United Stated","united states","united States","United states","United States","united states of america","United States of America","United Statss","united ststes","United ststes","Unites States","us","Us","US","US of A","usa","Usa","USa","USA","USA USA USA!!!!","USA! USA! USA!","USA? Hard to tell anymore..", "USAA","usas", "USAUSAUSA","USSA")
+Canada_Names <- c("Can","canada","Canada","CANADA","Canada`","soviet canuckistan")
+UK_Names <- c("endland","England","Scotland", "U.K.","uk","Uk","UK","United kingdom","United Kingdom")
+Unknowns = c(1,32,35,45,46, "A", "Earth", "Fear and Loathing","I don't know anymore", "Narnia", "subscribe to dm4uz3 on youtube",	NA,"insanity lately","Canae","cascadia","Atlantis","Europe","UD","N. America")
+Cali_Names <- c("CA","ca","Ca","alameda county, california","BERKELEY, CA","CA, Alameda","cailifornia","Cali","calif","Califor","califormia","California, Contra Costa County, Pleasant Hill", "California, Mendocino County", "California, San Diego", "California, San Diego county","California, San Francisco", "California, USA","California, Ventura County","Glendora, Los Angeles, California","Los Angeles, California","La","Oakland, California","oakland,ca","San Jose","Santa Barbara co. California","Santa Clara County, California","Santa Cruz County, California","California, Alameda", "california", "orange county, ca")
+WA_Names <- c("Washington","WA","Wa","wa","Washington, Clark","Washington, King","Washington State","Washington, King County","washington","Washington state","Washington, Seattle, king","Washington state, Kitsap County","Issaquah, WA, King County","Washington, seattle, king","hatcom County, WA","Washington State, King County", "City of Seattle","Whatcom County, WA","Washington State, King County, City of Seattle","King County, Washington","Washington, Island county","renton,wa","wa, spokane","Vancouver, Wa","Washingto")
+NY_Names <- c("NY", "New York","Ny","ny","new york","New york","NEW YORK","nyc","New York County, New York City, New York State","New York, New York","New York, NY","NY, Tompkins County","NYC","suffolk county ny","ulster county, NY","Astoria NY","Kings, New York","Queens","Brooklyn, kings county ny","DUTCHESS COUNTY NY","Brooklyn")
+PA_Names <- c("PA","pa","Pa","Pa.   Northampton county","pennsylvania","PEnnsylvania","PENNSYLVANIA","Pennsylvania, Montgomery County","pennsylvania, northampton couny, easton","philadelphia","Philadelphia","Philadelphia PA","Philadelphia, PA","Pittsburgh pa","exton pa", "Northampton County, PA")
+IL_Names <- c("IL","Chicago, Illinois","Il","illinois","Illinois","Chicago, IL","ill","il","Northbrook, IL","Chicago")
+MN_Names <- c("MN","mn","Mn","minnesota","Carver county, MN")
+TX_Names <- c("TX","tx","Tx.","Tx","TEXAS","texas", "Harris County, Texas")
+MASS_Names <- c("MA","ma","massachusetts","Ma","Massachusetts, Plymouth county","Massachussets")
+NC_Names <- c("NC","nc","north carolina","North carolina","Buncombe County, North Carolina","Durham County, North Carolina","Nc","The Democratic People's Republic of North Carolina","	|NC")
+GA_Names <- c("GA","Ga","GA - Georgia","georgia","Marietta, GA","Atlanta, GA")
+VA_Names <- c("VA","va","virginia","Henrico, VA","Rappahannock County, VA","arlington, va","Arlington, VA","Va","Virginia, Arlington")
+OR_Names <- c("OR","oregon","or","OREGON","Or","Oregon - but will be in Washington for Halloween",	"Oregon, Multnomah County")
+CO_Names <- c("CO","Colorado","CO, Larimer County","Colorado, Jefferson county","colorado","co","colorado, boulder", "COLORADO","Colorado larimer county","Co","Colorado (CO)")
+BC_Names <- c("BC","Bc","bc","british columbia","British Columbia, Canada","vancouver, bc")
+ONT_Names <- c("ontario","ONTARIO","Toronto, Ontario","ON","On","ont","Ont","Ontario,  Canada","Oshawa, Ontario, Canada")
+FL_Names <- c("FL","Orlando, FL","Orlando, FL")
+IN_Names <- c("IN","indiana","Bloomington, IN","in")
+MO_Names <- c("MO","mo","Mo","missouri","Missoure","Missouri, Miller County","St Louis mo","St. Louis County, Missouri")
+FL_Names <- c("FL","florida","Fl","FL, Orange County","st. augustine florida")
+NJ_Names <- c("NJ","Nj","New jersey","nj","NJ, Gloucester", "NJ; Essex")
+MI_Names <- c("MI","Mi","mi","michigan","Kalamazoo County, MI","Mich","Michigan, Shiawassee County","Michigin","Oakland County, Michigan")
+OH_Names <- c("OH","ohio","Cuyahoga County, Ohio")
+MD_Names <- c("MD","md","maryland","MARYLAND","Md")
+DC_Names <- c("DC","dc","District of Columbia","Dc", "Washington DC","WASHINGTON DC","Washington, DC")
+NM_Names <- c("NM","nm","Dona Ana county, New Mexico", "New Mexico, USA","Nm")
+IA_Names <- c("IA","iowa","Ia")
+KS_Names <- c("KS","kansas","Ks")
+CT_Names <- c("CT","ct","connecticut")
+MA_Names <- c("maine","Portland, maine")
+NH_Names <- c("NH","new hampshire","nh","Nh")
+NV_Names <- c("NV")
+RI_Names <- c("RI","rhode island","Rhode island","Ri","ri")
+UT_Names <- c("UT","Ut","UT, Salt Lake","utah")
+WI_Names <- c("WI","wisconsin","Wi","Wisconsin, 53705")
+WV_Names <- c("WV","wv","WV, Kanawha County","west virginia")
+AB_Names <- c("AB","alberta")
+SC_Names <- c("SC","sc")
+KY_Names <- c("KY","kentucky","Ky")
+TN_Names <- c("TN","tn","Knox county, Tennessee","Tn", "tennessee","Tennessee, Knox County")
+AZ_Names <- c("AZ","az","Az","phoenix, maricopa county, arizona")
+VT_Names <- c("vt","VT","Vt","VT, Chittenden")
+OK_Names <- c("OK","oklahoma")
+NS_Names <- c("NS")
+HI_Names <- c("HI","hi")
+QC_Names <- c("QC")
+
+# Copying state data to proper column
+candy$State[candy$COUNTRY == "California"] <- "California"
+candy$State[candy$COUNTRY == "New Jersey"] <- "New Jersey"
+candy$State[candy$COUNTRY == "New York"] <- "New York"
+candy$State[candy$COUNTRY == "North Carolina"] <- "North Carolina"
+candy$State[candy$COUNTRY == "Pittsburgh"] <- "Pennsylvania"
+
+# replacing various names to a single name
+candy$State[candy$State %in% Cali_Names] <- "California"
+candy$State[candy$State %in% WA_Names] <- "Washington"
+candy$State[candy$State %in% NY_Names] <- "New York"
+candy$State[candy$State %in% PA_Names] <- "Pennsylvania"
+candy$State[candy$State %in% IL_Names] <- "Illinois"
+candy$State[candy$State %in% MN_Names] <- "Minnesota"
+candy$State[candy$State %in% TX_Names] <- "Texas"
+candy$State[candy$State %in% MASS_Names] <- "Massachusetts"
+candy$State[candy$State %in% OR_Names] <- "Oregon"
+candy$State[candy$State %in% VA_Names] <- "Virginia"
+candy$State[candy$State %in% GA_Names] <- "Georgia"
+candy$State[candy$State %in% NC_Names] <- "North Carolina"
+candy$State[candy$State %in% CO_Names] <- "Colorado"
+candy$State[candy$State %in% BC_Names] <- "British Columbia"
+candy$State[candy$State %in% ONT_Names] <- "Ontario"
+candy$State[candy$State %in% FL_Names] <- "Florida"
+candy$State[candy$State %in% IN_Names] <- "Indiana"
+candy$State[candy$State %in% MO_Names] <- "Missouri"
+candy$State[candy$State %in% FL_Names] <- "Florida"
+candy$State[candy$State %in% NJ_Names] <- "New Jersey"
+candy$State[candy$State %in% MI_Names] <- "Michigan"
+candy$State[candy$State %in% OH_Names] <- "Ohio"
+candy$State[candy$State %in% MD_Names] <- "Maryland"
+candy$State[candy$State %in% DC_Names] <- "Washington, DC"
+candy$State[candy$State %in% NM_Names] <- "New Mexico"
+candy$State[candy$State %in% IA_Names] <- "Iowa"
+candy$State[candy$State %in% KS_Names] <- "Kansas"
+candy$State[candy$State %in% CT_Names] <- "Connecticut"
+candy$State[candy$State %in% MA_Names] <- "Maine"
+candy$State[candy$State %in% NH_Names] <- "New Hampshire"
+candy$State[candy$State %in% NV_Names] <- "Nevada"
+candy$State[candy$State %in% RI_Names] <- "Rhode Island"
+candy$State[candy$State %in% UT_Names] <- "Utah"
+candy$State[candy$State %in% WI_Names] <- "Wisconsin"
+candy$State[candy$State %in% WV_Names] <- "West Virginia"
+candy$State[candy$State %in% AB_Names] <- "Alberta"
+candy$State[candy$State %in% SC_Names] <- "South Carolina"
+candy$State[candy$State %in% KY_Names] <- "Kentucky"
+candy$State[candy$State %in% TN_Names] <- "Tennessee"
+candy$State[candy$State %in% AZ_Names] <- "Arizona"
+candy$State[candy$State %in% VT_Names] <- "Vermont"
+candy$State[candy$State %in% OK_Names] <- "Oklahoma"
+candy$State[candy$State %in% NS_Names] <- "Nova Scotia"
+candy$State[candy$State %in% HI_Names] <- "Hawaii"
+candy$State[candy$State %in% QC_Names] <- "Quebec"
+
+# replacing country names
+candy$COUNTRY[candy$COUNTRY %in% USA_Names] <- "United States"
+candy$COUNTRY[candy$COUNTRY %in% Canada_Names] <- "Canada"
+candy$COUNTRY[candy$COUNTRY %in% UK_Names] <- "United Kingdom"
+candy$COUNTRY[candy$COUNTRY %in% Unknowns] <- "Unknown"
+candy$COUNTRY[candy$COUNTRY == "germany"] <- "Germany"
+candy$COUNTRY[candy$COUNTRY == "australia"] <- "Australia"
+candy$COUNTRY[candy$COUNTRY == "Korea"] <- "South Korea"
+candy$COUNTRY[candy$COUNTRY ==  "hong kong"] <- "Hong Kong"
+```
+
+```{r}
+# Convert Ratings to Numeric values
+testf <- function(x)  {
+    ifelse(x=="DESPAIR", -1, ifelse(x=='JOY', 1, 0))
+}
+candy <- candy %>% 
+  mutate_at(vars(` 100 Grand Bar`:` York Peppermint Patties`), testf)
+```
+
+```{r}
+# Gather Candy Types into a single column
+candy <- candy %>%
+  gather(` 100 Grand Bar`:` York Peppermint Patties`,key="Candy Type",value = "Rating")
+
+candy2 <- candy %>%
+  group_by(`Candy Type`) %>%
+  filter(!is.na(Rating)) %>%
+  summarize(Score =sum(Rating)) %>%
+  arrange(desc(Score))
+
+```
+
