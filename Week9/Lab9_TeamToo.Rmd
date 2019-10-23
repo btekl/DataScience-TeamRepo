@@ -203,7 +203,7 @@ candy2 %>%
   summarize(Meh = n()) %>%
   arrange(desc(Meh))
 ```
-Lastly, the candies which no one had any opinion on at all:
+Lastly, the candies which received the most non-responses:
 ```{r}
 candy2 %>%
   filter(is.na(Rating)) %>%
@@ -214,13 +214,15 @@ candy2 %>%
 The overall distribution of Scores for candies:
 ```{r}
 ggplot(candy3) +
-  geom_histogram(aes(Score),bins=79)+
+  geom_histogram(aes(Score),bins=50)+
   ylab("Number of Candy Types")+
   xlab("Overall Score")+
   ggtitle("Overall distribution of Scores")
 ```
 
-**Recommendations:** The most popular candies all contain chocolate paired with some other flavor.
+**Recommendations:** The most popular candies all contain chocolate paired with some other flavor. 
+
+Sour candies should only be designed with a younger audience in mind, as we found that older demographics dislike sour flavors.
 
 **Description of Dataset:** This dataset came from an internet survey, where users could input whatever they wanted for age, country, state and gender. As a result, the majority of the work tidying this dataset was converting the many different responses for each category into a single name, so they could be more easily grouped. 
 
@@ -228,7 +230,7 @@ For the candy related questions, only 3 inputs were allowed: "Despair", "Meh", a
 
 Then, we dropped the irrelevant columns and gathered the candy data into a single column. The dataset is now tidy and ready to be analyzed.
 
-Finally, we ran summaries on the various demographics of the dataset, generated the score variable to compare overall preferences among candy types, and some filters to f
+Finally, we ran summaries on the various demographics of the dataset, generated the score variable to compare overall preferences among candy types, and ran a variety of filters to focus on subsets of the data, both for summaries and plots.
 
 ### Individual Findings and Plots
 
@@ -239,7 +241,7 @@ Finally, we ran summaries on the various demographics of the dataset, generated 
 
 #### Brian
 
-**Brian's Question:** Which candies are the most and least polarizing (Liked by one age group and disliked by another)?
+**Brian's Question:** Which candies are the most and least polarizing (liked by one age group and disliked by another)?
 
 First, ages needed to be consolidated into groups:
 ```{r, eval=FALSE}
@@ -299,7 +301,7 @@ ggplot(Notable_Candy)+
   geom_point(aes(AvgScore,`Candy Type`,color=AgeRange))+
   ylab("")+
   xlab("Average Score")+
-  scale_fill_gradient("Age Range")
+  scale_color_discrete("Age Range")
 ```
 
 So, we conclude that sour candies should be made with younger people in mind, while chocolate and nut combinations seem to be universally popular.
