@@ -8,14 +8,17 @@ output: html_document
 ```{r setup, include=FALSE}
 library(tidyverse)
 candy <- read_csv("https://www.scq.ubc.ca/wp-content/uploads/2017/10/candyhierarchy2017.csv")
+
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
 # Fix non UTF characters
 names(candy) <- iconv(names(candy), to='ASCII', sub='')
 
 candy <- select(candy,-`Internal ID`,-`X114`)
 
 # Regex to simplify column names
-colnames(candy) <- str_replace(colnames(candy), regex("^Q[\\d]+:?[\\s]*\\|?(.*)$"),"\\1")
+colnames(candy) <- str_replace(colnames(candy), regex("^Q[\\d]+:?[\\s]*\\|?[\\s]+(.*)$"),"\\1")
 candy <- rename(candy, "State" = `STATE, PROVINCE, COUNTY, ETC`)
+
 USA_Names <- c("'merica", "Ahem....Amerca", "Alaska", "america","America","California", "Murica", "murrika","I pretend to be from Canada, but I am really from the United States.","New Jersey","New York",	"North Carolina", "Pittsburgh","The United States","The United States of America","Trumpistan", "U S",	"u s a","u.s.","U.S.","u.s.a.","U.S.A.","unhinged states","Unied States","unite states","United Sates","United staes","United State","United Statea","United Stated","united states","united States","United states","United States","united states of america","United States of America","United Statss","united ststes","United ststes","Unites States","us","Us","US","US of A","usa","Usa","USa","USA","USA USA USA!!!!","USA! USA! USA!","USA? Hard to tell anymore..", "USAA","usas", "USAUSAUSA","USSA")
 Canada_Names <- c("Can","canada","Canada","CANADA","Canada`","soviet canuckistan")
 UK_Names <- c("endland","England","Scotland", "U.K.","uk","Uk","UK","United kingdom","United Kingdom")
@@ -65,6 +68,14 @@ OK_Names <- c("OK","oklahoma")
 NS_Names <- c("NS")
 HI_Names <- c("HI","hi")
 QC_Names <- c("QC")
+
+Age_Conv_59 <- c("59 on the day after Halloween")
+Age_Conv_60 <- c("60+")
+Age_Conv_70 <- c("70 1/2")
+Age_Conv_46 <- c("46 Halloweens.","I can remember when Java was a cool new language")
+Age_Conv_40 <- c("Many","old","OLD",	"old enough","39.4")
+Age_Conv_50 <- c("Over 50","Old enough","older than dirt","ancient","Enough")
+Age_Conv_Un <- c("?","hahahahaha","MY NAME JEFF","no","See question 2","sixty-nine","your mom","5u")
 
 # Copying state data to proper column
 candy$State[candy$COUNTRY == "California"] <- "California"
@@ -129,27 +140,187 @@ candy$COUNTRY[candy$COUNTRY == "germany"] <- "Germany"
 candy$COUNTRY[candy$COUNTRY == "australia"] <- "Australia"
 candy$COUNTRY[candy$COUNTRY == "Korea"] <- "South Korea"
 candy$COUNTRY[candy$COUNTRY ==  "hong kong"] <- "Hong Kong"
-```
 
-```{r}
+# Age Conversions
+candy$AGE[candy$AGE =="59 on the day after Halloween"] <- "59"
+candy$AGE[candy$AGE =="60+"] <- "60"
+candy$AGE[candy$AGE =="70 1/2"] <- "70"
+candy$AGE[candy$AGE %in% Age_Conv_46] <- "46"
+candy$AGE[candy$AGE %in% Age_Conv_40] <- "40"
+candy$AGE[candy$AGE %in% Age_Conv_50] <- "50"
+candy$AGE[candy$AGE %in% Age_Conv_Un] <- NA
+candy$AGE <- as.integer(candy$AGE)
+
+candy <- candy %>%
+  select(-"JOY OTHER",-"DESPAIR OTHER",-"OTHER COMMENTS",-"DRESS",-"DAY",-"MEDIA [Daily Dish]",-"MEDIA [Science]",-"MEDIA [ESPN]",-"MEDIA [Yahoo]",-"Click Coordinates (x, y)",-"Whole Wheat anything",-"White Bread",-"Vicodin",-"Vials of pure high fructose corn syrup, for main-lining into your vein",-"Real Housewives of Orange County Season 9 Blue-Ray",-"Pencils",-"Mint Juleps",-"Abstained from M&M'ing.",-"Green Party M&M's",-"Independent M&M's",-"Kale smoothie",-"Senior Mints",-"Hugs (actual physical hugs)",-"Healthy Fruit",-"Generic Brand Acetaminophen",-"Glow sticks",-"Dental paraphenalia",-"Chardonnay",-"Cash, or other forms of legal tender",-"Candy that is clearly just the stuff given out for free at restaurants",-"Broken glow stick",-"Bonkers (the board game)",-"Any full-sized candy bar", -"GOING OUT?",-"Creepy Religious comics/Chick Tracts")
+candy <- candy %>%
+  rename("Sourpatch Kids" = "Sourpatch Kids (i.e. abominations of nature)","Reeses" = "Reeses Peanut Butter Cups", "Mary Janes" = "Anonymous brown globs that come in black and orange wrappers\t(a.k.a. Mary Janes)")
 # Convert Ratings to Numeric values
 testf <- function(x)  {
     ifelse(x=="DESPAIR", -1, ifelse(x=='JOY', 1, 0))
 }
 candy <- candy %>% 
-  mutate_at(vars(` 100 Grand Bar`:` York Peppermint Patties`), testf)
+  mutate_at(vars(`100 Grand Bar`:`York Peppermint Patties`), testf)
+candy <- candy %>%
+  mutate(AgeRange = cut(AGE,
+                        breaks=c(-Inf,20, 25, 30, 35, 40, 45, 50,55,60,Inf), 
+                        labels=c("Under 20", "20-25", "25-30", "30-35", "35-40", "40-45", "45-50","50-55","55-60","Over 60")))
+
+# Gather Candy Types into a single column
+candy2 <- candy %>%
+  gather(`100 Grand Bar`:`York Peppermint Patties`, key="Candy Type",value = "Rating")
 ```
 
-```{r}
-# Gather Candy Types into a single column
-candy <- candy %>%
-  gather(` 100 Grand Bar`:` York Peppermint Patties`,key="Candy Type",value = "Rating")
+### Dataset and Questions
 
-candy2 <- candy %>%
+**Overall question and it's importance:** What candies are the most universally liked and disliked? 
+
+Understanding which candies are the most popular informs us of what qualities to keep in mind when designing a new candy.
+
+**Why the answer matters:** There are a variety of conclusions which can be drawn depending on who the company wants their new product to target. Universally liked candies offer a safe bet, universally disliked offer some qualities to avoid, while those in between could represent somewhat effective ideas which can be improved upon.
+
+**Conclusions:** The score variable describes the total number of likes (+1) and dislikes (-1) a candy received. Positive scores indicate candies that were liked overall, negatives indicate candies that were disliked overall.
+The highest scoring candies were:
+```{r}
+candy3 <- candy2 %>%
   group_by(`Candy Type`) %>%
   filter(!is.na(Rating)) %>%
-  summarize(Score =sum(Rating)) %>%
+  summarize(Score = sum(Rating)) %>%
   arrange(desc(Score))
-
+candy3 %>%
+  top_n(10)
+```
+The 10 lowest scoring:
+```{r}
+candy3 %>%
+  arrange(Score)
+```
+The candies receiving the most likes and dislikes follow the above summaries more or less. The candies receiving the most "Meh" ratings were:
+```{r}
+candy2 %>%
+  filter(Rating == 0) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Meh = n()) %>%
+  arrange(desc(Meh))
+```
+Lastly, the candies which no one had any opinion on at all:
+```{r}
+candy2 %>%
+  filter(is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+```
+The overall distribution of Scores for candies:
+```{r}
+ggplot(candy3) +
+  geom_histogram(aes(Score),bins=79)+
+  ylab("Number of Candy Types")+
+  xlab("Overall Score")+
+  ggtitle("Overall distribution of Scores")
 ```
 
+**Recommendations:** The most popular candies all contain chocolate paired with some other flavor.
+
+**Description of Dataset:** This dataset came from an internet survey, where users could input whatever they wanted for age, country, state and gender. As a result, the majority of the work tidying this dataset was converting the many different responses for each category into a single name, so they could be more easily grouped. 
+
+For the candy related questions, only 3 inputs were allowed: "Despair", "Meh", and "Joy". Once the various inputs were grouped properly, the candy inputs were converted to -1, 0, and 1 respectively, so they could be easily summed.
+
+Then, we dropped the irrelevant columns and gathered the candy data into a single column. The dataset is now tidy and ready to be analyzed.
+
+Finally, we ran summaries on the various demographics of the dataset, generated the score variable to compare overall preferences among candy types, and some filters to f
+
+### Individual Findings and Plots
+
+#### Andrew
+
+**Andrew's Question:** Are certain candies more likely to be popularized by Country?
+
+
+#### Brian
+
+**Brian's Question:** Which candies are the most and least polarizing (Liked by one age group and disliked by another)?
+
+First, ages needed to be consolidated into groups:
+```{r, eval=FALSE}
+candy <- candy %>%
+  mutate(AgeRange = cut(AGE,
+                        breaks=c(-Inf, 20, 25, 30, 35, 40, 45, 50, 55, 60, Inf), 
+                        labels=c("Under 20", "20-25", "25-30", "30-35", "35-40", "40-45", "45-50", "50-55", "55-60", "Over 60")))
+```
+
+The age demographics of the dataset are:
+```{r}
+(Responses_per_Agegroup <- candy %>%
+  group_by(AgeRange) %>%
+  filter(!is.na(AgeRange)) %>%
+  summarize(Responses = n()))
+```
+The age groups vary in size, so a new variable is made based on the average score given per respondent in a given group. 
+Votes of 0 and NA are equivalent for this calculation, as only dislikes and likes influence the score variable. Since 0 signifies indifference, it seems reasonable to equate non-answers to indifference (or no opinion) on a given candy.
+```{r}
+Score_per_Agegroup <- candy2 %>%
+  group_by(AgeRange,`Candy Type`) %>%
+  filter(!is.na(Rating) & !is.na(AgeRange)) %>%
+  summarize(Score = sum(Rating))
+
+(Score_over_Responses <- left_join(Score_per_Agegroup, Responses_per_Agegroup, by="AgeRange") %>%
+  mutate(AvgScore = Score/Responses) %>%
+  arrange(desc(AvgScore)))
+```
+Finally, to get an idea for how preferences differ among ages, we look at the range of average scores for each candy:
+```{r}
+(Score_Range <- Score_over_Responses %>%
+  group_by(`Candy Type`) %>%
+  summarize(ScoreRange = max(AvgScore)-min(AvgScore)) %>%
+  arrange(desc(ScoreRange)))
+```
+Sourpatch Kids stand out as highly divisive:
+```{r}
+Score_over_Responses %>%
+  filter(`Candy Type` == "Sourpatch Kids")
+```
+Distaste for Sourpatch Kids increases with age: the youngest age groups like them overall, as we increase through the age groups, respondents begin to dislike them overall with increasing regularity.
+
+The least divisive candies:
+```{r}
+Score_Range %>% arrange(ScoreRange)
+```
+Peanut M&Ms are liked by all groups, with little difference in scores:
+```{r}
+Score_over_Responses %>%
+  filter(`Candy Type` == "Peanut M&Ms")
+```
+Visualizing the Average scores of some notable candies:
+```{r}
+Notable_Candy <- Score_over_Responses %>%
+  filter(`Candy Type` == "Peanut M&Ms"|`Candy Type` == "Sourpatch Kids"|`Candy Type` == "Nerds"|`Candy Type` == "Twix"| `Candy Type` == "Peeps"|`Candy Type` == "Reeses")
+ggplot(Notable_Candy)+
+  geom_point(aes(AvgScore,`Candy Type`,color=AgeRange))+
+  ylab("")+
+  xlab("Average Score")+
+  scale_fill_gradient("Age Range")
+```
+
+So, we conclude that sour candies should be made with younger people in mind, while chocolate and nut combinations seem to be universally popular.
+
+**Reflections:** Whenever a product's target demographic is children, care should be taken when advertising; the goal is to make something they enjoy while recognizing they lack the skills to moderate themselves properly.
+
+#### Charles
+
+**Charles' Question:** Are there any candies which are predominantly popular to a particular sex/gender? Which candies, if any, are preferred predominantly by men or women?
+
+
+#### Clint
+
+**Clint's Question:** Does the popularity of candy vary by region or state? Are some candies unviversally popular? 
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:** I found the dataset and did the majority of the tidying. I used a variety of joins, mutates, etc. to create some new variables to compare preferences across groups of differing sizes.
+
+**Charles:**
+
+**Clint::**
