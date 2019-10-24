@@ -312,6 +312,23 @@ So, we conclude that sour candies should be made with younger people in mind, wh
 
 **Charles' Question:** Are there any candies which are predominantly popular to a particular sex/gender? Which candies, if any, are preferred predominantly by men or women?
 
+```{r}
+men_candy <- candy2 %>%
+  filter(GENDER == 'Male', !is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))
+men_candy %>%
+  top_n(10)
+
+women_candy <- candy2 %>%
+  filter(GENDER == 'Female',!is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))
+women_candy %>%
+  top_n(10)
+```
 
 #### Clint
 
