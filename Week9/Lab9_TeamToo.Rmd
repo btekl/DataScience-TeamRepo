@@ -332,25 +332,26 @@ women_candy %>%
   top_n(10)
 ```
 
-Overall the top candy choices of men and women are highly similar. 4 of the top 5 candies for men and women are similar 
+Overall the top candy choices of men and women are highly similar. 4 of the top 5 candies for men and women are identical. There is some preference from women to eat candied bars, but overall the difference between men and women's tastes in candy is not significant when viewing their favorite candies. This observation leads to a different question. If men and women like the same candies, do they also dislike the same candies.
 
 ```{r}
 lf_m <- candy2 %>%
   filter(Rating == -1, GENDER == 'Male') %>%
   group_by(`Candy Type`) %>%
-  summarize(Meh = n()) %>%
-  arrange(desc(Meh))
+  summarize(Dislike = n()) %>%
+  arrange(desc(Dislike))
 
 lf_m
 
 lf_w <- candy2 %>%
   filter(Rating == -1, GENDER == 'Female') %>%
   group_by(`Candy Type`) %>%
-  summarize(Meh = n()) %>%
-  arrange(desc(Meh))
+  summarize(Dislike = n()) %>%
+  arrange(desc(Dislike))
 
 lf_w
 ```
+Men and Women also dislike the same candies at the same rate. The similarity of their dislike of certain foods is even more similar than their appreciation of those foods. Simply viewing the results provides no reason to believe that candies' popularities are driven or correlated to the gender of the consumer. This is intuitive, because having a gender-neutral candy pushes sales onto both men and women, increasing profitability.
 
 #### Clint
 
