@@ -381,6 +381,180 @@ Ultimately, I have not been able to determine meaningful differences in the tast
 #### Clint
 
 **Clint's Question:** Does the popularity of candy vary by region or state? Are some candies unviversally popular? 
+The region grouping by which my analysis will be conducted is based off of the nine regions used by the National Climate Data Center.
+
+```{r}
+# gathering states into regions 
+
+candy_nwp <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Washington', 'Oregon', 'Idaho', 'Alaska', 'Hawaii'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+candy_west <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('California', 'Nevada'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_sw <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Colorado', 'New Mexico', 'Arizona', 'Utah'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_wnc <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Wyoming', 'Montana', 'North Dakota', 'South Dakota', 'Nebraska'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_south <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Kansas', 'Oklahoma', 'Texas', 'Arkansas', 'Louisiana'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_enc <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Wisconsin', 'Iowa', 'Minnesota', 'Michigan'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_central <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Missouri', 'Indiana', 'Illinois', 'Ohio', 'Kentucky', 'West Virginia'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_ne <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Maryland', 'Delaware', 'New Jersey', 'Pennsylvania', 'New York', 'Connecticut', 'Rhode Island', 'Massechusetts', 'Vermont', 'New Hampshire', 'Maine'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+
+candy_se <- candy2%>%
+  filter(COUNTRY == 'United States', State %in% c('Virginia', 'North Carolina', 'South Carolina', 'Georgia', 'Florida', 'Alabama'), !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+candy_canada <- candy2%>%
+  filter(COUNTRY == 'Canada', !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+candy_int <- candy2%>%
+  filter(COUNTRY != 'United States', COUNTRY != 'Canada', !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
+```
+
+```{r}
+#creating graphs 
+
+ggplot(data = candy_ne)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_ne$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Northeast United States")+
+  xlab("Candy Type")
+  
+
+ggplot(data = candy_central)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_central$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Central United States")+
+  xlab("Candy Type")
+
+ggplot(data = candy_enc)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_enc$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the East North Central United States")+
+  xlab("Candy Type")
+
+ggplot(data = candy_nwp)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_nwp$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Northwest and Pacific United States")+
+  xlab("Candy Type")
+
+ggplot(data = candy_se)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_se$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Southeast United States")+
+  xlab("Candy Type")
+
+ggplot(data = candy_south)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_south$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Southern Region of the United States") +
+  xlab("Candy Type")
+
+ggplot(data = candy_sw)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_sw$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Southwest United States")+
+  xlab("Candy Type")
+
+
+ggplot(data = candy_west)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_west$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Western Region of the United States") +
+  xlab("Candy Type")
+
+ggplot(data = candy_wnc)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_wnc$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the Western North Central Region of the United States") +
+  xlab("Candy Type")
+
+ggplot(data = candy_canada)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_canada$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in Canada")+
+  xlab("Candy Type")
+
+ggplot(data = candy_int)+
+geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_int$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies Outside the US or Canada") +
+  xlab("Candy Type")
+```
+Through examination of the graphs it is clear that the variation between candy popularity across regions is not quite as large as one might initially surmise. Candies like Reeses, Kit Kat, Snickers, and Twix dominate the top five most popular condies across most of the United States. The Western North Central region of the United States had the largest difference from the other US regions and the Canadian region bared more similarities to the US than the international subset.
 
 ### Individual Contributions
 
