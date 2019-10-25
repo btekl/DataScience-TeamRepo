@@ -358,9 +358,22 @@ lf_w
 Men and Women also dislike the same candies at the same rate. The similarity of their dislike of certain foods is even more similar than their appreciation of those foods. Simply viewing the results provides no reason to believe that candies' popularities are driven or correlated to the gender of the consumer. This is intuitive, because having a gender-neutral candy pushes sales onto both men and women, increasing profitability.
 
 ```{r}
-ggplot(data = mc)+
-  geom_bar(aes(x = mc$`Candy Type`))
+mc %>%
+  ggplot(aes(x = fct_reorder(`Candy Type`, Score), y = Score))+
+  geom_bar(stat = "identity") +
+  ggtitle("Men's Favorite Candies")+
+  xlab("Candy")+
+  coord_flip()
+
+wc %>%
+  ggplot(aes(x = fct_reorder(`Candy Type`, Score), y = Score))+
+  geom_bar(stat = "identity") +
+  ggtitle("Women's Favorite Candies")+
+  xlab("Candy")+
+  coord_flip()
 ```
+
+Ultimately, I have not been able to determine meaningful differences in the tastes for women and men of candies. This is useful to a degree because it demonstrates that companies have not wedged the market of sweets into what are "men's tastes" and "women's tastes."
 
 #### Clint
 
@@ -372,6 +385,6 @@ ggplot(data = mc)+
 
 **Brian:** I found the dataset and did the majority of the tidying. I used a variety of joins, mutates, etc. to create some new variables to compare preferences across groups of differing sizes.
 
-**Charles:**
+**Charles:** I mutated the dataset to view it specifically from the perspectives of gender, and tested to see if gender caused meaningful variations in the preferences of candies.
 
 **Clint::**
