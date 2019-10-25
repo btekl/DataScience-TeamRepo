@@ -239,7 +239,52 @@ Finally, we ran summaries on the various demographics of the dataset, generated 
 
 #### Andrew
 
-**Andrew's Question:** Are certain candies more likely to be popularized by Country?
+**Andrew's Question:** Are certain candies more likely to be popularized and disliked by Country?
+
+```{r}
+UScandy <- candy2 %>%
+  filter(COUNTRY == 'United States', !is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Rating = sum(Rating)) %>%
+  arrange(desc(Rating))
+topUS <- UScandy %>%
+  top_n(10)
+
+Ukcandy <- candy2 %>%
+  filter(COUNTRY == 'United Kingdom', !is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Rating = sum(Rating)) %>%
+  arrange(desc(Rating))
+topUk <- Ukcandy %>%
+  top_n(10)
+
+Ccandy <- candy2 %>%
+  filter(COUNTRY == 'Canada', !is.na(Rating)) %>%
+  group_by(`Candy Type`) %>%
+  summarize(Rating = sum(Rating)) %>%
+  arrange(desc(Rating))
+topC <- Ccandy %>%
+  top_n(10)
+```
+
+
+```{r}
+dlUS <- candy2 %>%
+  filter(Rating == -1, COUNTRY =="United States") %>%
+  group_by(`Candy Type`) %>%
+  summarize( Disliked = n()) %>%
+  arrange(desc(Disliked))
+dlUk <- candy2 %>%
+  filter(Rating == -1, COUNTRY =="United Kingdom") %>%
+  group_by(`Candy Type`) %>%
+  summarize( Disliked = n()) %>%
+  arrange(desc(Disliked))
+dlC <- candy2 %>%
+  filter(Rating == -1, COUNTRY =="Canada") %>%
+  group_by(`Candy Type`) %>%
+  summarize( Disliked = n()) %>%
+  arrange(desc(Disliked))
+```
 
 
 #### Brian
