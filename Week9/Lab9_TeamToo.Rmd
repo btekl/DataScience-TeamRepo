@@ -227,6 +227,7 @@ We also found that:
 * Preferences for candy don't significantly vary among genders.
 * Sour candies should only be designed with a younger audience in mind, as we found that older demographics dislike sour flavors.
 * The top candies are similar in various regions of the US and Internationally, but outside the top 5 there is some variety in preferences. So, there is some indication that regionally targetted candy choices would be successful.
+* The favorite and least favorite candies are similar but display noticable differences between countries. All countries tend to hate the same candy and prefer chocolate over sour and sweet candy.
 
 **Description of Dataset:** This dataset came from an internet survey, where users could input whatever they wanted for age, country, state and gender. As a result, the majority of the work tidying this dataset was converting the many different responses for each category into a single name, so they could be more easily grouped. 
 
@@ -319,7 +320,7 @@ topC %>%
   coord_flip()
 
 ```
-
+From this we can see that the United Kingdom's favorite candy Rolos is not seen as a favorite for United States and Canada. All the candies made up of chocolate as well for the United Kingdom and the United States, but Canada had smarties as one of thier favorite candies. Overall, the favorites and dislike are similar but there are differences that allow us to analyze the preferences of each country.
 
 #### Brian
 
@@ -653,7 +654,7 @@ Through examination of the graphs it is clear that the variation between candy p
 
 ### Individual Contributions
 
-**Andrew:**
+**Andrew:** I used a clean dataset to analyze the prefered and least favorite candies based upon which country the person was from.
 
 **Brian:** I found the dataset and did the majority of the tidying. I used a variety of joins, mutates, etc. to create some new variables to compare preferences across groups of differing sizes.
 
