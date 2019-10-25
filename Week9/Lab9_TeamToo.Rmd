@@ -226,6 +226,7 @@ We also found that:
 
 * Preferences for candy don't significantly vary among genders.
 * Sour candies should only be designed with a younger audience in mind, as we found that older demographics dislike sour flavors.
+* The top candies are similar in various regions of the US and Internationally, but outside the top 5 there is some variety in preferences. So, there is some indication that regionally targetted candy choices would be successful.
 
 **Description of Dataset:** This dataset came from an internet survey, where users could input whatever they wanted for age, country, state and gender. As a result, the majority of the work tidying this dataset was converting the many different responses for each category into a single name, so they could be more easily grouped. 
 
@@ -618,6 +619,7 @@ geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_int$Score)) +  theme
 
 Through examination of the graphs it is clear that the variation between candy popularity across regions is not quite as large as one might initially surmise. Candies like Reeses, Kit Kat, Snickers, and Twix dominate the top five most popular candies across most of the United States. The Western North Central region of the United States had the largest difference from the other US regions and the Canadian region bared more similarities to the US than the international subset. While the top end is dominated by some of the same candies there is more variation at the 6-10 slots in most popular candies chart. Firms outside the top 5 main candies are able to grab meaningful popularity at a regional level and shouldn't be discouraged by the overall popularity of the main candies. 
 
+
 ### Individual Contributions
 
 **Andrew:**
@@ -625,5 +627,6 @@ Through examination of the graphs it is clear that the variation between candy p
 **Brian:** I found the dataset and did the majority of the tidying. I used a variety of joins, mutates, etc. to create some new variables to compare preferences across groups of differing sizes.
 
 **Charles:** I mutated the dataset to view it specifically from the perspectives of gender, and tested to see if gender caused meaningful variations in the preferences of candies.
+
 
 **Clint::** I used the tidy dataset to filter by regions in the US and then created collumn graphs for each region and for the United States in general. I then compared the graphs to each other and to the US candy popularity graph in general. 
