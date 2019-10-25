@@ -433,6 +433,13 @@ The region grouping by which my analysis will be conducted is based off of the n
 ```{r}
 # gathering states into regions 
 
+candy_us <- candy2%>%
+  filter(COUNTRY == 'United States', !is.na(Rating))%>%
+  group_by(`Candy Type`) %>%
+  summarize(Score = sum(Rating)) %>%
+  arrange(desc(Score))%>%
+  top_n(10)
+
 candy_nwp <- candy2%>%
   filter(COUNTRY == 'United States', State %in% c('Washington', 'Oregon', 'Idaho', 'Alaska', 'Hawaii'), !is.na(Rating))%>%
   group_by(`Candy Type`) %>%
@@ -522,6 +529,13 @@ candy_int <- candy2%>%
 ```{r}
 #creating graphs 
 
+ggplot(data = candy_us)+
+  geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_us$Score)) +  theme(text = element_text(size=10),
+        axis.text.x = element_text(angle=90, hjust=1)) +
+  ylab("Candy Popularity") +
+  ggtitle("Most Popular Candies in the United States")+
+  xlab("Candy Type")
+
 ggplot(data = candy_ne)+
   geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_ne$Score)) +  theme(text = element_text(size=10),
         axis.text.x = element_text(angle=90, hjust=1)) +
@@ -601,7 +615,8 @@ geom_col(aes(x = reorder(`Candy Type`, -`Score`), y = candy_int$Score)) +  theme
   ggtitle("Most Popular Candies Outside the US or Canada") +
   xlab("Candy Type")
 ```
-Through examination of the graphs it is clear that the variation between candy popularity across regions is not quite as large as one might initially surmise. Candies like Reeses, Kit Kat, Snickers, and Twix dominate the top five most popular condies across most of the United States. The Western North Central region of the United States had the largest difference from the other US regions and the Canadian region bared more similarities to the US than the international subset.
+
+Through examination of the graphs it is clear that the variation between candy popularity across regions is not quite as large as one might initially surmise. Candies like Reeses, Kit Kat, Snickers, and Twix dominate the top five most popular candies across most of the United States. The Western North Central region of the United States had the largest difference from the other US regions and the Canadian region bared more similarities to the US than the international subset. While the top end is dominated by some of the same candies there is more variation at the 6-10 slots in most popular candies chart. Firms outside the top 5 main candies are able to grab meaningful popularity at a regional level and shouldn't be discouraged by the overall popularity of the main candies. 
 
 ### Individual Contributions
 
@@ -611,4 +626,4 @@ Through examination of the graphs it is clear that the variation between candy p
 
 **Charles:** I mutated the dataset to view it specifically from the perspectives of gender, and tested to see if gender caused meaningful variations in the preferences of candies.
 
-**Clint::**
+**Clint::** I used the tidy dataset to filter by regions in the US and then created collumn graphs for each region and for the United States in general. I then compared the graphs to each other and to the US candy popularity graph in general. 
