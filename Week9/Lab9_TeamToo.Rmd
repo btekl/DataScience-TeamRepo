@@ -274,11 +274,13 @@ dlUS <- candy2 %>%
   group_by(`Candy Type`) %>%
   summarize( Disliked = n()) %>%
   arrange(desc(Disliked))
+
 dlUk <- candy2 %>%
   filter(Rating == -1, COUNTRY =="United Kingdom") %>%
   group_by(`Candy Type`) %>%
   summarize( Disliked = n()) %>%
   arrange(desc(Disliked))
+
 dlC <- candy2 %>%
   filter(Rating == -1, COUNTRY =="Canada") %>%
   group_by(`Candy Type`) %>%
