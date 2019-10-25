@@ -242,6 +242,7 @@ Finally, we ran summaries on the various demographics of the dataset, generated 
 
 **Andrew's Question:** Are certain candies more likely to be popularized and disliked by Country?
 
+First, I separted the candy data set into 3 different data sets based upion which country the person was from. This will allows us to compare the most popular candies as well as those that were the most disliked.
 ```{r}
 UScandy <- candy2 %>%
   filter(COUNTRY == 'United States', !is.na(Rating)) %>%
@@ -267,6 +268,9 @@ Ccandy <- candy2 %>%
 topC <- Ccandy %>%
   top_n(10)
 ```
+After filtering through to find the popular candy for each country, we found that each country had a favorite candy. It was also recongnized that the majority of observations in the candy data set were from the Unitd States while the United Kingdom had a very small sample size. The common favorite candies within each countries' top ten are Reeses, Kit Kat, Tolberone, Mars, and Twix. 
+  
+Now that we know the favorite candies for each country, it would be also interesting to analyze the least favorite candies.
 
 
 ```{r}
@@ -287,6 +291,33 @@ dlC <- candy2 %>%
   group_by(`Candy Type`) %>%
   summarize( Disliked = n()) %>%
   arrange(desc(Disliked))
+```
+It was interesting to find that every country hates gum from baseball cards, little marshmellows from circus peanuts, and Box'o'raisins. Although there were less entries for Canada and United Kingdom, it was interesting to notice that each had similar favorites and least favorites.
+```{r, eval=FALSE}
+topUS %>%
+  ggplot(aes(x = reorder(`Candy Type`, Rating), y = Rating))+
+  geom_col(stat = "identity") +
+  ggtitle("United States Favorite Candies")+
+  xlab("Candy")+
+  ylab("Number of People")+
+  coord_flip()
+
+topUk %>%
+  ggplot(aes(x = reorder(`Candy Type`, Rating), y = Rating))+
+  geom_col(stat = "identity") +
+  ggtitle("United Kingdoms Favorite Candies")+
+  xlab("Candy")+
+  ylab("Number of People")+
+  coord_flip()
+
+topC %>%
+  ggplot(aes(x = reorder(`Candy Type`, Rating), y = Rating))+
+  geom_col(stat = "identity") +
+  ggtitle("Canada's Favorite Candies")+
+  xlab("Candy")+
+  ylab("Number of People")+
+  coord_flip()
+
 ```
 
 
