@@ -1,0 +1,113 @@
+---
+title: 'Lab 10: Text and Time Analysis'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "11/01/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(stringr)
+library(lubridate)
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+Que <- read_csv("Questions_trunc.csv")
+Ans <- read_csv("Answers_trunc.csv")
+Ans <- Ans %>%
+  mutate(ans_time = ymd_hms(CreationDate))
+Que <- Que %>%
+  mutate(ask_time = ymd_hms(CreationDate))
+Q_and_A <- Que %>%
+  left_join(Ans, by = c("Id" = "ParentId")) 
+Q_and_A <- Q_and_A %>%
+  select(-CreationDate.x,-CreationDate.y,-X7.x,-X7.y)
+Q_and_A <- Q_and_A %>%
+  rename(Score_Que = Score.x, AnswerId = Id.y, Id_Asked = OwnerUserId.x, ID_Answered = OwnerUserId.y, QuestionBody = Body.x, AnswerBody = Body.y, Score_Ans = Score.y)
+```
+### Findings and Features
+
+**Notable Features:** What affects score and why
+
+**Ideal question and answer:**
+
+#### Timeliness as a Feature
+
+First, the timeliness variable must be created. The ask_time and ans_time variables are datetime types, so timeliness can be measured as the difference between ask and answered time, and then ranked accordingly:
+```{r}
+Q_and_A2 <- Q_and_A %>%
+  group_by(Id) %>%
+  mutate(Timeliness = min_rank(desc(ask_time-ans_time)))
+```
+
+```{r}
+Ans_per_Timeli <- Q_and_A2 %>%
+  group_by(Timeliness) %>%
+  count()
+Score_per_Timeli <- Q_and_A2 %>%
+  group_by(Timeliness) %>%
+  summarize(timeScore = sum(Score_Ans))
+(Score_per_Ans <- Ans_per_Timeli %>%
+  left_join(Score_per_Timeli,by="Timeliness")%>%
+  group_by(Timeliness) %>%
+  summarize(Score_per_Ans = timeScore/n))
+```
+
+```{r}
+# 6 Answers came before question
+t <- Q_and_A2 %>%
+  filter(ans_time <= ask_time)
+```
+
+#### Is answer score normally distributed?
+
+no? a few sentences
+
+**Benefits of this analysis:**
+
+### Individual Findings
+
+#### Andrew
+What features did you create and why did you choose those features?
+What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
+
+#### Brian
+```{r}
+test <- Q_and_A2 %>%
+  mutate(Inc_Code = str_detect(AnswerBody,"<code>"))
+p1 <- test %>%
+  group_by(Inc_Code)%>%
+  summarize(total = sum(Score_Ans))
+p2 <- test %>%
+  group_by(Inc_Code) %>%
+  count()
+p3 <- p1 %>%
+  left_join(p2) %>%
+  group_by(Inc_Code) %>%
+  summarize(tot_per = total/n)
+```
+
+```{r}
+t2 <- Q_and_A2 %>%
+  mutate(need = str_count(QuestionBody,regex("need",ignore_case = TRUE)))
+c1 <- t2 %>%
+  group_by(need) %>%
+  count()
+c2 <- t2 %>%
+  group_by(need) %>%
+  summarize(tot = sum(Score_Que)) %>%
+  group_by(need) %>%
+  left_join(c1) %>%
+  summarize(tot_per = tot/n)
+```
+```{r}
+ggplot(c2,aes(need,tot_per))+
+  geom_point()+
+  geom_smooth(method='lm')
+```
+
+#### Charles
+What features did you create and why did you choose those features?
+What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
+
+#### Clint
+What features did you create and why did you choose those features?
+What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
