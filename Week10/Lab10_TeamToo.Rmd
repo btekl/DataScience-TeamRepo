@@ -17,7 +17,8 @@ Ans <- Ans %>%
 Que <- Que %>%
   mutate(ask_time = ymd_hms(CreationDate))
 Q_and_A <- Que %>%
-  left_join(Ans, by = c("Id" = "ParentId")) 
+  left_join(Ans, by = c("Id" = "ParentId")) %>%
+  mutate(time_to_ans = CreationDate.y-CreationDate.x)
 Q_and_A <- Q_and_A %>%
   select(-CreationDate.x,-CreationDate.y,-X7.x,-X7.y)
 Q_and_A <- Q_and_A %>%
@@ -31,37 +32,57 @@ Q_and_A <- Q_and_A %>%
 
 #### Timeliness as a Feature
 
-First, the timeliness variable must be created. The ask_time and ans_time variables are datetime types, so timeliness can be measured as the difference between ask and answered time, and then ranked accordingly:
+First, the timeliness variable must be created. The time_to_ans variable describes the number of minutes between the posting of a question and an answer. Answers are ranked in order of response:
 ```{r}
 Q_and_A2 <- Q_and_A %>%
   group_by(Id) %>%
-  mutate(Timeliness = min_rank(desc(ask_time-ans_time)))
+  mutate(Timeliness = min_rank(time_to_ans))
 ```
-
+Most questions receive only a few answers, so the earliest answer ranks are the most crowded:
 ```{r}
-Ans_per_Timeli <- Q_and_A2 %>%
+(Ans_per_Timeli <- Q_and_A2 %>%
   group_by(Timeliness) %>%
-  count()
-Score_per_Timeli <- Q_and_A2 %>%
+  count())
+```
+So, to compare across ranks, we summarize the total score at each rank and divide by the number of answers at that rank:
+```{r}
+(Score_per_Ans <- Q_and_A2 %>%
   group_by(Timeliness) %>%
-  summarize(timeScore = sum(Score_Ans))
-(Score_per_Ans <- Ans_per_Timeli %>%
-  left_join(Score_per_Timeli,by="Timeliness")%>%
+  summarize(timeScore = sum(Score_Ans)) %>%
   group_by(Timeliness) %>%
+  left_join(Ans_per_Timeli,by="Timeliness")%>%
   summarize(Score_per_Ans = timeScore/n))
 ```
 
 ```{r}
-# 6 Answers came before question
-t <- Q_and_A2 %>%
-  filter(ans_time <= ask_time)
+ggplot()+
+geom_line(data=Score_per_Ans,aes(Timeliness,Score_per_Ans))+
+  geom_hline(aes(yintercept=mean(Q_and_A2$Score_Ans,na.rm=TRUE),color='Sample Average'),linetype='dashed')+
+  scale_color_manual(name='',values=c(`Sample Average`='red'))+
+  ggtitle("Average Answer Score by Response Order")+
+  ylab("Average Score")+
+  xlab("Answer in Order of Response")
 ```
+
+Earlier responses don't outscore later responses, in general they fall very close to the average score. Some of the late responses score far above the average: questions which generate a lot of responses are more nuanced and it takes longer for a person with the adequate knowledge to respond. Additionally, only 4 questions received more than 20 responses, so the averages at these ranks are heavily weighted by any high scoring response.
 
 #### Is answer score normally distributed?
 
-no? a few sentences
+```{r}
+ggplot(Q_and_A2,aes(Score_Ans))+
+  geom_histogram(bins = 100)+
+  geom_vline(aes(xintercept=mean(Q_and_A2$Score_Ans,na.rm=TRUE),color='Mean'),linetype='dashed')+
+  geom_vline(aes(xintercept=median(Q_and_A2$Score_Ans,na.rm=TRUE),color='Median'),linetype='dashed')+
+  scale_color_manual(name='Statistics',values=c(Mean='red',Median='blue'))+
+  xlim(-3,25)+
+  ggtitle("Distribution of Answer Scores")+
+  ylab("Number of Answers")+
+  xlab("Score")
+```
 
-**Benefits of this analysis:**
+Score is not normally distributed; a normal distribution is centered on the mean. The presence of extreme outliers (one question received a score of 8384) skews the mean away from where the majority of answer scores fall. We are able to compute percentiles and z-scores, but they will be similarly skewed, and thus not as meaningful as for a normal distribution.
+
+**Benefits of this analysis:** Recommendations for question and answer styling could be incorporated into a Stack Overflow beginner's guide.
 
 ### Individual Findings
 
