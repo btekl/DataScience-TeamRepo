@@ -26,9 +26,13 @@ Q_and_A <- Q_and_A %>%
 ```
 ### Findings and Features
 
-**Notable Features:** What affects score and why
+**Notable Features:** The tone of a question, ... seem to influence the score of a question. 
 
-**Ideal question and answer:**
+Answers which include examples, ... influence the score of a submission.
+
+**Ideal question and answer:** The ideal question should not be demanding, ...
+
+The ideal answer should be specific, with examples, ...
 
 #### Timeliness as a Feature
 
@@ -44,14 +48,11 @@ Most questions receive only a few answers, so the earliest answer ranks are the 
   group_by(Timeliness) %>%
   count())
 ```
-So, to compare across ranks, we summarize the total score at each rank and divide by the number of answers at that rank:
+So, to compare across ranks, we compare the average score at each rank:
 ```{r}
-(Score_per_Ans <- Q_and_A2 %>%
+Score_per_Ans <- Q_and_A2 %>%
   group_by(Timeliness) %>%
-  summarize(timeScore = sum(Score_Ans)) %>%
-  group_by(Timeliness) %>%
-  left_join(Ans_per_Timeli,by="Timeliness")%>%
-  summarize(Score_per_Ans = timeScore/n))
+  summarize(Score_per_Ans = mean(Score_Ans))
 ```
 
 ```{r}
@@ -64,7 +65,7 @@ geom_line(data=Score_per_Ans,aes(Timeliness,Score_per_Ans))+
   xlab("Answer in Order of Response")
 ```
 
-Earlier responses don't outscore later responses, in general they fall very close to the average score. Some of the late responses score far above the average: questions which generate a lot of responses are more nuanced and it takes longer for a person with the adequate knowledge to respond. Additionally, only 4 questions received more than 20 responses, so the averages at these ranks are heavily weighted by any high scoring response.
+Earlier responses don't outscore later responses, in general they fall very close to the overall average score. Some of the late responses score far above the average: questions which generate a lot of responses are more nuanced and it takes longer for a person with the adequate knowledge to respond. Additionally, only 4 questions received more than 20 responses, so the averages at these ranks are heavily weighted by any high scoring response.
 
 #### Is answer score normally distributed?
 
@@ -80,7 +81,7 @@ ggplot(Q_and_A2,aes(Score_Ans))+
   xlab("Score")
 ```
 
-Score is not normally distributed; a normal distribution is centered on the mean. The presence of extreme outliers (one question received a score of 8384) skews the mean away from where the majority of answer scores fall. We are able to compute percentiles and z-scores, but they will be similarly skewed, and thus not as meaningful as for a normal distribution.
+Score is not normally distributed; a normal distribution is centered on the mean. The presence of extreme outliers (one question received a score of 8384) skews the mean away from where the majority of answer scores fall. We are able to compute percentiles and z-scores, but they will be similarly skewed, and thus not as evenly spaced as for a normal distribution.
 
 **Benefits of this analysis:** Recommendations for question and answer styling could be incorporated into a Stack Overflow beginner's guide.
 
@@ -91,39 +92,72 @@ What features did you create and why did you choose those features?
 What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
 
 #### Brian
+
+For questions, I created a feature related to the number of mentions of the word "need". I figured questions that came off as demanding would be scored lower overall, and tried features with a variety of words that could come across as demanding.
+
+For answers, my feature checks if a submission included the code tag `<code>`. I reasoned that including specific code examples would generally increase an answers score as it's something I've found helpful when using Stack Overflow.
+
+Creating the factor for questions:
 ```{r}
-test <- Q_and_A2 %>%
-  mutate(Inc_Code = str_detect(AnswerBody,"<code>"))
-p1 <- test %>%
-  group_by(Inc_Code)%>%
-  summarize(total = sum(Score_Ans))
-p2 <- test %>%
-  group_by(Inc_Code) %>%
-  count()
-p3 <- p1 %>%
-  left_join(p2) %>%
-  group_by(Inc_Code) %>%
-  summarize(tot_per = total/n)
+bq <- Q_and_A2 %>%
+  mutate(need = str_count(QuestionBody,regex("need",ignore_case = TRUE)))
+
+bq2 <- bq %>%
+  group_by(need) %>%
+  summarize(med = median(Score_Que,na.rm = TRUE)) 
+
+bq3 <- bq %>%
+  group_by(need) %>%
+  summarize(mean = mean(Score_Que,na.rm = TRUE))
+
+ggplot()+
+  geom_point(data=bq3,aes(need,mean,color="Mean"))+
+  geom_smooth(data=bq3,aes(need,mean,color="Mean"),se=FALSE,method='lm',linetype="dashed")+
+  geom_point(data=bq2,aes(need,med,color="Median"))+
+  geom_smooth(data=bq2,aes(need,med,color="Median"),se=FALSE,method='lm',linetype="dashed")+
+  scale_color_manual(name = "",values = c(Mean = "red",Median="black"))+
+  ggtitle("Mean and Median Scores by Usage of 'Need'")+
+  ylab("Score")+
+  xlab("Number of Usages of 'Need'")
 ```
 
+The mean score is substantially lower for higher usages of need, while the median score appears to be unaffected. It is difficult to say for sure that there is a relationship between mentions of need and score, but the affect on average score gives some evidence of a link between them. 
+
+Questions which seem to be demanding or forcing a sense of urgency can be off putting for a person answering the question for free on their own time.
+
+Creating the factor for answers:
 ```{r}
-t2 <- Q_and_A2 %>%
-  mutate(need = str_count(QuestionBody,regex("need",ignore_case = TRUE)))
-c1 <- t2 %>%
-  group_by(need) %>%
-  count()
-c2 <- t2 %>%
-  group_by(need) %>%
-  summarize(tot = sum(Score_Que)) %>%
-  group_by(need) %>%
-  left_join(c1) %>%
-  summarize(tot_per = tot/n)
+ba <- Q_and_A2 %>%
+  mutate(Inc_Code = str_detect(AnswerBody,"<code>")) %>%
+  mutate(s = ifelse(Score_Ans>=41, "High", "Low"))
+ba2 <- ba %>%
+  filter(!is.na(Inc_Code)& s=="High") %>%
+  group_by(Inc_Code)%>%
+  summarize(mean = mean(Score_Ans,na.rm=TRUE))
+ba3 <- ba %>%
+  filter(!is.na(Inc_Code)& s=="Low") %>%
+  group_by(Inc_Code)%>%
+  summarize(mean = mean(Score_Ans,na.rm=TRUE))
 ```
+Scores are grouped into high and low, with high scores being the top 5%. Because the scales are so different, they are plotted seperately:
 ```{r}
-ggplot(c2,aes(need,tot_per))+
-  geom_point()+
-  geom_smooth(method='lm')
+ggplot(ba2,aes(Inc_Code,mean,fill=Inc_Code))+
+  geom_col()+
+  ggtitle("Affect of Code on High Score Answers")+
+  ylab("Average Score")+
+  xlab("Usage of Code in Answer")+
+  theme(legend.position = "none")
+ggplot(ba3,aes(Inc_Code,mean,fill=Inc_Code))+
+  geom_col()+
+  ggtitle("Affect of Code on Low Score Answers")+
+  ylab("Average Score")+
+  xlab("Usage of Code in Answer")+
+  theme(legend.position = "none")
 ```
+
+Including code seems to have a notable affect, both on answers that performed well and those that did poorly. Answers using code examples score nearly twice as well in both groups. 
+
+Code examples are likely linked to specific parts of a question which are the most relevant. So, inclusion of code may represent more direct answers than those without code.
 
 #### Charles
 What features did you create and why did you choose those features?
