@@ -115,8 +115,11 @@ ggplot(meanint, mapping = aes( x= integer,y = mean, fill = integer ))+
 
 
 ```
+We can see the questions 1- 4 seem to be a lot easier than questions 5 - 7. When looking at the actually questions. It seems that it also took longer for the person to answer the questions 5-7 meaning they were much more difficult. Overall, we can see that many people average well on the easy questions and poor on the hard. This string was commonly used and very useful in the field.
 
-For my answers I decided to check the median score on answers that involve the string "failed" because i felt it would be interesting to see the correlation between this pratical string and results.
+
+
+For my answers I decided to check the time it too answer when the person answered with the word failed. It would be interesting to see a correlation between the word and the time the person took to answer.
 
 ```{r}
 failed <- Q_and_A2%>%
@@ -124,18 +127,24 @@ failed <- Q_and_A2%>%
 
 medfailed <- failed %>%
   group_by(failed) %>%
-  summarize(med = mean(Score_Que,na.rm = TRUE)) 
+  summarise(mean = mean(time_to_ans,na.rm = TRUE))
+  
+  
 
-ggplot(medfailed, mapping = aes( x= failed,y = med, fill = failed ))+
+ggplot(medfailed, mapping = aes( x= failed,y = mean/1000000, fill = failed ))+
   geom_col()+
-  scale_fill_gradient(low = 'red', high = 'yellow')+
-   ggtitle("Median Score for Answer involving the string Failed")+
-  ylab("Median Score")+
+  scale_fill_gradient(low = 'red', high = 'blue')+
+   ggtitle("Time it took Answer a Question correlated to the amount of time failed was said")+
+  ylab("Time it took to answer")+
   xlab("Question Number")+
-  labs(fill = "Question")+
-  scale_x_discrete(limits = c(0,1,2,3,4,5,6))
+  labs(fill = "Number of uses of the word failed")+
+  scale_x_discrete(limits = c(1,2,3,4))+
+  xlim(0,5)
+
 ```
 
+
+We can see if the person used the word failed once then they look a long time to explain why. It is interesting to see that of they used failed a lot, or 4 time, then they were very quick to answer.
 #### Brian
 
 For questions, I created a feature related to the number of mentions of the word "need". I figured questions that came off as demanding would be scored lower overall, and tried features with a variety of words that could come across as demanding.
