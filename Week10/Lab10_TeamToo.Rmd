@@ -160,8 +160,30 @@ Including code seems to have a notable affect, both on answers that performed we
 Code examples are likely linked to specific parts of a question which are the most relevant. So, inclusion of code may represent more direct answers than those without code.
 
 #### Charles
-What features did you create and why did you choose those features?
-What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
+For the questions I'm curious to see if the quality of an answer is dependent upon the inclusion of punctuation and capitalization. I suspect the better a question is written the quicker it will be answered.
+
+I wondered for answeres if the length of the answer affected was linked to response time. My suspicion is that if a response is longer an answer will come slower, because even complex coding problems are often the result of a formatting error or missing semicolon. Shorter questions have less information, and as such dont make themselves as answerable.
+
+```{r}
+quequal <- Q_and_A2 %>%
+  mutate(punctuation = str_count(QuestionBody,"[:punct:]")) %>%
+  mutate(speed = ifelse(Score_Ans>=41, "High", "Low"))
+
+howlong <- Q_and_A2 %>%
+  mutate(len = nchar(AnswerBody)) %>%
+  group_by(len) %>%
+  summarize(av = mean(time_to_ans,na.rm = TRUE))
+ggplot(data = howlong, aes(len,av))+
+  geom_point()+
+  geom_smooth()+
+  xlim(0,10000)+
+  ggtitle("Time Needed to Answer Questions of Differing Lengths")+
+  xlab("Character Length for Answer")+
+  ylab("Time Before Answer")
+```
+```{r}
+
+```
 
 #### Clint
 What features did you create and why did you choose those features?
