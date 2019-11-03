@@ -96,9 +96,7 @@ int <- Q_and_A2%>%
   mutate(integer = str_count(QuestionBody, regex("integer", ignore_case =  TRUE)))
 
 
-medint <- int %>%
-  group_by(integer) %>%
-  summarize(med = median(Score_Que,na.rm = TRUE)) 
+
 
 meanint <- int %>%
   group_by(integer) %>%
@@ -114,21 +112,28 @@ ggplot(meanint, mapping = aes( x= integer,y = mean, fill = integer ))+
   labs(fill = "Question")+
   scale_x_discrete(limits = c(0,1,2,3,4,5,6,7))
 
-ggplot(medint, mapping = aes( x= integer,y = med, fill = integer ))+
-  geom_col()+
-  scale_fill_gradient(low = 'red', high = 'yellow')+
-   ggtitle("Median Score for Questions involving the concept Integer")+
-  ylab("Median Score")+
-  xlab("Question Number")+
-  labs(fill = "Question")+
-  scale_x_discrete(limits = c(0,1,2,3,4,5,6,7))
+
 
 ```
 
-
+For my answers I decided to check the median score on answers that involve the string "failed" because i felt it would be interesting to see the correlation between this pratical string and results.
 
 ```{r}
+failed <- Q_and_A2%>%
+  mutate(failed = str_count(AnswerBody, regex("failed", ignore_case =  TRUE)))
 
+medfailed <- failed %>%
+  group_by(failed) %>%
+  summarize(med = median(Score_Que,na.rm = TRUE)) 
+
+ggplot(medfailed, mapping = aes( x= failed,y = med, fill = failed ))+
+  geom_col()+
+  scale_fill_gradient(low = 'red', high = 'yellow')+
+   ggtitle("Median Score for Answer involving the string Failed")+
+  ylab("Median Score")+
+  xlab("Question Number")+
+  labs(fill = "Question")+
+  scale_x_discrete(limits = c(0,1,2,3,4,5,6))
 ```
 
 #### Brian
