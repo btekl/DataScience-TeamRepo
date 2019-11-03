@@ -248,5 +248,92 @@ There seems to be no clear link between the grammar of a question, at least by t
 There also seems to be no clear link between the length of an answer and the period of time required to submit it. This must be because of factors like quoting and copy-pastable banks already stored on the responder's console.
 
 #### Clint
-What features did you create and why did you choose those features?
-What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
+Ideas for feature -questions: I want to see if a question with a high score is likely to produce and answer with a high score. Is there are a relationship between question score and answer score? 
+
+
+ I was curious how the length of a answer effects the score? I was also curious to see how the inclusion of code effected the average scores at different answer lengths. I would suspect that longer responses would generally lead to higher scores. 
+```{r}
+
+fst_anal<- Ans %>% 
+  filter(str_detect(Ans$Body , "<code>") == TRUE)
+
+fst_anal2 <- Ans %>% 
+  filter(str_detect(Ans$Body , "<code>") == FALSE)
+
+mean_code <- mean(fst_anal$Score)
+
+mean_para <- mean(fst_anal2$Score)
+
+mean_gen <- mean(Ans$Score)
+```
+
+
+```{r}
+### actually first I'll see if there appears to be a relationship between length of response and score
+
+secnd_anal2 <- Ans %>%
+  mutate(body_leng = str_length(Ans$Body)) %>%
+  group_by(body_leng)%>%
+   summarise(mean = mean(Score))
+fst_anal_b <- fst_anal %>%
+  mutate(body_leng = str_length(fst_anal$Body))%>%
+  group_by(body_leng)%>%
+   summarise(mean = mean(Score))
+fst_anal_2b <- fst_anal2 %>%
+  mutate(body_leng = str_length(fst_anal2$Body))%>%
+  group_by(body_leng)%>%
+   summarise(mean = mean(Score))
+
+long_body <- secnd_anal2 %>%
+  filter(body_leng > 3000)
+short_body <- secnd_anal2  %>%
+  filter(body_leng < 900)
+
+mean_length <- mean(secnd_anal$body_leng)
+
+ggplot(secnd_anal, mapping = aes(x= secnd_anal$body_leng, y = secnd_anal$mean)) + 
+  geom_smooth() +
+  geom_point() +
+  ggtitle("Effect of Answer Length on Score")+
+  ylab("Average Score of the Response")+
+  xlab("Length of the Response") + 
+  xlim(0,10000) +
+  ylim(0,75)
+
+ggplot(fst_anal_b, mapping = aes(x= fst_anal_b$body_leng, y = fst_anal_b$mean)) + 
+  geom_point() +
+  geom_smooth() +
+ xlim(0,10000) +
+  ylim(0,75)+
+  ggtitle("Effect of Answer Length on Score of Responses with <code>")+
+  ylab("Average Score of the Response")+
+  xlab("Length of the Response")
+
+ggplot(fst_anal_2b, mapping = aes(x= fst_anal_2b$body_leng, y = fst_anal_2b$mean)) + 
+  geom_point() +
+  geom_smooth() +
+ xlim(0,10000) +
+  ylim(0,75) +
+  ggtitle("Effect of Answer Length on Score of responses without <code>")+
+  ylab("Average Score of the Response")+
+  xlab("Length of the Response")
+  ggplot(long_body, mapping = aes(x= long_body$body_leng, y = long_body$mean)) + 
+  geom_point() +
+  geom_smooth() +
+ xlim(3000,10000) +
+  ylim(0,75) +
+  ggtitle("Effect of Long Answer Length on Score of responses without <code>")+
+  ylab("Average Score of the Response")+
+  xlab("Length of the Response")
+
+ggplot(short_body, mapping = aes(x= short_body$body_leng, y = short_body$mean)) + 
+  geom_point() +
+  geom_smooth() +
+ xlim(0,900) +
+  ylim(0,75) +
+  ggtitle("Effect of short Answer Length on score")+
+  ylab("Average Score of the Response")+
+  xlab("Length of the Response")
+```
+From examining the graphs you can see that the vast majority of responses fall around 1800 characters and unsurprisingly the responses containing code did better, however with response containing no code at all there was a much stronger correlation between length and score. This suggests tht amongst response with no code a longer wordier answer may have been able to achieve a higher score. By splitting the overall graph into graphs examining just short answers, under 900 characters, and long answers, over 3000, I would suggest that there is not a relationship between the length of answer and score in general as the line of best fit if very flat across all three graphs.
+
