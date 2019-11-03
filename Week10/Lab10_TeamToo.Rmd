@@ -88,8 +88,36 @@ Score is not normally distributed; a normal distribution is centered on the mean
 ### Individual Findings
 
 #### Andrew
-What features did you create and why did you choose those features?
-What is the relationship between your features and the scores of questions/answers if any? Provide an explanation for why each relationship does/does not exist.
+My feature count the number of questions that include the string "integer" in some form. This feature is created in order to view the importance of this program to people/organization asking the questions. This will help us to analyze how important this concept is in the field.
+
+```{r}
+
+int <- Q_and_A2%>%
+  mutate(integer = str_count(QuestionBody, regex("integer", ignore_case =  TRUE)))
+
+
+medint <- int %>%
+  group_by(integer) %>%
+  summarize(med = median(Score_Que,na.rm = TRUE)) 
+
+meanint <- int %>%
+  group_by(integer) %>%
+  summarize(mean = mean(Score_Que,na.rm = TRUE))
+
+
+ggplot(meanint, mapping = aes( x= integer,y = mean, fill = integer ))+
+  geom_col()
+
+ggplot(medint, mapping = aes( x= integer,y = med, fill = integer ))+
+  geom_col()+
+  scale_fill_gradient()
+```
+
+
+
+```{r}
+
+```
 
 #### Brian
 
