@@ -88,7 +88,7 @@ Score is not normally distributed; a normal distribution is centered on the mean
 ### Individual Findings
 
 #### Andrew
-My feature count the number of questions that include the string "integer" in some form. This feature is created in order to view the importance of this program to people/organization asking the questions. This will help us to analyze how important this concept is in the field.
+My feature which plots the average score for each question using the word "integer". I figured this was a basic concept learned in many intro math classes and it would be interesting to see how well people react to questions with this concept. This feature is created in order to view the importance of this program to people/organization asking the questions. This will help us to analyze how important this concept is in the field.
 
 ```{r}
 
@@ -106,11 +106,23 @@ meanint <- int %>%
 
 
 ggplot(meanint, mapping = aes( x= integer,y = mean, fill = integer ))+
-  geom_col()
+  geom_col()+
+  scale_fill_gradient(low = 'red', high = 'yellow')+
+   ggtitle("Mean Score for Questions involving the concept Integer")+
+  ylab("Mean Score")+
+  xlab("Question Number")+
+  labs(fill = "Question")+
+  scale_x_discrete(limits = c(0,1,2,3,4,5,6,7))
 
 ggplot(medint, mapping = aes( x= integer,y = med, fill = integer ))+
   geom_col()+
-  scale_fill_gradient()
+  scale_fill_gradient(low = 'red', high = 'yellow')+
+   ggtitle("Median Score for Questions involving the concept Integer")+
+  ylab("Median Score")+
+  xlab("Question Number")+
+  labs(fill = "Question")+
+  scale_x_discrete(limits = c(0,1,2,3,4,5,6,7))
+
 ```
 
 
