@@ -175,7 +175,8 @@ ggplot(data = quequal, aes(punctuation,sq))+
   xlab("Units of Grammar (capitalization and punctuation)")+
   ylab("Quality")+
   ylim(0,100)+
-  xlim(0,100)
+  xlim(0,100)+
+  coord_flip()
 
 howlong <- Q_and_A2 %>%
   mutate(len = nchar(AnswerBody)) %>%
@@ -189,9 +190,10 @@ ggplot(data = howlong, aes(len,av))+
   xlab("Character Length for Answer")+
   ylab("Time Before Answer")
 ```
-```{r}
 
-```
+There seems to be no clear link between the grammar of a question, at least by the metric provided, and the quality of said question. Some shorter questions are considered to be a higher in quality than longer questions and vice versa. There is no clear link. This is probably because including code that is clear is more important than simply wording a question elegantly.
+
+There also seems to be no clear link between the length of an answer and the period of time required to submit it. This must be because of factors like quoting and copy-pastable banks already stored on the responder's console.
 
 #### Clint
 What features did you create and why did you choose those features?
