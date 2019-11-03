@@ -166,8 +166,16 @@ I wondered for answeres if the length of the answer affected was linked to respo
 
 ```{r}
 quequal <- Q_and_A2 %>%
-  mutate(punctuation = str_count(QuestionBody,"[:punct:]")) %>%
-  mutate(speed = ifelse(Score_Ans>=41, "High", "Low"))
+  mutate(punctuation = str_count(QuestionBody,"[:punct:]|[:upper:]")) %>%
+  group_by(punctuation)%>%
+  summarize(sq = mean(Score_Que,na.rm = TRUE))
+ggplot(data = quequal, aes(punctuation,sq))+
+  geom_col()+
+  ggtitle("Quality of Questions per Grammatical Unit")+
+  xlab("Units of Grammar (capitalization and punctuation)")+
+  ylab("Quality")+
+  ylim(0,100)+
+  xlim(0,100)
 
 howlong <- Q_and_A2 %>%
   mutate(len = nchar(AnswerBody)) %>%
