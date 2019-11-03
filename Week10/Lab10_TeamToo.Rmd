@@ -26,13 +26,13 @@ Q_and_A <- Q_and_A %>%
 ```
 ### Findings and Features
 
-**Notable Features:** The tone of a question, ... seem to influence the score of a question. 
+**Notable Features:** The tone of a question, formatting, specificity, and ... seem to influence the score of a question. 
 
-Answers which include examples, ... influence the score of a submission.
+Answers which include examples, are of adequate length, with a positive tone, ... influence the score of a submission.
 
-**Ideal question and answer:** The ideal question should not be demanding, ...
+**Ideal question and answer:** Though our findings were not all conclusive, the ideal question should not be demanding, properly articulated, and ..
 
-The ideal answer should be specific, with examples, ...
+The ideal answer should be specific, with examples, long enough to sufficiently answer the question, with a positive tone, and ...
 
 #### Timeliness as a Feature
 
@@ -88,6 +88,7 @@ Score is not normally distributed; a normal distribution is centered on the mean
 ### Individual Findings
 
 #### Andrew
+
 My feature which plots the average score for each question using the word "integer". I figured this was a basic concept learned in many intro math classes and it would be interesting to see how well people react to questions with this concept. This feature is created in order to view the importance of this program to people/organization asking the questions. This will help us to analyze how important this concept is in the field.
 
 ```{r}
@@ -112,12 +113,9 @@ ggplot(meanint, mapping = aes( x= integer,y = mean, fill = integer ))+
   labs(fill = "Question")+
   scale_x_discrete(limits = c(0,1,2,3,4,5,6,7))
 
-
-
 ```
+
 We can see the questions 1- 4 seem to be a lot easier than questions 5 - 7. When looking at the actually questions. It seems that it also took longer for the person to answer the questions 5-7 meaning they were much more difficult. Overall, we can see that many people average well on the easy questions and poor on the hard. This string was commonly used and very useful in the field.
-
-
 
 For my answers I decided to check the time it too answer when the person answered with the word failed. It would be interesting to see a correlation between the word and the time the person took to answer.
 
@@ -143,11 +141,11 @@ ggplot(medfailed, mapping = aes( x= failed,y = mean/1000000, fill = failed ))+
 
 ```
 
-
 We can see if the person used the word failed once then they look a long time to explain why. It is interesting to see that of they used failed a lot, or 4 time, then they were very quick to answer.
+
 #### Brian
 
-For questions, I created a feature related to the number of mentions of the word "need". I figured questions that came off as demanding would be scored lower overall, and tried features with a variety of words that could come across as demanding.
+For questions, I created a feature related to the number of mentions of the word "need". I figured questions that came off as demanding would be scored lower overall, and tried features with a variety of words that could come across as demanding, eventually settling on "need".
 
 For answers, my feature checks if a submission included the code tag `<code>`. I reasoned that including specific code examples would generally increase an answers score as it's something I've found helpful when using Stack Overflow.
 
