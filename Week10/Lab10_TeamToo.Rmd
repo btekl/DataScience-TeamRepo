@@ -124,7 +124,7 @@ failed <- Q_and_A2%>%
 
 medfailed <- failed %>%
   group_by(failed) %>%
-  summarize(med = median(Score_Que,na.rm = TRUE)) 
+  summarize(med = mean(Score_Que,na.rm = TRUE)) 
 
 ggplot(medfailed, mapping = aes( x= failed,y = med, fill = failed ))+
   geom_col()+
