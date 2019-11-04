@@ -247,9 +247,32 @@ There seems to be no clear link between the grammar of a question, at least by t
 
 There also seems to be no clear link between the length of an answer and the period of time required to submit it. This must be because of factors like quoting and copy-pastable banks already stored on the responder's console.
 
-#### Clint
-Ideas for feature -questions: I want to see if a question with a high score is likely to produce and answer with a high score. Is there are a relationship between question score and answer score? 
+I want to see if a question with a high score is more likely to produce and answer with a high score. I would predict that higher score questions would produce higher scoring answer because I would think that more interesting or insightful questions would be more likely to elicit a strong answer. 
 
+```{r}
+### First I want to get an assesment of the basic relationship betweeen question score and answer score
+ggplot(Q_and_A2) + geom_smooth(aes(Score_Que, Score_Ans)) + 
+  geom_point(aes(Score_Que, Score_Ans)) +
+  xlim(0,500) +
+  ylim(0,500) 
+
+```
+
+This graph isn't particularly insightful, but maybe by examining the average score at each question score the relationship will become more clear.
+
+```{r}
+prep_qanda <- Q_and_A2 %>%
+  group_by(Score_Que) %>%
+  summarise(mean = mean(Score_Ans))
+
+ggplot(prep_qanda) + geom_smooth(aes(Score_Que, mean)) + 
+  geom_point(aes(Score_Que, mean)) +
+  xlim(0,500) +
+  ylim(0,75) 
+```
+This graph suggests a much stronger relationship between question score and answer score than I first would have anticipated. At the very low questions scores are corresponingly related to low answer scores in a very strong positive fashion up to a question score of 200, from which the line tapers off. This suggests that higher scoring questions are likely to inspire higher scoring answers up to a point, after which the quality matters less. 
+
+#### CLINT
 
  I was curious how the length of a answer effects the score? I was also curious to see how the inclusion of code effected the average scores at different answer lengths. I would suspect that longer responses would generally lead to higher scores. 
 ```{r}
@@ -259,13 +282,10 @@ fst_anal<- Ans %>%
 
 fst_anal2 <- Ans %>% 
   filter(str_detect(Ans$Body , "<code>") == FALSE)
-
-mean_code <- mean(fst_anal$Score)
-
-mean_para <- mean(fst_anal2$Score)
-
-mean_gen <- mean(Ans$Score)
 ```
+
+
+
 
 
 ```{r}
@@ -289,9 +309,7 @@ long_body <- secnd_anal2 %>%
 short_body <- secnd_anal2  %>%
   filter(body_leng < 900)
 
-mean_length <- mean(secnd_anal$body_leng)
-
-ggplot(secnd_anal, mapping = aes(x= secnd_anal$body_leng, y = secnd_anal$mean)) + 
+ggplot(secnd_anal2, mapping = aes(x= secnd_anal2$body_leng, y = secnd_anal2$mean)) + 
   geom_smooth() +
   geom_point() +
   ggtitle("Effect of Answer Length on Score")+
