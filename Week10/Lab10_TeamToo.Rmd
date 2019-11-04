@@ -26,13 +26,13 @@ Q_and_A <- Q_and_A %>%
 ```
 ### Findings and Features
 
-**Notable Features:** The tone of a question, formatting, specificity, and ... seem to influence the score of a question. 
+**Notable Features:** The tone of a question, formatting, and specificity seem to influence the score of a question. 
 
-Answers which include examples, are of adequate length, with a positive tone, ... influence the score of a submission.
+Answers which include examples, are of adequate length, and are written with a positive tone, influence the score of a submission.
 
-**Ideal question and answer:** Though our findings were not all conclusive, the ideal question should not be demanding, properly articulated, and ..
+**Ideal question and answer:** Though our findings were not all conclusive, the ideal question should not be demanding, and properly articulated.
 
-The ideal answer should be specific, with examples, long enough to sufficiently answer the question, with a positive tone, and ...
+The ideal answer should be specific, with examples, long enough to sufficiently answer the question, and written with a positive tone.
 
 #### Timeliness as a Feature
 
