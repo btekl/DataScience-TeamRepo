@@ -1,0 +1,60 @@
+---
+title: 'Lab 11: Baby Names'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "11/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(stringr)
+library(babynames)
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+
+babys18 <- read_csv('yob2018.txt',col_types = cols(
+                    name = col_character(),
+                    sex = col_character(),
+                    n = col_double()))
+babys18 <- babys18 %>%
+  mutate(prop = n/sum(n)) %>%
+  mutate(year = 2018)
+
+babys <- babynames %>%
+  full_join(babys18)
+```
+
+### Analyzing Baby Names
+
+Clearly for males or females (no gender-ambiguous names)
+
+“Trending” but not “trendy”, i.e., on the upslope but not super-popular today. Maybe very popular in 10-20 years.
+
+Cannot be easily (and commonly) shortened to a nickname (like “Benjamin” to “Ben”)
+
+### Individual Name Popularity
+
+#### Andrew
+
+#### Brian
+
+#### Charles
+
+#### Clint
+
+### The Little Mermaid Effect
+
+Ariel Rachel stuff
+
+### Changes Among Our Names
+
+### Recommendations
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:**
+
+**Clint:**
