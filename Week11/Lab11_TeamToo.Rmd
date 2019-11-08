@@ -15,6 +15,7 @@ babys18 <- read_csv('yob2018.txt',col_types = cols(
                     name = col_character(),
                     sex = col_character(),
                     n = col_double()))
+
 babys18 <- babys18 %>%
   mutate(prop = n/sum(n)) %>%
   mutate(year = 2018)
@@ -30,8 +31,113 @@ Clearly for males or females (no gender-ambiguous names)
 “Trending” but not “trendy”, i.e., on the upslope but not super-popular today. Maybe very popular in 10-20 years.
 
 Cannot be easily (and commonly) shortened to a nickname (like “Benjamin” to “Ben”)
+```{r}
+v1 <- babys %>% 
+  filter(year %in% c(2016,2017,2018), n<500, sex=='M')
+```
+
 
 ### Individual Name Popularity
+
+#### Andrew
+
+#### Brian
+
+```{r}
+bri <- babys %>%
+  filter(str_detect(name, "^Bri")) %>%
+  group_by(year) %>%
+  summarise(bri_prop = sum(prop))
+
+brian <- babys %>%
+  filter(str_detect(name,"^Br[iy][oa]n"),sex=='M')%>%
+  group_by(year) %>%
+  summarize(brian_prop = sum(prop))
+
+ggplot()+
+  geom_line(data=bri,aes(year,bri_prop,color='Bri Names'))+
+  geom_line(data=brian,aes(year,brian_prop,color='Brian Names'))+
+  geom_vline(aes(xintercept = 1995, color='1995'), linetype='dashed')+
+  scale_color_manual(name='',values=c(`Bri Names`='red', `Brian Names`='black', `1995`='blue'))+
+  ylab("Proportion of Total")+
+  xlab("Year")+
+  ggtitle("Proportion of Names over Time")
+```
+
+I used the regex "^Br[iy][oa]n" to match names similar to Brian. I opted not to exclude variants like Bryant, but did restrict based on sex, to exclude variants more commonly female, such as Brianna.
+
+Popularity of both variants of Brian and names beginning with Bri both peaked prior to 1995, consistently decreasing since then. Brian variants peaked between 1960 and 1980, when their proportion was greater than names beginning with Bri. Following this peak, popularity has steadily decreased while names beginning with Bri, and not consisting of Brian variants, peaked in popularity just prior to 1995.
+
+#### Charles
+
+#### Clint
+
+### Ariel and Rachel Regex
+
+We opted to include variants such as Arielle and Ariela in our calculations. The total versions of Ariel by year: 
+```{r}
+Ariel <- "A[r]+[iy]+.l+.*"
+babys %>%
+  filter(str_detect(name,Ariel),year %in%c(1973,1988,1990),sex=="F") %>%
+  group_by(year)%>%
+  summarise(Ariel_Variants = n())
+```
+The number of versions of Rachel:
+```{r}
+babys %>%
+  filter(str_detect(name,"Ra[ey]?ch.*l$"),year%in%c(1973,1988,1990),sex=='F') %>%
+  group_by(year) %>%
+  summarise(Rachel_Variants = n())
+```
+The chance a girl would be named a variant of either Rachel or Ariel, for the given years:
+```{r}
+babys %>%
+  filter(str_detect(name,Ariel) | str_detect(name,"Ra[ey]?ch.*l$"),year%in%c(1973,1988,1990,2018),sex=='F') %>%
+  group_by(year) %>%
+  summarise(Ariel_or_Rachel = sum(prop))
+```
+
+### The Little Mermaid Effect
+
+```{r}
+vowel_f_88 <- babys %>%
+  filter(str_detect(name,"^[AEIOU]"),sex=='F', year == 1988) 
+vowel_f_diff <- babys %>%
+  filter(str_detect(name,"^[AEIOU]"), sex=='F', year == 1990) %>%
+  full_join(vowel_f_88, by = "name") %>%
+  replace_na(list(prop.x=0, prop.y=0)) %>% # replace names which didn't exist in one of the years with 0
+  mutate(prop_change = (prop.x-prop.y))
+
+a1 <- babys %>%
+  filter(str_detect(name,Ariel, year %in% c(1988,1990)))
+
+(ariel_prop <- vowel_f_diff %>%
+  semi_join(a1) %>%
+  summarise(prop_change = sum(prop_change)))
+
+f_88 <- babys %>%
+  filter(sex == 'F',year == 1988)
+  
+top_changes <- babys %>%
+  filter(sex == 'F', year == 1990) %>%
+  full_join(f_88, by = "name") %>% 
+  replace_na(list(prop.x=0, prop.y=0)) %>%
+  mutate(prop_change = (prop.x-prop.y)) %>%
+  filter(min_rank(desc(prop_change)) <15) %>%
+  full_join(ariel_prop) %>%
+  replace_na(list(name = "Ariel Names"))
+
+t <- ecdf(vowel_f_diff$prop_change)
+t(ariel_prop) # 100th percentile of change for sum of all ariel names. Comparing changes in 10 names to single names
+
+ggplot()+
+  geom_point(data=top_changes,aes(fct_reorder(name,prop_change),prop_change))+coord_flip()+
+  ggtitle("Largest Increases in Proportion from 1988 to 1990") +
+  xlab("")+
+  ylab("Change in Proportion")
+```
+
+### Changes Among Our Names
 
 #### Andrew
 
@@ -40,12 +146,6 @@ Cannot be easily (and commonly) shortened to a nickname (like “Benjamin” to 
 #### Charles
 
 #### Clint
-
-### The Little Mermaid Effect
-
-Ariel Rachel stuff
-
-### Changes Among Our Names
 
 ### Recommendations
 
