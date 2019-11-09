@@ -74,7 +74,7 @@ Popularity of both variants of Brian and names beginning with Bri both peaked pr
 
 ### Ariel and Rachel Regex
 
-We opted to include variants such as Arielle and Ariela in our calculations. The total versions of Ariel by year: 
+We decided to include variants such as Arielle and Ariela in our calculations. The total versions of Ariel by year: 
 ```{r}
 Ariel <- "A[r]+[iy]+.l+.*"
 babys %>%
@@ -82,23 +82,25 @@ babys %>%
   group_by(year)%>%
   summarise(Ariel_Variants = n())
 ```
-The number of versions of Rachel:
+We chose to only include variants which ended with 'l'. Variants ending in other letters (Rachelle, Rachelanne, etc.) have significantly differing pronounciations and were thus excluded. The number of versions of Rachel:
 ```{r}
+Rachel <- "Ra[ey]?ch.*l$"
 babys %>%
-  filter(str_detect(name,"Ra[ey]?ch.*l$"),year%in%c(1973,1988,1990),sex=='F') %>%
-  group_by(year) %>%
-  summarise(Rachel_Variants = n())
+  filter(str_detect(name,Rachel),year %in%c (1973,1988,1990),sex=='F')# %>%
+#  group_by(year) %>%
+ # summarise(Rachel_Variants = n())
 ```
 The chance a girl would be named a variant of either Rachel or Ariel, for the given years:
 ```{r}
 babys %>%
-  filter(str_detect(name,Ariel) | str_detect(name,"Ra[ey]?ch.*l$"),year%in%c(1973,1988,1990,2018),sex=='F') %>%
+  filter(str_detect(name,Ariel) | str_detect(name,Rachel),year%in%c(1973,1988,1990,2018),sex=='F') %>%
   group_by(year) %>%
   summarise(Ariel_or_Rachel = sum(prop))
 ```
 
 ### The Little Mermaid Effect
 
+To investigate how the proportion of names changed from 1988 to 1990, we create a variable describing the change in proportion between the years. NA values are replaced with zero, as they represent a name that was not present in the dataset for one of the years. First, we investigate female baby names beginning with vowels:
 ```{r}
 vowel_f_88 <- babys %>%
   filter(str_detect(name,"^[AEIOU]"),sex=='F', year == 1988) 
@@ -107,37 +109,51 @@ vowel_f_diff <- babys %>%
   full_join(vowel_f_88, by = "name") %>%
   replace_na(list(prop.x=0, prop.y=0)) %>% # replace names which didn't exist in one of the years with 0
   mutate(prop_change = (prop.x-prop.y))
-
-a1 <- babys %>%
+```
+Similarly, we calculate the change in proportion for just Ariel variants, and get the total change in proportion for all variants of Ariel combined:
+```{r}
+ariel_names <- babys %>%
   filter(str_detect(name,Ariel, year %in% c(1988,1990)))
 
 (ariel_prop <- vowel_f_diff %>%
-  semi_join(a1) %>%
+  semi_join(ariel_names) %>%
   summarise(prop_change = sum(prop_change)))
+```
+When we look at the change in proportion of female names beginning with a vowel, in terms of percentile, our Ariel variants are at:
+```{r}
+percentile_change <- ecdf(vowel_f_diff$prop_change)
+percentile_change(ariel_prop) 
+```
+Ariel variants are at the 100th percentile of change in proportion among female names beginning with a vowel. However, we're comparing the total change of 12 names (all Ariel variants) to the change in only a single name. So while the total change appears significant, this result may overstate exactly how large the increase in Ariel names actually was.
 
+To get a better idea of how significant this result is, we can compare it to the entire set of female names. We construct the same data, but for the entire set of names in 1988 and 1990:
+```{r}
 f_88 <- babys %>%
   filter(sex == 'F',year == 1988)
-  
+
 top_changes <- babys %>%
   filter(sex == 'F', year == 1990) %>%
   full_join(f_88, by = "name") %>% 
   replace_na(list(prop.x=0, prop.y=0)) %>%
   mutate(prop_change = (prop.x-prop.y)) %>%
-  filter(min_rank(desc(prop_change)) <15) %>%
+  filter(min_rank(desc(prop_change)) < 15) %>%
   full_join(ariel_prop) %>%
-  replace_na(list(name = "Ariel Names"))
-
-t <- ecdf(vowel_f_diff$prop_change)
-t(ariel_prop) # 100th percentile of change for sum of all ariel names. Comparing changes in 10 names to single names
+  replace_na(list(name = "Ariel and Variants"))
 
 ggplot()+
-  geom_point(data=top_changes,aes(fct_reorder(name,prop_change),prop_change))+coord_flip()+
-  ggtitle("Largest Increases in Proportion from 1988 to 1990") +
+  geom_point(data=top_changes, aes(fct_reorder(name,prop_change), prop_change))+
+  coord_flip()+
+  ggtitle("The 15 Largest Increases in Proportion for Female Names from 1988 to 1990") +
   xlab("")+
-  ylab("Change in Proportion")
+  ylab("Change in Proportion of Total")
 ```
 
+Ariel variants have the 6th largest increase from 1988 to 1990. The name Ariel alone had the 11th largest increase among female names, not including variants of Ariel in the ranking. The overall rankings of these names would likely change, should we aggregate the various spellings for all the names into single categories, as we did for Ariel. However, the high placement of both Ariel alone, and it's aggregated variants suggests a substantial increase in the 2 year period, larger than the vast majority of female names in the same period.
+
+From this, we conclude *The Little Mermaid* did cause an increase in female babies named Ariel in 1990.  
+
 ### Changes Among Our Names
+1 plot for (age) years before birth, 1 for after
 
 #### Andrew
 
