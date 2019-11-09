@@ -71,6 +71,29 @@ Popularity of both variants of Brian and names beginning with Bri both peaked pr
 #### Charles
 
 #### Clint
+```{r}
+just_name <- babys%>%
+  filter(str_detect(name,"^Clint[^e]"),sex=='M')%>%
+  group_by(year)
+
+my_name_3 <- babys %>%
+  filter(str_detect(name, "^Cli")) %>%
+  group_by(year) %>%
+  summarise(cli_prop = sum(prop))
+
+my_name <- babys %>%
+  filter(str_detect(name,"^Clint"),sex=='M')%>%
+  group_by(year) %>%
+  summarize(clint_prop = sum(prop))
+
+ggplot()+
+  geom_line(data= my_name_3, aes(year, cli_prop,color='Cli Names'))+
+  geom_line(data=my_name, aes(year, clint_prop, color='Clint Names'))+
+  scale_color_manual(name='',values=c(`Cli Names`='Purple', `Clint Names`='Red'))+
+  ylab("Proportion of Total Names ")+
+  xlab("Year")+
+  ggtitle("Proportion of Total Names over Time")
+```
 
 ### Ariel and Rachel Regex
 
@@ -162,7 +185,47 @@ From this, we conclude *The Little Mermaid* did cause an increase in female babi
 #### Charles
 
 #### Clint
+```{r}
+birth_name <- my_name%>%
+  filter(year > 1998)
 
+birth_name_2 <- my_name%>%
+  filter(year < 1999, year >1979)
+
+ggplot(data = birth_name) + 
+  geom_line(aes(year, clint_prop))+
+  ylab("Proportion of Total Names ")+
+  xlab("Year")+
+  ggtitle("Proportion of Babies Named Clint Since 1999")
+
+ggplot(data = birth_name_2) + 
+  geom_line(aes(year, clint_prop))+
+  ylab("Proportion of Total Names ")+
+  xlab("Year")+
+  ggtitle("Proportion of Babies Named Clint Since From 1979 to 1999")
+```
+
+```{r}
+my_1999 <- just_name%>%
+  filter(year == "1999")
+
+my_2018 <- just_name%>%
+  filter(year == "2018")%>%
+  full_join(my_1999, by = "name")%>%
+  mutate(prop_change = (prop.y-prop.x))%>%
+  summarise(total_change = sum(prop_change))
+
+my_1980 <- just_name%>%
+  filter(year == "1980")%>%
+  full_join(my_1999, by = "name")%>%
+  mutate(prop_change = (prop.x-prop.y))%>%
+  summarise(total_change = sum(prop_change))
+
+ggplot()+
+  geom_col(data = my_1980, aes(x= year.x,  y= total_change, color = "1980-1999"))+
+  geom_col(data = my_2018, aes(x= year.x,  y= total_change, color = "1999-2018"))+
+  scale_color_manual(name='',values=c(`1980-1999`='red', `1999-2018`='purple'))
+```
 ### Recommendations
 
 ### Individual Contributions
