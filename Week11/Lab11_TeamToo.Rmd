@@ -305,7 +305,15 @@ Only Clint falls reasonably close to the peak of the distribution, all the other
 
 ### Baby Name Recommendations
 
+For a female name, we recommend Lyra. Lyra only appears as a female name in the dataset, and doesn't easily shorten to a nickname ("Ly" does appear in the dataset, but with a maximum count of 8 since 2000). In terms of total number, Lyra has been trending upward steadily since 2000. Proportion has increased similarly, though with a slight dip in 2018.
 
+```{r}
+ggplot(filter(babys,name == "Lyra",year >1999))+
+  geom_line(aes(year,n))+
+  xlab("Year")+
+  ylab("Number of Female Babies")+
+  ggtitle("Number of Female Babies Named Lyra by Year")
+```
 
 ### Individual Contributions
 
@@ -314,62 +322,5 @@ Only Clint falls reasonably close to the peak of the distribution, all the other
 **Brian:**
 
 **Charles:**
-```{r}
-after_birth <- charles %>% filter(year >= 1999)
-before_birth <- charles %>% filter(year < 1999, year > 1980)
 
-ggplot(data = after_birth) + 
-  geom_line(aes(year, chap))+
-  xlab("Year")+
-  ylab("Proportion of Total Names")+
-  ggtitle("Charles Name Popularity Since 1999")
-
-ggplot(data = before_birth) + 
-  geom_line(aes(year, chap))+
-  xlab("Year")+
-  ylab("Proportion of Total Names")+
-  ggtitle("Charles Name Popularity 1980-1999")
-```
 **Clint:**
-
-```{r}
-birth_name <- my_name%>%
-  filter(year > 1998)
-
-birth_name_2 <- my_name%>%
-  filter(year < 1999, year >1979)
-
-ggplot(data = birth_name) + 
-  geom_line(aes(year, clint_prop))+
-  ylab("Proportion of Total Names ")+
-  xlab("Year")+
-  ggtitle("Proportion of Babies Named Clint Since 1999")
-
-ggplot(data = birth_name_2) + 
-  geom_line(aes(year, clint_prop))+
-  ylab("Proportion of Total Names ")+
-  xlab("Year")+
-  ggtitle("Proportion of Babies Named Clint Since From 1979 to 1999")
-```
-
-```{r}
-my_1999 <- just_name%>%
-  filter(year == "1999")
-
-my_2018 <- just_name%>%
-  filter(year == "2018")%>%
-  full_join(my_1999, by = "name")%>%
-  mutate(prop_change = (prop.y-prop.x))%>%
-  summarise(total_change = sum(prop_change))
-
-my_1980 <- just_name%>%
-  filter(year == "1980")%>%
-  full_join(my_1999, by = "name")%>%
-  mutate(prop_change = (prop.x-prop.y))%>%
-  summarise(total_change = sum(prop_change))
-
-ggplot()+
-  geom_col(data = my_1980, aes(x= year.x,  y= total_change, color = "1980-1999"))+
-  geom_col(data = my_2018, aes(x= year.x,  y= total_change, color = "1999-2018"))+
-  scale_color_manual(name='',values=c(`1980-1999`='red', `1999-2018`='purple'))
-```
