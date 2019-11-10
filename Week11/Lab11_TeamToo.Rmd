@@ -130,7 +130,7 @@ ggplot()+
   xlab("Year")+
   ggtitle("Proportion of Total Names over Time")
 ```
-
+The Popularity of Clint names peaked around 1910 and had another smaller peak around the 1980s and has steadily declined to 2018. I think that this second peak can be explained by the popularity of actor Clint Eastwood as corresponding to the decline of his influence as an actor the proportion of Cli names steadily decreases following 1980. 
 ### Ariel and Rachel Regex
 
 We decided to include variants such as Arielle and Ariela in our calculations. The total versions of Ariel by year: 
@@ -310,7 +310,7 @@ The relative change:
 percentile_before <- ecdf(get_allnames_prop_change(1999,2018)$prop_change)
 percentile_before(get_prop_change(1999,2018,"^Clint"))
 ```
-
+The popularity of Clint names continued to decline but as they were already a smaller proportion of total names that decline was lesser.
 #### Histograms
 
 We chose to only look at the exact spellings for our names, as all saw changes outside the normal range, so including additional spellings moved them even farther away, making it difficult to visualize.
@@ -379,4 +379,4 @@ ggplot(baker) +
 **Charles:**
 
 **Clint:**
-
+I used stringr and dplyr to filter the dataset to discern the popularity of my name over time and then used the tidyverse to graph my observations. I also used dplyr and stringr to filter the babys dataset in order to find a male name that would be short (less likely to have an easy nickname), trendy (the proportion of total names increased from 2017-2018), but not trending(outside of the top 200 boy names of 2018). 
