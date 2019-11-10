@@ -267,6 +267,27 @@ percentile_before(get_prop_change(1995,2018,"^Br[iy][oa]n"))
 
 #### Charles
 
+actual change of names 1999-2018
+```{r}
+get_prop_change(1999,2018,"^Charl[ie][sey]")
+```
+
+relative change names 1999-2018
+```{r}
+percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
+percentile_before(get_prop_change(1999,2018,"^Charl[ie][sey]"))
+```
+
+actual change 1980-2018
+```{r}
+get_prop_change(1999,2018,"^Charl[ie][sey]")
+```
+
+relative 1980-2018
+```{r}
+percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
+percentile_before(get_prop_change(1980,1999,"^Charl[ie][sey]"))
+```
 #### Clint
 
 
