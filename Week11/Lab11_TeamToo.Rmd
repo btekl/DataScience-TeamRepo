@@ -69,6 +69,33 @@ I used the regex "^Br[iy][oa]n" to match names similar to Brian. I opted not to 
 Popularity of both variants of Brian and names beginning with Bri both peaked prior to 1995, consistently decreasing since then. Brian variants peaked between 1960 and 1980, when their proportion was greater than names beginning with Bri. Following this peak, popularity has steadily decreased while names beginning with Bri, and not consisting of Brian variants, peaked in popularity just prior to 1995.
 
 #### Charles
+```{r}
+first_3 <- babys %>%
+  filter(str_detect(name, "^Cha")) %>%
+  group_by(year) %>%
+  summarise(chap = sum(prop))
+
+similar <- babys %>%
+  filter(str_detect(name,"^Charl[ie][sey]"),sex=='M')%>%
+  group_by(year) %>%
+  summarize(chap = sum(prop))
+
+charles <- babys %>%
+  filter(str_detect(name,"^Charles"),sex=='M')%>%
+  group_by(year) %>%
+  summarize(chap = sum(prop))
+
+#View(charles)
+
+ggplot()+
+  geom_line(data = first_3, aes(year, chap, color = 'Names with "cha"'))+
+  geom_line(data = charles, aes(year, chap, color = 'Charles'))+
+  scale_color_manual(name='')+
+  ylab("Proportion of Total Names ")+
+  xlab("Year")+
+  scale_color_manual(name='',values=c(`Names with "cha"`='red', `Charles`='black'))+
+  ggtitle("Proportion of Total Names over Time")
+```
 
 #### Clint
 ```{r}
