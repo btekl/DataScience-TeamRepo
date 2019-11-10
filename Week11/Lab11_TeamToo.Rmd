@@ -377,6 +377,7 @@ ggplot(baker) +
 **Brian:** I found out how to use manual scales to add a legend manually to a plot. I also found the ecdf function, to find a percentile given a vector of data.
 
 **Charles:**
+I am not incredibly proud of my contributions this week. I was able to use the tools and determine the popularity of my name though I do wish I was able to figure out the Ariel part earlier so my team mates could have laid back more.
 
 **Clint:**
 I used stringr and dplyr to filter the dataset to discern the popularity of my name over time and then used the tidyverse to graph my observations. I also used dplyr and stringr to filter the babys dataset in order to find a male name that would be short (less likely to have an easy nickname), trendy (the proportion of total names increased from 2017-2018), but not trending(outside of the top 200 boy names of 2018). 
