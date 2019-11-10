@@ -242,7 +242,22 @@ percentile_before(change_brian_after)
 ```
 
 #### Charles
+```{r}
+after_birth <- charles %>% filter(year >= 1999)
+before_birth <- charles %>% filter(year < 1999, year > 1980)
 
+ggplot(data = after_birth) + 
+  geom_line(aes(year, chap))+
+  xlab("Year")+
+  ylab("Proportion of Total Names")+
+  ggtitle("Charles Name Popularity Since 1999")
+
+ggplot(data = before_birth) + 
+  geom_line(aes(year, chap))+
+  xlab("Year")+
+  ylab("Proportion of Total Names")+
+  ggtitle("Charles Name Popularity 1980-1999")
+```
 #### Clint
 ```{r}
 birth_name <- my_name%>%
