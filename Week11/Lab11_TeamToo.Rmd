@@ -24,19 +24,6 @@ babys <- babynames %>%
   full_join(babys18)
 ```
 
-### Analyzing Baby Names
-
-Clearly for males or females (no gender-ambiguous names)
-
-“Trending” but not “trendy”, i.e., on the upslope but not super-popular today. Maybe very popular in 10-20 years.
-
-Cannot be easily (and commonly) shortened to a nickname (like “Benjamin” to “Ben”)
-```{r}
-v1 <- babys %>% 
-  filter(year %in% c(2016,2017,2018), n<500, sex=='M')
-```
-
-
 ### Individual Name Popularity
 
 #### Andrew
@@ -193,7 +180,7 @@ top_changes <- babys %>%
 ggplot()+
   geom_point(data=top_changes, aes(fct_reorder(name,prop_change), prop_change))+
   coord_flip()+
-  ggtitle("The 15 Largest Increases in Proportion for Female Names from 1988 to 1990") +
+  ggtitle("Top 15 Increases in Proportion for Female Names from 1988 to 1990") +
   xlab("")+
   ylab("Change in Proportion of Total")
 ```
@@ -204,19 +191,35 @@ From this, we conclude *The Little Mermaid* did cause an increase in female babi
 
 ### Changes Among Our Names
 
+```{r}
+# Calculates total change in proportion between two years, for all matches of a given regex. Assumes gender is male
+get_prop_change <- function(year_from,year_to,regex)
+{
+  before <- babys %>%
+    filter(sex == 'M', year == year_from, str_detect(name,regex))
+  before_and_after <- babys %>%
+    filter(sex == 'M', year == year_to,str_detect(name,regex)) %>%
+    full_join(before, by = "name") %>% 
+    replace_na(list(prop.x=0, prop.y=0)) %>%
+    mutate(prop_change = (prop.x-prop.y)) %>%
+    summarise(total = sum(prop_change))
+  return(before_and_after$total)
+}
+```
+
 ```{r, include=FALSE}
-all_names1 <- babys %>%
+all_names72 <- babys %>%
   filter(sex == 'M', year == 1972)
-all_names_before <- babys %>%
+all_names_72_95 <- babys %>%
   filter(sex == 'M', year == 1995) %>%
-  full_join(all_names1, by = "name") %>% 
+  full_join(all_names72, by = "name") %>% 
   replace_na(list(prop.x=0, prop.y=0)) %>%
   mutate(prop_change = (prop.x-prop.y))
-all_names2 <- babys %>%
+all_names95 <- babys %>%
   filter(sex == 'M', year == 1995)
-all_names_after <- babys %>%
+all_names_95_18 <- babys %>%
   filter(sex == 'M', year == 2018) %>%
-  full_join(all_names2, by = "name") %>% 
+  full_join(all_names95, by = "name") %>% 
   replace_na(list(prop.x=0, prop.y=0)) %>%
   mutate(prop_change = (prop.x-prop.y))
 ```
@@ -225,20 +228,25 @@ all_names_after <- babys %>%
 
 #### Brian
 
+The actual change in Brian names from 1972 to 1995:
 ```{r}
-(change_brian_before <- all_names_before %>%
-  filter(str_detect(name,"^Br[iy][oa]n")) %>%
-  summarise(change_brian = sum(prop_change)))
-percentile_before <- ecdf(all_names_before$prop_change)
-percentile_before(change_brian_before)
+get_prop_change(1972,1995,"^Br[iy][oa]n")
 ```
-
+The relative change:
 ```{r}
-(change_brian_after <- all_names_after %>%
-  filter(str_detect(name,"^Br[iy][oa]n")) %>%
-  summarise(change_brian = sum(prop_change)))
-percentile_before <- ecdf(all_names_after$prop_change)
-percentile_before(change_brian_after)
+percentile_before <- ecdf(all_names_72_95$prop_change)
+percentile_before(get_prop_change(1972,1995,"^Br[iy][oa]n"))
+```
+Brian names decreased substantially in popularity over this period: essentially in the 0th percentile.
+
+The actual change in Brian names from 1995 to 2018:
+```{r}
+get_prop_change(1995,2018,"^Br[iy][oa]n")
+```
+The relative change:
+```{r}
+percentile_before <- ecdf(all_names_95_18$prop_change)
+percentile_before(get_prop_change(1995,2018,"^Br[iy][oa]n"))
 ```
 
 #### Charles
@@ -301,8 +309,21 @@ ggplot()+
   scale_color_manual(name='',values=c(`1980-1999`='red', `1999-2018`='purple'))
 ```
 
+```{r}
+ggplot(all_names_95_18,aes(prop_change))+
+  geom_histogram(bins=100)+
+  xlim(-.00005,.00005)
+```
 
-### Recommendations
+```{r}
+ggplot(all_names_72_95,aes(prop_change))+
+  geom_histogram(bins = 100)+
+  xlim(-.00005,.00005)
+```
+
+### Baby Name Recommendations
+
+
 
 ### Individual Contributions
 
