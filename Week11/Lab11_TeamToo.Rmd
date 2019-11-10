@@ -130,7 +130,9 @@ ggplot()+
   xlab("Year")+
   ggtitle("Proportion of Total Names over Time")
 ```
+
 The Popularity of Clint names peaked around 1910 and had another smaller peak around the 1980s and has steadily declined to 2018. I think that this second peak can be explained by the popularity of actor Clint Eastwood as corresponding to the decline of his influence as an actor the proportion of Cli names steadily decreases following 1980. 
+
 ### Ariel and Rachel Regex
 
 We decided to include variants such as Arielle and Ariela in our calculations. The total versions of Ariel by year: 
@@ -213,8 +215,8 @@ From this, we conclude *The Little Mermaid* did cause an increase in female babi
 
 ### Changes Among Our Names
 
+We created a pair of functions to make these calculations easier. The first function takes two years and a regex as an argument, and returns the change in proportion from the first year to the second. The second function takes a pair of years, and calculates the change in proportion for every name in the dataset between those two years. This set of data can then be passed to the r function ecdf, to build the distribution of proportion changes for that set of years. Then, our individual changes are compared to the distribution to get a percentile result.
 ```{r}
-# Calculates total change in proportion between two years, for all matches of a given regex. Assumes gender is male
 get_prop_change <- function(year_from,year_to,regex)
 {
   before <- babys %>%
@@ -242,27 +244,27 @@ get_allnames_prop_change <- function(year_start,year_end)
 
 #### Andrew
 
-actual change of names 1999-2018
+actual change of names 1976-1997
 ```{r}
-get_prop_change(1972,1995,"^And[y|rew]")
+get_prop_change(1976,1997,"^And[y|rew]")
 ```
 
-relative change names 1999-2018
+relative change names 1976-1997
 ```{r}
-percentile_before <- ecdf(get_allnames_prop_change(1972,1995)$prop_change)
-percentile_before(get_prop_change(1972,1995,"^And[y|rew]"))
+percentile_before <- ecdf(get_allnames_prop_change(1976,1997)$prop_change)
+percentile_before(get_prop_change(1976,1997,"^And[y|rew]"))
 ```
 
-actual change 1980-2018
+actual change 1997-2018
 ```{r}
-percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
-percentile_before(get_prop_change(1980,1999,"^And[y|rew]"))
+percentile_before <- ecdf(get_allnames_prop_change(1997,2018)$prop_change)
+percentile_before(get_prop_change(1997,2018,"^And[y|rew]"))
 ```
 
-relative 1980-2018
+relative 1997-2018
 ```{r}
-percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
-percentile_before(get_prop_change(1980,1999,"^And[y|rew]"))
+percentile_before <- ecdf(get_allnames_prop_change(1997,2018)$prop_change)
+percentile_before(get_prop_change(1997,2018,"^And[y|rew]"))
 ```
 
 #### Brian
@@ -297,23 +299,23 @@ get_prop_change(1999,2018,"^Charl[ie][sey]")
 
 relative change names 1999-2018
 ```{r}
-percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
+percentile_before <- ecdf(get_allnames_prop_change(1999,2018)$prop_change)
 percentile_before(get_prop_change(1999,2018,"^Charl[ie][sey]"))
 ```
 
-actual change 1980-2018
+actual change 1980-1999
 ```{r}
-get_prop_change(1999,2018,"^Charl[ie][sey]")
+get_prop_change(1980,1999,"^Charl[ie][sey]")
 ```
 
-relative 1980-2018
+relative 1980-1999
 ```{r}
-percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
+percentile_before <- ecdf(get_allnames_prop_change(1980,1999)$prop_change)
 percentile_before(get_prop_change(1980,1999,"^Charl[ie][sey]"))
 ```
 
 #### Clint
-actual change in Clint from 1972 to 1995:
+actual change in Clint from 1979 to 1999:
 ```{r}
 get_prop_change(1979,1999,"^Clint")
 ```
@@ -334,6 +336,7 @@ percentile_before <- ecdf(get_allnames_prop_change(1999,2018)$prop_change)
 percentile_before(get_prop_change(1999,2018,"^Clint"))
 ```
 The popularity of Clint names continued to decline but as they were already a smaller proportion of total names that decline was lesser.
+
 #### Histograms
 
 We chose to only look at the exact spellings for our names, as all saw changes outside the normal range, so including additional spellings moved them even farther away, making it difficult to visualize.
