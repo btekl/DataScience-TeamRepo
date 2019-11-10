@@ -205,23 +205,17 @@ get_prop_change <- function(year_from,year_to,regex)
     summarise(total = sum(prop_change))
   return(before_and_after$total)
 }
-```
 
-```{r, include=FALSE}
-all_names72 <- babys %>%
-  filter(sex == 'M', year == 1972)
-all_names_72_95 <- babys %>%
-  filter(sex == 'M', year == 1995) %>%
-  full_join(all_names72, by = "name") %>% 
-  replace_na(list(prop.x=0, prop.y=0)) %>%
-  mutate(prop_change = (prop.x-prop.y))
-all_names95 <- babys %>%
-  filter(sex == 'M', year == 1995)
-all_names_95_18 <- babys %>%
-  filter(sex == 'M', year == 2018) %>%
-  full_join(all_names95, by = "name") %>% 
-  replace_na(list(prop.x=0, prop.y=0)) %>%
-  mutate(prop_change = (prop.x-prop.y))
+get_allnames_prop_change <- function(year_start,year_end)
+{
+  all_names_1 <- babys %>%
+    filter(sex == 'M', year == year_start)
+  all_names <- babys %>%
+    filter(sex == 'M', year == year_end) %>%
+    full_join(all_names_1, by = "name") %>% 
+    replace_na(list(prop.x=0, prop.y=0)) %>%
+    mutate(prop_change = (prop.x-prop.y))
+}
 ```
 
 #### Andrew
@@ -234,7 +228,7 @@ get_prop_change(1972,1995,"^Br[iy][oa]n")
 ```
 The relative change:
 ```{r}
-percentile_before <- ecdf(all_names_72_95$prop_change)
+percentile_before <- ecdf(get_allnames_prop_change(1972,1995)$prop_change)
 percentile_before(get_prop_change(1972,1995,"^Br[iy][oa]n"))
 ```
 Brian names decreased substantially in popularity over this period: essentially in the 0th percentile.
@@ -245,11 +239,59 @@ get_prop_change(1995,2018,"^Br[iy][oa]n")
 ```
 The relative change:
 ```{r}
-percentile_before <- ecdf(all_names_95_18$prop_change)
+percentile_before <- ecdf(get_allnames_prop_change(1995,2018)$prop_change)
 percentile_before(get_prop_change(1995,2018,"^Br[iy][oa]n"))
 ```
 
 #### Charles
+
+#### Clint
+
+
+#### Histograms
+
+We chose to only look at the exact spellings for our names, as all saw changes outside the normal range, so including additional spellings moved them even farther away, making it difficult to visualize.
+
+We restricted to only male names, as all of our names and variants were male. We also chose to use the smallest age range, as this still covered most of the same years.
+```{r}
+our_props <- c(get_prop_change(1980,1999,"^Andrew$"),
+               get_prop_change(1980,1999,"^Brian$"), get_prop_change(1980,1999,"^Charles$"),
+               get_prop_change(1980,1999,"^Clint$"))
+```
+
+```{r}
+ggplot(get_allnames_prop_change(1980,1999),aes(prop_change))+
+  geom_histogram(bins=100)+
+  xlim(-.0009,.00125)+
+  geom_vline(xintercept = our_props,color='red')
+```
+
+The plot is scaled to try to keep shape of the distribution visible while still showing our names. Andrew (right) and Clint (left) are pictured, Charles and Brian lie even farther to the left. All our names saw significant changes, with only Andrew increasing, the rest decreased.
+
+The second age range:
+```{r}
+our_props2 <- c(get_prop_change(1999,2018,"^Andrew$"),
+               get_prop_change(1999,2018,"^Brian$"), get_prop_change(1999,2018,"^Charles$"),
+               get_prop_change(1999,2018,"^Clint$"))
+ggplot(get_allnames_prop_change(1999,2018),aes(prop_change))+
+  geom_histogram(bins = 100)+
+  xlim(-.00006,.00006)+
+  geom_vline(xintercept = our_props2,color='red')
+```
+
+Only Clint falls reasonably close to the peak of the distribution, all the other names are far to the left, indicating significant decreases in the popularity of Brian, Charles and Andrew.
+
+### Baby Name Recommendations
+
+
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:**
 ```{r}
 after_birth <- charles %>% filter(year >= 1999)
 before_birth <- charles %>% filter(year < 1999, year > 1980)
@@ -266,7 +308,8 @@ ggplot(data = before_birth) +
   ylab("Proportion of Total Names")+
   ggtitle("Charles Name Popularity 1980-1999")
 ```
-#### Clint
+**Clint:**
+
 ```{r}
 birth_name <- my_name%>%
   filter(year > 1998)
@@ -308,29 +351,3 @@ ggplot()+
   geom_col(data = my_2018, aes(x= year.x,  y= total_change, color = "1999-2018"))+
   scale_color_manual(name='',values=c(`1980-1999`='red', `1999-2018`='purple'))
 ```
-
-```{r}
-ggplot(all_names_95_18,aes(prop_change))+
-  geom_histogram(bins=100)+
-  xlim(-.00005,.00005)
-```
-
-```{r}
-ggplot(all_names_72_95,aes(prop_change))+
-  geom_histogram(bins = 100)+
-  xlim(-.00005,.00005)
-```
-
-### Baby Name Recommendations
-
-
-
-### Individual Contributions
-
-**Andrew:**
-
-**Brian:**
-
-**Charles:**
-
-**Clint:**
