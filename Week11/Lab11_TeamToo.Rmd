@@ -290,7 +290,26 @@ percentile_before(get_prop_change(1980,1999,"^Charl[ie][sey]"))
 ```
 
 #### Clint
+actual change in Clint from 1972 to 1995:
+```{r}
+get_prop_change(1979,1999,"^Clint")
+```
+The relative change:
+```{r}
+percentile_before <- ecdf(get_allnames_prop_change(1979,1999)$prop_change)
+percentile_before(get_prop_change(1979,1999,"^Clint"))
+```
+Clint names experienced a major decrease in popularity
 
+actual change in Clint names from 1999 to 2018:
+```{r}
+get_prop_change(1999,2018,"^Clint")
+```
+The relative change:
+```{r}
+percentile_before <- ecdf(get_allnames_prop_change(1999,2018)$prop_change)
+percentile_before(get_prop_change(1999,2018,"^Clint"))
+```
 
 #### Histograms
 
@@ -336,7 +355,39 @@ ggplot(filter(babys,name == "Lyra",year >1999))+
   ylab("Number of Female Babies")+
   ggtitle("Number of Female Babies Named Lyra by Year")
 ```
+Baker name info -> We can fill in if the name works
 
+```{r}
+anal_baby_2018 <- babys%>%
+  filter(sex == "M", year == "2018", str_length(name) < 6)%>%
+  arrange(desc(prop))
+
+anal_baby_2017 <- babys%>%
+  filter(sex == "M", year == "2017", str_length(name) < 6)%>%
+  arrange(desc(prop))
+
+anal_baby <- anal_baby_2017%>%
+  full_join(anal_baby_2018, by = "name")%>%
+  mutate(prop_change = (prop.y-prop.x)) %>%
+  arrange(desc(prop_change))%>%
+  filter(n.y > 100)
+
+```
+
+```{r}
+
+baker <- babys %>%
+  filter(str_detect(name, "^Baker$"), babys$sex == "M")
+
+ggplot(baker) +
+  geom_line(aes(year, n, color = "Number of Children named Baker")) +
+  geom_vline(xintercept = 2010, color = "2010") +
+  scale_color_manual(name="" ,values=c(`Number of Children named Baker`='black', `2010`= 'red')) +
+  xlab("Year") +
+  ylab("Number of Male Babies named Baker")+
+  ggtitle("Change in Number of All Babies Named Baker Over Time")
+  
+```
 ### Individual Contributions
 
 **Andrew:**
