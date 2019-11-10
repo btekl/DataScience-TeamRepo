@@ -28,6 +28,28 @@ babys <- babynames %>%
 
 #### Andrew
 
+```{r}
+and <- babys %>%
+  filter(str_detect(name, "^And")) %>%
+  group_by(year) %>%
+  summarise(and_prop = sum(prop))
+
+andrew <- babys %>%
+  filter(str_detect(name,"^And[y|rew]"),sex=='M')%>%
+  group_by(year) %>%
+  summarize(andrew_prop = sum(prop))
+
+ggplot()+
+  geom_line(data=and,aes(year,and_prop,color='And Names'))+
+  geom_line(data=andrew,aes(year,andrew_prop,color='Andrew Names'))+
+  scale_color_manual(name='',values=c(`And Names`='blue', `Andrew Names`='green'))+
+  ylab("Proportion of Total")+
+  xlab("Year")+
+  ggtitle("Proportion of Names over Time")
+```
+
+I decided to find names that specfically start with 'And' such as Anderson and Anders, but excluded names such as Drew or female variations such as Andrea. It was interesting to see that a large majority of 'And' names were within the few I chose to include. My name is a very popular one but recently have starting to die down.
+
 #### Brian
 
 ```{r}
