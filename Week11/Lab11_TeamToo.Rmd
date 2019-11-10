@@ -355,27 +355,9 @@ ggplot(filter(babys,name == "Lyra",year >1999))+
   ylab("Number of Female Babies")+
   ggtitle("Number of Female Babies Named Lyra by Year")
 ```
-Baker name info -> We can fill in if the name works
 
+For a male name, we recommend Baker. It can't be shortened into a nickname, though it does have some split on sex, with around 5-10% of Bakers in a given year being female. The overall popularity of Baker has begun to increase substantially in recent years:
 ```{r}
-anal_baby_2018 <- babys%>%
-  filter(sex == "M", year == "2018", str_length(name) < 6)%>%
-  arrange(desc(prop))
-
-anal_baby_2017 <- babys%>%
-  filter(sex == "M", year == "2017", str_length(name) < 6)%>%
-  arrange(desc(prop))
-
-anal_baby <- anal_baby_2017%>%
-  full_join(anal_baby_2018, by = "name")%>%
-  mutate(prop_change = (prop.y-prop.x)) %>%
-  arrange(desc(prop_change))%>%
-  filter(n.y > 100)
-
-```
-
-```{r}
-
 baker <- babys %>%
   filter(str_detect(name, "^Baker$"), babys$sex == "M")
 
@@ -386,8 +368,8 @@ ggplot(baker) +
   xlab("Year") +
   ylab("Number of Male Babies named Baker")+
   ggtitle("Change in Number of All Babies Named Baker Over Time")
-  
 ```
+
 ### Individual Contributions
 
 **Andrew:**
