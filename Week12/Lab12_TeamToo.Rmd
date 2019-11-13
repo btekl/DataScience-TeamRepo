@@ -1,0 +1,112 @@
+---
+title: 'Lab 12: Gapminder Permutations'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "11/15/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+library(gapminder)
+data <- gapminder # replace w/ updated dataset
+```
+
+### Gapminder Dataset
+
+The gapminder dataset contains life expectancy, population, and GDP per capita data on 142 countries, across 5 continents (North/South America are combined into Americas).
+
+### Questions of Interest
+
+Explain why your questions are important. One of the questions should be answered with the two-sample mean permutation test, and the other with the correlation permutation test.
+
+### Function Implementations
+
+```{r}
+perm_mean <- function(perms = 1000, all_values, n_A)
+{
+  ## Variables ##
+  # perms: The number of permutations 
+  # all_values (num): 
+  # n1 (int): Size of group 1
+  ###############
+  
+  # Step 1:
+  # Create vector of zeroes of length "perms" to store
+  # permuted mean differnces
+  output <- numeric(perms)
+  # Loop throught number of permutations
+  for (i in c(1:perms))
+  {
+    # Step 2:
+    # Randomly separate vector "all_values" into disjoint 
+    # groups of size "n1" and "length(all_values) - n1" respectively
+    samp <- sample(all_values, n_A)
+    rand1 <- all_values[samp]
+    rand2 <- all_values[-samp]
+    # Step 3:
+    # Compute the sample means for the two groups from 
+    # step 2
+    mean1 <- mean(rand1)
+    mean2 <- mean(rand2)
+    # Step 4: 
+    # Compute the difference in sample means, store the
+    # value in the vector from step 1
+    output[i] <- (mean1 - mean2)
+  }
+  
+  # Step 5:
+  # Return new updated vector, created in step 1
+  return(output)
+}
+```
+
+```{r}
+perm_cor <- function(perms = 1000, x, y)
+{
+  ## Variables ##
+  # perms: The number of permutations 
+  # x: Vector 1 - for computing correlation
+  # y: Vector 2 - for computing correlation
+  ###############
+  
+  # Step 1:
+  # Create vector of zeroes of length "perms" to store
+  # permuted mean differnces
+  output <- numeric(perms)
+  # Loop throught number of permutations
+  for (i in c(1:perms))
+  {
+    # Step 2:
+    # Randomly mix up the values in the vector "y"
+    rand <- sample(y)
+    # Step 3:
+    # Compute the correlation between x and the randomly mixed
+    # up y-vector. Store this value in the vector from step 1.
+    output[i] <- cor(x,rand,method="pearson")
+  }
+  
+  # Step 4:
+  # Return new updated vector, created in step 1
+  return(output)
+}
+```
+
+### Conclusions and Visualizations
+
+Create visualizations of the statistical tests.
+
+Make data-based conclusions about the results. Do you believe there are differences among the groups you are comparing?
+
+Generate percentiles, summary statistics (max, min), and probabilites (p-all_values) to justify your conclusions.
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:**
+
+**Clint:**
+
