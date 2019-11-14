@@ -94,11 +94,44 @@ perm_cor <- function(perms = 1000, x, y)
 
 ### Conclusions and Visualizations
 
+Perm mean idea: LifeExp in top 500 vs bottom 500 gdpPercap
+```{r}
+low_gdp <- data %>%
+  filter(min_rank(gdpPercap)<=500)
+high_gdp <- data %>%
+  filter(min_rank(desc(gdpPercap))<=500)
+low_and_high_gdp <- low_gdp %>% full_join(high_gdp)
+(actual_mean <- mean(low_gdp$lifeExp)-mean(high_gdp$lifeExp)) # -25.11
+perm_mean_test <- perm_mean(1000,low_and_high_gdp$lifeExp,floor(length(low_and_high_gdp$lifeExp)/2))
+
+tf <- ecdf(perm_mean_test)
+tf(actual_mean) # 0th percentile
+range(perm_mean_test) # min -14.59353 max -13.18413
+
+ggplot(tibble(perm_mean_test))+
+  geom_histogram(aes(perm_mean_test),bins=50)
+```
+
+cor test idea:
+```{r}
+america <- data %>% filter(continent == "Americas")
+cor_test <- (perm_cor(1000,america$pop,america$lifeExp))
+(cor_act <- cor(america$pop,america$lifeExp)) # .25
+l <- ecdf(cor_test)
+l(cor_act) # 100th percentile
+range(cor_test)
+# weak correlation... should the be correlated at all?
+# no/weaker correlation for other continents
+
+ggplot(tibble(cor_test))+
+  geom_histogram(aes(cor_test),bins = 50)
+```
+
 Create visualizations of the statistical tests.
 
 Make data-based conclusions about the results. Do you believe there are differences among the groups you are comparing?
 
-Generate percentiles, summary statistics (max, min), and probabilites (p-all_values) to justify your conclusions.
+Generate percentiles, summary statistics (max, min), and probabilites (p-values) to justify your conclusions.
 
 ### Individual Contributions
 
