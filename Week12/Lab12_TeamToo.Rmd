@@ -119,7 +119,7 @@ cor_test <- (perm_cor(1000,america$pop,america$lifeExp))
 (cor_act <- cor(america$pop,america$lifeExp)) # .25
 l <- ecdf(cor_test)
 l(cor_act) # 100th percentile
-range(cor_test)
+range(cor_test) #-0.1653624  0.1613103
 # weak correlation... should the be correlated at all?
 # no/weaker correlation for other continents
 
@@ -133,6 +133,43 @@ Make data-based conclusions about the results. Do you believe there are differen
 
 Generate percentiles, summary statistics (max, min), and probabilites (p-values) to justify your conclusions.
 
+Perm-Mean Idea: 50 highest pop countries/50 lowest pop countries in 2007 vs life expectancy
+
+```{r}
+high_pop <- data%>%
+  filter(year == 2007, pop >= 20378239)
+low_pop <- data%>%
+  filter(year == 2007, pop <= 6667147)
+high_to_low_pop <- high_pop %>% full_join(low_pop)
+(actual_mean_pop <- mean(high_pop$lifeExp) -mean(low_pop$lifeExp)) # 1.0484
+perm_mean_test_pop <- perm_mean(1000,high_to_low_pop$lifeExp,floor(length(high_to_low_pop$lifeExp)/2))
+
+tf_pop <- ecdf(perm_mean_test_pop)
+tf_pop(actual_mean_pop) #98th percentile
+range(perm_mean_test_pop) #-6.44, 2.44
+
+ggplot(tibble(perm_mean_test_pop))+
+  geom_histogram(aes(perm_mean_test_pop),bins=50)
+```
+ 
+
+Perm-Cor Idea: For Asian countries what is cor between life expectancy and gdp
+
+```{r}
+Asia <- data %>% filter(continent == "Asia")
+cor_test_asia <- (perm_cor(1000, Asia$lifeExp, Asia$gdpPercap))
+(cor_act_asia <- cor(Asia$lifeExp, Asia$gdpPercap)) # 0.38
+l_asia <- ecdf(cor_test_asia)
+l_asia(cor_act_asia) # 100th percentile
+range(cor_test_asia) # -0.188, 0.144
+
+
+ggplot(tibble(cor_test_asia))+
+  geom_histogram(aes(cor_test_asia),bins = 50)
+```
+There is a really weak observed correlation between life expectancy and GDP per capita
+
+
 ### Individual Contributions
 
 **Andrew:**
@@ -142,4 +179,5 @@ Generate percentiles, summary statistics (max, min), and probabilites (p-values)
 **Charles:**
 
 **Clint:**
+
 
