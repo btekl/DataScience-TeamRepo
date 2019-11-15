@@ -165,6 +165,7 @@ This extra data helps us infer that this correlation arises in the continents wi
 ### Individual Contributions
 
 **Andrew:**
+I helped to create the functions and make sure they were able to use a new data-set. I helped come uo with ideas that were not used.
 
 **Brian:** I helped formulate ideas for both tests and compiled our ideas together. I also came up with the idea to look for a strange correlation in the initial dataset, which we can then further investigate in the updated dataset.
 
