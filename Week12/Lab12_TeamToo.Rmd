@@ -18,7 +18,13 @@ The gapminder dataset contains life expectancy, population, and GDP per capita d
 
 ### Questions of Interest
 
-Explain why your questions are important. One of the questions should be answered with the two-sample mean permutation test, and the other with the correlation permutation test.
+**First Question:** How does life expectancy differ between the richest and poorest countries (in terms of per capita gdp)?
+
+While we might anticipate that richer countries have longer life expectancies than poorer countries, verifying that this is the case can still provide useful insights. The degree to which they differ can inform us of how a country with a low life expectancy would want to improve their citizens health. Low life expectancy could be viewed as both a health infrastructure and economic problem.
+
+**Second Question:** Are there any unintuitive correlations in the dataset? If so, do these correlations exist in the updated dataset as well, or are they a result of some specific characteristics of countries and years in the base gapminder dataset?
+
+Some variables relate to each other in obvious ways, while for others the connection is not obvious. By looking for not-so-obvious correlations, we can generate further questions as to why they might exist, or if they are some unusual 'quirk' of the dataset.
 
 ### Function Implementations
 
@@ -42,8 +48,8 @@ perm_mean <- function(perms = 1000, all_values, n_A)
     # Randomly separate vector "all_values" into disjoint 
     # groups of size "n1" and "length(all_values) - n1" respectively
     samp <- sample(all_values, n_A)
-    rand1 <- all_values[samp]
-    rand2 <- all_values[-samp]
+    rand1 <- all_values[samp]     # Adds the sample values to one group
+    rand2 <- all_values[-samp]    # Adds all the values not in the sample to the second group
     # Step 3:
     # Compute the sample means for the two groups from 
     # step 2
@@ -94,87 +100,68 @@ perm_cor <- function(perms = 1000, x, y)
 
 ### Conclusions and Visualizations
 
-Perm mean idea: LifeExp in top 500 vs bottom 500 gdpPercap
+#### Two-Sample Permutation Test
+
+To compare rich and poor countries, we looked at the top and bottom 500 richest/poorest by per capita GDP. The actual difference in their means:
 ```{r}
 low_gdp <- data %>%
   filter(min_rank(gdpPercap)<=500)
 high_gdp <- data %>%
   filter(min_rank(desc(gdpPercap))<=500)
 low_and_high_gdp <- low_gdp %>% full_join(high_gdp)
-(actual_mean <- mean(low_gdp$lifeExp)-mean(high_gdp$lifeExp)) # -25.11
-perm_mean_test <- perm_mean(1000,low_and_high_gdp$lifeExp,floor(length(low_and_high_gdp$lifeExp)/2))
+(actual_mean <- mean(low_gdp$lifeExp)-mean(high_gdp$lifeExp))
+```
+Running our permuted means test, we found our actual mean was at the 0th percentile of our randomized test:
+```{r}
+perm_mean_test <- perm_mean(1000,low_and_high_gdp$lifeExp,length(low_gdp$lifeExp))
 
-tf <- ecdf(perm_mean_test)
-tf(actual_mean) # 0th percentile
-range(perm_mean_test) # min -14.59353 max -13.18413
+percentile_mean_test <- ecdf(perm_mean_test)
+percentile_mean_test(actual_mean)
+range(perm_mean_test)
 
 ggplot(tibble(perm_mean_test))+
-  geom_histogram(aes(perm_mean_test),bins=50)
+  geom_histogram(aes(perm_mean_test),bins=50)+
+  geom_vline(xintercept = actual_mean, color = 'red')+
+  ylab("Number of Tests")+
+  xlab("Difference in Means")+
+  ggtitle("Two-Sample Permutation Test for High and Low GDP Countries")
 ```
 
-cor test idea:
+Our p value for this test is basically 0: if the null hypothesis (that the difference in means is zero) were true, we would never expect to see a difference as large as our actual value. Therefore, we reject the null hypothesis in favor of the alternate hypothesis: the difference of means of high and low gdp countries is non-zero.
+
+#### Linear Correlation Permutation Test
+
+This test was based on our second question. We found that, for the Americas continent only, population and life expectancy were weakly positively correlated.
+
+Running our correlation test and getting the actual correlation:
 ```{r}
 america <- data %>% filter(continent == "Americas")
 cor_test <- (perm_cor(1000,america$pop,america$lifeExp))
-(cor_act <- cor(america$pop,america$lifeExp)) # .25
-l <- ecdf(cor_test)
-l(cor_act) # 100th percentile
-range(cor_test) #-0.1653624  0.1613103
-# weak correlation... should the be correlated at all?
-# no/weaker correlation for other continents
+(cor_act <- cor(america$pop,america$lifeExp))
+```
+Our result is in the 100th percentile of our linear correlation permutation test:
+```{r}
+percentiles_cor_test <- ecdf(cor_test)
+percentiles_cor_test(cor_act) 
+range(cor_test) 
 
 ggplot(tibble(cor_test))+
-  geom_histogram(aes(cor_test),bins = 50)
+  geom_histogram(aes(cor_test),bins = 50)+
+  geom_vline(xintercept = cor_act, color = 'red')+
+  ylab("Number of Tests")+
+  xlab("Pearson Correlation Coefficient")+
+  ggtitle("Linear Correlation Permutation Test for Population and Life Expectancy in the Americas")
 ```
 
-Create visualizations of the statistical tests.
+Our p-value for this correlation is essentially 0: if no correlation exists, our random tests never reach a correlation as high as our actual observed value. So, we have evidence to reject the null hypothesis that population and life expectancy in the Americas are not correlated, in favor of the alternate hypothesis that some correlation exists.
 
-Make data-based conclusions about the results. Do you believe there are differences among the groups you are comparing?
-
-Generate percentiles, summary statistics (max, min), and probabilites (p-values) to justify your conclusions.
-
-Perm-Mean Idea: 50 highest pop countries/50 lowest pop countries in 2007 vs life expectancy
-
-```{r}
-high_pop <- data%>%
-  filter(year == 2007, pop >= 20378239)
-low_pop <- data%>%
-  filter(year == 2007, pop <= 6667147)
-high_to_low_pop <- high_pop %>% full_join(low_pop)
-(actual_mean_pop <- mean(high_pop$lifeExp) -mean(low_pop$lifeExp)) # 1.0484
-perm_mean_test_pop <- perm_mean(1000,high_to_low_pop$lifeExp,floor(length(high_to_low_pop$lifeExp)/2))
-
-tf_pop <- ecdf(perm_mean_test_pop)
-tf_pop(actual_mean_pop) #98th percentile
-range(perm_mean_test_pop) #-6.44, 2.44
-
-ggplot(tibble(perm_mean_test_pop))+
-  geom_histogram(aes(perm_mean_test_pop),bins=50)
-```
- 
-
-Perm-Cor Idea: For Asian countries what is cor between life expectancy and gdp
-
-```{r}
-Asia <- data %>% filter(continent == "Asia")
-cor_test_asia <- (perm_cor(1000, Asia$lifeExp, Asia$gdpPercap))
-(cor_act_asia <- cor(Asia$lifeExp, Asia$gdpPercap)) # 0.38
-l_asia <- ecdf(cor_test_asia)
-l_asia(cor_act_asia) # 100th percentile
-range(cor_test_asia) # -0.188, 0.144
-
-
-ggplot(tibble(cor_test_asia))+
-  geom_histogram(aes(cor_test_asia),bins = 50)
-```
-There is a really weak observed correlation between life expectancy and GDP per capita
-
+This correlation suggests that, in the Americas continent, life expectancy is slightly higher in the more populous countries.
 
 ### Individual Contributions
 
 **Andrew:**
 
-**Brian:**
+**Brian:** I helped formulate ideas for both tests and compiled our ideas together. I also came up with the idea to look for a strange correlation in the initial dataset, which we can then further investigate in the updated dataset.
 
 **Charles:**
 
