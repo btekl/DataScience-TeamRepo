@@ -9,7 +9,10 @@ output: html_document
 knitr::opts_chunk$set(warning=FALSE,message=FALSE)
 library(tidyverse)
 library(gapminder)
-data <- gapminder # replace w/ updated dataset
+```
+
+```{r}
+data <- gapminder_unfiltered # replace w/ updated dataset
 ```
 
 ### Gapminder Dataset
@@ -47,9 +50,9 @@ perm_mean <- function(perms = 1000, all_values, n_A)
     # Step 2:
     # Randomly separate vector "all_values" into disjoint 
     # groups of size "n1" and "length(all_values) - n1" respectively
-    samp <- sample(all_values, n_A)
-    rand1 <- all_values[samp]     # Adds the sample values to one group
-    rand2 <- all_values[-samp]    # Adds all the values not in the sample to the second group
+    samp <- sample(all_values)
+    rand1 <- samp[1:n_A]     
+    rand2 <- samp[(n_A+1):length(all_values)]    
     # Step 3:
     # Compute the sample means for the two groups from 
     # step 2
@@ -127,7 +130,7 @@ ggplot(tibble(perm_mean_test))+
   ggtitle("Two-Sample Permutation Test for High and Low GDP Countries")
 ```
 
-Our p value for this test is basically 0: if the null hypothesis (that the difference in means is zero) were true, we would never expect to see a difference as large as our actual value. Therefore, we reject the null hypothesis in favor of the alternate hypothesis: the difference of means of high and low gdp countries is non-zero.
+Our p value for this test is basically 0: if the null hypothesis (that the difference in means is zero) were true, we would never expect to see a difference as large as our actual value. Therefore, we reject the null hypothesis in favor of the alternate hypothesis: the difference of means of high and low gdp countries is non-zero. This result held in both gapminder datasets.
 
 #### Linear Correlation Permutation Test
 
@@ -155,7 +158,9 @@ ggplot(tibble(cor_test))+
 
 Our p-value for this correlation is essentially 0: if no correlation exists, our random tests never reach a correlation as high as our actual observed value. So, we have evidence to reject the null hypothesis that population and life expectancy in the Americas are not correlated, in favor of the alternate hypothesis that some correlation exists.
 
-This correlation suggests that, in the Americas continent, life expectancy is slightly higher in the more populous countries.
+This correlation existed in both datasets; however, the unfiltered dataset contains the additional FSU (former Soviet Union) continent, which has a moderate negative correlation (-.59) between population and life expectancy. Oceania has more data as well, and we find a weak positive correlation with similar p-values as above.
+
+This extra data helps us infer that this correlation arises in the continents with fewer countries overall. The most populous countries in each region (Russia, Australia, United States/Brazil) describe a large proportion of their continent's dataset: the correlation that arises between population and life expectancy is heavily weighted by the overall trends of these countries.
 
 ### Individual Contributions
 
@@ -163,7 +168,7 @@ This correlation suggests that, in the Americas continent, life expectancy is sl
 
 **Brian:** I helped formulate ideas for both tests and compiled our ideas together. I also came up with the idea to look for a strange correlation in the initial dataset, which we can then further investigate in the updated dataset.
 
-**Charles:**
+**Charles:** I assisted Brian in his formulation and deployment of solutions for the dataset. I also partook in the translation of our recitation sections code to be applied to the document.
 
 **Clint:**
 
