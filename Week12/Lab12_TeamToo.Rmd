@@ -171,5 +171,5 @@ This extra data helps us infer that this correlation arises in the continents wi
 **Charles:** I assisted Brian in his formulation and deployment of solutions for the dataset. I also partook in the translation of our recitation sections code to be applied to the document.
 
 **Clint:**
-
+I came up with some alternate questions, values, and analysis. I tested the functions and I assisted in the implementation of the new dataset into the code. 
 
