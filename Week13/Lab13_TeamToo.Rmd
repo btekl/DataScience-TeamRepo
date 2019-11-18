@@ -4,6 +4,11 @@ author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
 date: "11/15/2019"
 output: html_document
 ---
+```{r}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+```
+
 
 ### Individual Contributions
 
