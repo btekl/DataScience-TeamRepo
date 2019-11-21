@@ -1,0 +1,156 @@
+---
+title: 'Lab 13: World Indicators'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "11/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+pump_price <- read_csv("pump_price_for_gasoline_us_per_liter.csv",col_types = cols(`1993` = col_double(),
+  `1994` = col_double(),
+  `1996` = col_double(),
+  `1997` = col_double(),
+  `1999` = col_double(),
+  `2001` = col_double(),
+  `2003` = col_double(),
+  `2005` = col_double(),
+  `2007` = col_double(),
+  `2009` = col_double(),
+  `2011` = col_double(),
+  `2013` = col_double(),
+  `2015` = col_double()))
+co2_emissions <- read_csv("co2_emissions_tonnes_per_person.csv")
+```
+
+## Team Section
+
+#### Our Research Question 
+
+#### Data Description and Preprocessing
+
+We used two datasets to investigate this question: the first describes the CO2 emissions for 192 countries from as far back as 1800, though the majority of the data comes from more recent years. The second dataset describes the price of the most widely sold type of gasoline in US Dollars. The price comes as a single number for each year: it is not stated to be an average, but given the regular fluctuations of gas prices, we assume it is some sort of average.
+
+We tidied the two datasets, then combined them into a single dataset which contained only years in which both CO2 emission data and gas prices were available.
+```{r}
+co2_emissions <- co2_emissions %>%
+  gather(`1800`:`2014`,key='year',value='CO2 Emissions (Tonnes/person)')
+
+pump_price <- pump_price %>%
+  gather(`1991`:`2016`,key = 'year',value = 'Pump Price ($/L)')
+
+co2_and_pump <- co2_emissions %>%
+  inner_join(pump_price, by = c('country','year')) %>%
+  filter(!is.na(`Pump Price ($/L)`) & !is.na(`CO2 Emissions (Tonnes/person)`))
+```
+
+#### Summary Answer
+
+## Individual Sections
+
+### Andrew
+
+What is the subquestion you are addressing?
+
+```{r}
+#The code for the map function you used and a brief description of what the code is doing
+
+```
+A description of the permutation you performed and its results.
+Your description should contain the following:
+state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
+
+what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
+
+a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
+
+the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
+
+what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
+
+A data-based conclusion/answer to your subquestion
+
+### Brian
+
+What is the correlation between gas prices and co2 emissions on a global scale?
+
+Map Function:
+```{r}
+(act_cor <- co2_and_pump %>% 
+#  group_by(country) %>% 
+#  filter(country=='United States') %>%
+  nest() %>% 
+  mutate(cor = map(data, ~cor(.x$`CO2 Emissions (Tonnes/person)`, .x$`Pump Price ($/L)`))) %>%
+  unnest(cor, .drop = TRUE) %>%
+   arrange(desc(cor)))
+```
+
+The null hypothesis is that no correlation exists: the correlation coefficient is 0. The alternate hypothesis is that some correlation exists, so the correlation coefficient is non-zero.
+
+The test statistic I chose to use was the pearson correlation coefficient.
+
+```{r}
+perm_test_cor <- numeric(1000)
+
+for(i in seq_along(perm_test_cor)){
+  s <- sample(co2_and_pump$`CO2 Emissions (Tonnes/person)`)
+  perm_test_cor[i] <- cor(co2_and_pump$`Pump Price ($/L)`,s)
+}
+
+ggplot(tibble(perm_test_cor),aes(perm_test_cor))+geom_histogram(bins = 50)+
+  geom_vline(xintercept = act_cor$cor, color='red')
+```
+
+The percentile of the actual correlation:
+```{r}
+sum(act_cor$cor > perm_test_cor)/length(perm_test_cor)
+```
+
+Since our result is at the 0th percentile of the permutation tests, we reject the null hypothesis that no correlation exists, in favor of the alternate hypothesis that some correlation exists.
+
+While our calculated correlation appears to be a significant result, the actual value itself is quite small: -.1. This result was fairly surprising to me, as I anticipated a much stronger correlation. This lead to the formulation of the team question, where we found the correlations vary greatly between different countries. Thus, while the worldwide average correlation is very weak, this is because individual countries range across the entire spectrum of positive and negative correlations.
+
+### Charles 
+
+What is the subquestion you are addressing?
+
+```{r}
+#The code for the map function you used and a brief description of what the code is doing
+
+```
+A description of the permutation you performed and its results.
+Your description should contain the following:
+state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
+
+what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
+
+a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
+
+the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
+
+what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
+
+A data-based conclusion/answer to your subquestion
+
+### Clint
+
+What is the subquestion you are addressing?
+
+```{r}
+#The code for the map function you used and a brief description of what the code is doing
+
+```
+A description of the permutation you performed and its results.
+Your description should contain the following:
+state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
+
+what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
+
+a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
+
+the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
+
+what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
+
+A data-based conclusion/answer to your subquestion
