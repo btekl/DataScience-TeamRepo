@@ -119,7 +119,9 @@ What is the subquestion you are addressing?
 suicides_100k <- read_csv("suicide_per_100000_people.csv")
 sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
 
-#suicides_100k <- suicides_100k[complete.cases(),]
+suicides_100k <- suicides_100k %>%
+  gather(`1950`:`1998`,key='year',value='Suicides (per 100k people)')
+
 ```
 
 ```{r}
