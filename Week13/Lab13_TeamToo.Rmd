@@ -116,9 +116,15 @@ While our calculated correlation appears to be a significant result, the actual 
 What is the subquestion you are addressing?
 
 ```{r}
-#The code for the map function you used and a brief description of what the code is doing
+suicides_100k <- read_csv("suicide_per_100000_people.csv")
+sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
 
+#suicides_100k <- suicides_100k[complete.cases(),]
 ```
+
+```{r}
+```
+
 A description of the permutation you performed and its results.
 Your description should contain the following:
 state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
