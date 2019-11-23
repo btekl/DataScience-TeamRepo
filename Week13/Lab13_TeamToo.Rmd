@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: 'Lab 13: World Indicators'
 author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
@@ -155,9 +156,17 @@ While our calculated correlation appears to be a significant result, the actual 
 What is the subquestion you are addressing?
 
 ```{r}
-#The code for the map function you used and a brief description of what the code is doing
+suicides_100k <- read_csv("suicide_per_100000_people.csv")
+sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
+
+suicides_100k <- suicides_100k %>%
+  gather(`1950`:`1998`,key='year',value='Suicides (per 100k people)')
 
 ```
+
+```{r}
+```
+
 A description of the permutation you performed and its results.
 Your description should contain the following:
 state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
@@ -177,8 +186,62 @@ A data-based conclusion/answer to your subquestion
 What is the subquestion you are addressing?
 
 ```{r}
-#The code for the map function you used and a brief description of what the code is doing
+child_mort <- read_csv("child_mortality_0_5_year_olds_dying_per_1000_born.csv")
 
+birthrate <- read_csv("children_per_woman_total_fertility.csv")
+
+child_mort <- child_mort%>%
+  gather('1800':'2018', key = 'year', value = "Child Mortality (# of Deaths per Thousand Births")
+
+birthrate <- birthrate%>%
+  gather('1800':'2018', key = 'year', value = "Birthrate (# of Children per woman)")
+
+mort_2018 <- child_mort%>%
+  filter(year == "2018", !is.na(`Child Mortality (# of Deaths per Thousand Births`))%>%
+  arrange(desc(`Child Mortality (# of Deaths per Thousand Births`))
+
+birth_2018 <- birthrate%>%
+  filter(year == "2018",!is.na(`Birthrate (# of Children per woman)`))%>%
+  arrange(desc(`Birthrate (# of Children per woman)`))
+```
+
+```{r}
+top_mort <- mort_2018%>%
+  filter(`Child Mortality (# of Deaths per Thousand Births` >= 42.90)
+
+bottom_mort <- mort_2018%>%
+  filter(mort_2018$`Child Mortality (# of Deaths per Thousand Births` <= 7.97)
+
+top_birth <- birth_2018%>%
+  filter(`Birthrate (# of Children per woman)` >= 3.56)
+
+bottom_birth <-birth_2018%>%
+  filter(`Birthrate (# of Children per woman)` <= 1.76)
+
+high_and_low_mort <- top_mort %>% full_join(bottom_mort)
+
+high_and_low_birth <- top_birth %>% full_join(bottom_birth)
+
+combined_data <- high_and_low_birth%>% inner_join(high_and_low_mort, by = c('country','year'))
+```
+
+
+```{r}
+real_cor <- cor(x = combined_data$`Birthrate (# of Children per woman)`,y = combined_data$`Child Mortality (# of Deaths per Thousand Births`) # 0.927
+
+perm_test_clint <- numeric(1000)
+
+for(i in seq_along(perm_test_clint)){
+  sam <- sample(combined_data$`Birthrate (# of Children per woman)`)
+  perm_test_clint[i] <- cor(combined_data$`Child Mortality (# of Deaths per Thousand Births`,sam)
+}
+
+percentiles_cor_test <- ecdf(perm_test_clint)
+percentiles_cor_test(real_cor) #1
+range(perm_test_clint) #-0.337, 0.356 
+
+ggplot(tibble(perm_test_clint),aes(perm_test_clint))+geom_histogram(bins = 50)+
+  geom_vline(xintercept = real_cor, color='yellow')
 ```
 A description of the permutation you performed and its results.
 Your description should contain the following:
