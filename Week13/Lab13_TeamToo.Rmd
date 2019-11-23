@@ -160,8 +160,11 @@ suicides_100k <- read_csv("suicide_per_100000_people.csv")
 sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
 
 suicides_100k <- suicides_100k %>%
-  gather(`1950`:`1998`,key='year',value='Suicides (per 100k people)')
-
+  gather(`1950`:`2016`,key='year',value='Suicides (per 100k people)') %>%
+  filter(!is.na(`Suicides (per 100k people)`))
+sex_ratio <- sex_ratio %>%
+  gather(`1950`:`2100`,key='year',value='Male/Female Ratio') %>%
+  filter(!is.na(`Male/Female Ratio`))
 ```
 
 ```{r}
