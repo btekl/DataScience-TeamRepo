@@ -1,7 +1,7 @@
 ---
 title: 'Lab 13: World Indicators'
 author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
-date: "11/18/2019"
+date: "11/24/2019"
 output: html_document
 ---
 
@@ -47,6 +47,42 @@ co2_and_pump <- co2_emissions %>%
 
 #### Summary Answer
 
+
+```{r}
+t <- co2_and_pump %>% group_by(country) %>% count() %>% filter(n>=10)
+
+(cor_by_country <- co2_and_pump %>%
+  semi_join(t) %>%
+  group_by(country) %>% 
+  nest() %>% 
+  mutate(cor = map(data, ~cor(.x$`CO2 Emissions (Tonnes/person)`, .x$`Pump Price ($/L)`))) %>%
+  unnest(cor, .drop = TRUE) %>%
+   arrange((cor)))
+```
+
+```{r}
+
+USA <- co2_and_pump %>% filter(country == "United States")
+```
+
+```{r}
+perm_test_cor_team <- numeric(1000)
+
+for(i in seq_along(perm_test_cor_team)){
+  # Randomize one of variables of interest:
+  s <- sample(USA$`CO2 Emissions (Tonnes/person)`)
+  # Find the correlation between the un-randomized vector and the randomized vector
+  perm_test_cor_team[i] <- cor(USA$`Pump Price ($/L)`,s)
+}
+USA_cor <- filter(cor_by_country,country == 'United States')$cor
+ggplot(tibble(perm_test_cor_team),aes(perm_test_cor_team))+geom_histogram(bins = 30)+
+  geom_vline(xintercept = USA_cor, color='red')
+```
+```{r}
+sum(perm_test_cor_team > USA_cor)/length(perm_test_cor_team)
+```
+
+
 ## Individual Sections
 
 ### Andrew
@@ -75,26 +111,29 @@ A data-based conclusion/answer to your subquestion
 
 What is the correlation between gas prices and co2 emissions on a global scale?
 
-Map Function:
+For measuring correlations, the pearson correlation coefficient seemed like the natural choice.
+
+Using a map function with the correlation coefficient doesn't work as easily as some other summary statistics. The nest function gives us a list of tibbles, then correlation is calculated using the map function in a mutate for each tibble in the list. Finally, unnest drops all the columns except the calculated correlation and any grouping variables used. The code was referenced from [here](https://community.rstudio.com/t/how-to-use-map-with-cor/6509). 
+
 ```{r}
 (act_cor <- co2_and_pump %>% 
 #  group_by(country) %>% 
-#  filter(country=='United States') %>%
   nest() %>% 
   mutate(cor = map(data, ~cor(.x$`CO2 Emissions (Tonnes/person)`, .x$`Pump Price ($/L)`))) %>%
-  unnest(cor, .drop = TRUE) %>%
-   arrange(desc(cor)))
+  unnest(cor, .drop = TRUE))
 ```
 
-The null hypothesis is that no correlation exists: the correlation coefficient is 0. The alternate hypothesis is that some correlation exists, so the correlation coefficient is non-zero.
+For finding a single correlation, using the columns directly in the cor function is much more straight forward. However, this method does yield the same result, and can be expanded to the grouped case, as in the team section.
 
-The test statistic I chose to use was the pearson correlation coefficient.
+The null hypothesis is that no correlation exists: the correlation coefficient is 0. The alternate hypothesis is that some correlation exists, so the correlation coefficient is non-zero.
 
 ```{r}
 perm_test_cor <- numeric(1000)
 
 for(i in seq_along(perm_test_cor)){
+  # Randomize one of variables of interest:
   s <- sample(co2_and_pump$`CO2 Emissions (Tonnes/person)`)
+  # Find the correlation between the un-randomized vector and the randomized vector
   perm_test_cor[i] <- cor(co2_and_pump$`Pump Price ($/L)`,s)
 }
 
