@@ -153,7 +153,7 @@ While our calculated correlation appears to be a significant result, the actual 
 
 ### Charles 
 
-What is the subquestion you are addressing?
+Is there any correlation between the sex ratio of populations and the quantity of suicides?
 
 ```{r}
 suicides_100k <- read_csv("suicide_per_100000_people.csv")
@@ -161,13 +161,11 @@ sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
 
 suicides_100k <- suicides_100k %>%
   gather(`1950`:`2016`,key='year',value='Suicides (per 100k people)') %>%
-  filter(!is.na(`Suicides (per 100k people)`))
+  filter(!is.na(`Suicides (per 100k people)`) & year < 2016)
+
 sex_ratio <- sex_ratio %>%
   gather(`1950`:`2100`,key='year',value='Male/Female Ratio') %>%
-  filter(!is.na(`Male/Female Ratio`))
-```
-
-```{r}
+  filter(!is.na(`Male/Female Ratio`) & year < 2016)
 ```
 
 A description of the permutation you performed and its results.
@@ -175,6 +173,23 @@ Your description should contain the following:
 state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
 
 what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
+
+```{r}
+suicide_plus_ratio <- sex_ratio %>%
+  inner_join(suicides_100k, by = c('country','year'))
+
+ams <- suicide_plus_ratio %>% group_by(country) %>%
+  count() %>%
+  filter(n >= 10)
+
+#(all_cors <- suicide_plus_ratio %>%
+#  semi_join(t) %>%
+#  group_by(country) %>% 
+#  nest() %>% 
+#  mutate(cor = map(data, ~cor(.x$`Suicides (per 100k people)`, #.x$`Male/Female Ratio`))) %>%
+#  unnest(cor, .drop = TRUE) %>%
+#   arrange((cor)))
+```
 
 a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
 
