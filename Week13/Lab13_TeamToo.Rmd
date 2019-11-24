@@ -102,25 +102,79 @@ It seems reasonable to conclude that countries with a strong negative correlatio
 
 ### Andrew
 
-What is the subquestion you are addressing?
+Is there a correlation between GDP  and total amount of energy used by the country? I will only be checking for countries that are growing (postive GDP) because there are a lot of odd outlyers when taking in account negative values.
 
+In order to map the function will be displaying the mean of both values. The significance of studying this is to determine whether or not countries base their energy consumption off of how their economy is growing. 
 ```{r}
-#The code for the map function you used and a brief description of what the code is doing
+ener <- read_csv("energy_production_total.csv")
 
+gdp <- read_csv("gdp_total_yearly_growth.csv")
+
+ener <- ener%>%
+  gather('1960':'2010', key = 'year', value = "Energy Cost")%>%
+  filter(!is.na(`Energy Cost`))
+
+gdp <- gdp%>%
+  gather('1960':'2010', key = 'year', value = "GDP")%>%
+  select('year','GDP','country')
+
+gdp_pos <- gdp %>%
+  filter(`GDP` > 0)
+  
 ```
-A description of the permutation you performed and its results.
-Your description should contain the following:
-state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
+ 
+  I will use an inner join to put the two together in order to study the correlation.
+```{r}
+combine <- gdp_pos %>% inner_join(ener, by = c('country','year'))
+```
 
-what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
 
-a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
+Map function:
+My use of the map function is to determine the mean GDP and energy cost over a global scale. This function takes GDP and Energy Cost which are the two columns we want to study and takes their overall mean. Looking at these statistics will us to see what the average growing country uses in energy compared to the amount their economy has grown.
+```{r}
+combine %>% 
+  select(`GDP`, `Energy Cost`)%>%
+  map(mean)
+```
+Null Hypothesis: There is no correlation between GDP and Energy Cost the correlation coefficient will be close zero. 
 
-the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
+Alternate Hypothesis: There will be strong correlation between the GDP and Energy Cost?
 
-what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
+This function will run through and randomize the GDP and test how it correlates to the Energy Cost.
+```{r}
+perm_test_andrew <- numeric(1000)
 
-A data-based conclusion/answer to your subquestion
+for(i in seq_along(perm_test_andrew)){
+  
+  and <- sample(combine$`GDP`)
+  
+  perm_test_andrew[i] <- cor(combine$`Energy Cost`, and)
+}
+
+corre <- cor(x = combine$`GDP`, y = combine$`Energy Cost`) 
+```
+This value is the correlation between these two factors.
+
+This displays the correlation and also shows what percentiles the correlation resulted in.
+```{r}
+ggplot(tibble(perm_test_andrew),mapping = aes(perm_test_andrew))+
+  geom_histogram(bins = 60)+
+  geom_vline(xintercept = corre, color='red')+
+  ggtitle("Correlation test between GDP and Energy Use")
+
+percentiles_cor_test <- ecdf(perm_test_andrew)
+percentiles_cor_test(corre) 
+range(perm_test_andrew) 
+```
+
+ This is used to test the percentiles and the range of values in the perm test.
+ 
+ As we can tell from these values there is absolutely no significance in tgis correlation so we must accept the NULL hypothesis.
+
+From my perumation test I can determine that the correlation between Child Mortality and birthrate is statistically significant because the actual corrlation was more than double andy observed random correlation and therefore fell in the 100th percentile of the correlation test. 
+
+From this we can conlcude that as Child Mortality rise Birthrate also rises, and the opposite is also true. This would make sense logically because if more children are dying before the age of 5 then more children would need to be born to even maintain the similar real Birthrate as other countries.
+
 
 ### Brian {#Brian}
 
