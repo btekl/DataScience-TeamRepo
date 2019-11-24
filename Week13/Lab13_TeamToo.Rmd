@@ -153,7 +153,7 @@ While our calculated correlation appears to be a significant result, the actual 
 
 ### Charles 
 
-Is there any correlation between the sex ratio of populations and the quantity of suicides?
+Is there any correlation between the sex ratio of populations and the quantity of suicides? My interest is to take countries with 'suicide crises' (specifically Japan) and determine if the populations at the highest risk of suicide are those with a disproportionate amount of men or women. The majority of suicides occur between 15 and 49 years of age, so this is the data I will be taking into consideration.
 
 ```{r}
 suicides_100k <- read_csv("suicide_per_100000_people.csv")
@@ -168,32 +168,48 @@ sex_ratio <- sex_ratio %>%
   filter(!is.na(`Male/Female Ratio`) & year < 2016)
 ```
 
-A description of the permutation you performed and its results.
-Your description should contain the following:
-state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
-
-what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
-
 ```{r}
 suicide_plus_ratio <- sex_ratio %>%
   inner_join(suicides_100k, by = c('country','year'))
 
-ams <- suicide_plus_ratio %>% group_by(country) %>%
-  count() %>%
-  filter(n >= 10)
-
-#(all_cors <- suicide_plus_ratio %>%
-#  semi_join(t) %>%
-#  group_by(country) %>% 
-#  nest() %>% 
-#  mutate(cor = map(data, ~cor(.x$`Suicides (per 100k people)`, #.x$`Male/Female Ratio`))) %>%
-#  unnest(cor, .drop = TRUE) %>%
-#   arrange((cor)))
+suicide_plus_ratio %>% filter(country == 'Japan')
 ```
 
-a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
+The map formula that I'll use will be to find the median amount of suicides and the median male/female ratio of the population as well as the means of those values.
+
+```{r}
+suicide_plus_ratio %>% select(`Suicides (per 100k people)`, `Male/Female Ratio`) %>% map_dbl(median)
+
+suicide_plus_ratio %>% select(`Suicides (per 100k people)`, `Male/Female Ratio`) %>% map_dbl(mean)
+```
+
+The null hypothesis is that there is no correlation between the Male/Female ratio of a population and the proportion of suicides per 100,000 people.
+
+
+```{r}
+tests <- numeric(1000)
+
+for(i in 1:1000){
+  randomized <- sample(suicide_plus_ratio$`Male/Female Ratio`)
+  tests[i] <- cor(suicide_plus_ratio$`Suicides (per 100k people)`, randomized)
+}
+
+correlation <- cor(x=suicide_plus_ratio$`Male/Female Ratio`,y=suicide_plus_ratio$`Suicides (per 100k people)`) # -0.1058622
+```
+
+```{r}
+ggplot(tibble(tests),aes(tests))+geom_histogram(bins = 50)+
+  geom_vline(xintercept = correlation, color='red')+
+  ggtitle("Correlation between Gender Ratios and Suicide in Japan")
+```
 
 the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
+
+```{r}
+percentile <- ecdf(tests)
+percentile(correlation)
+mean(percentile(tests))
+```
 
 what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
 
