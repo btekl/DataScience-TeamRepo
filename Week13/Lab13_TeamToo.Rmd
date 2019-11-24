@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ---
 title: 'Lab 13: World Indicators'
 author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
@@ -29,6 +28,10 @@ co2_emissions <- read_csv("co2_emissions_tonnes_per_person.csv")
 
 #### Our Research Question 
 
+This question is a follow up to the question answered [here](#Brian). How does the correlation between gas prices and CO2 emissions change between countries?
+
+We discovered there was near zero correlation between gas prices and CO2 emissions for the full set of data across every country. This led us to further investigate how this correlation varies among countries: Does every country have low/no correlation, or are there a wider range of correlations across different countries?
+
 #### Data Description and Preprocessing
 
 We used two datasets to investigate this question: the first describes the CO2 emissions for 192 countries from as far back as 1800, though the majority of the data comes from more recent years. The second dataset describes the price of the most widely sold type of gasoline in US Dollars. The price comes as a single number for each year: it is not stated to be an average, but given the regular fluctuations of gas prices, we assume it is some sort of average.
@@ -48,25 +51,28 @@ co2_and_pump <- co2_emissions %>%
 
 #### Summary Answer
 
-
+First, we decided to look at the subset of the data containing countries which had at least 10 data points to work with. Then, we calculate the correlation coefficients for each country, and look at the 10 lowest:
 ```{r}
-t <- co2_and_pump %>% group_by(country) %>% count() %>% filter(n>=10)
+at_least_10 <- co2_and_pump %>% group_by(country) %>% count() %>% filter(n>=10)
 
 (cor_by_country <- co2_and_pump %>%
-  semi_join(t) %>%
+  semi_join(at_least_10) %>%
   group_by(country) %>% 
   nest() %>% 
   mutate(cor = map(data, ~cor(.x$`CO2 Emissions (Tonnes/person)`, .x$`Pump Price ($/L)`))) %>%
   unnest(cor, .drop = TRUE) %>%
    arrange((cor)))
 ```
-
+Similarly, the 10 highest coefficients:
 ```{r}
-
-USA <- co2_and_pump %>% filter(country == "United States")
+cor_by_country %>% arrange(desc(cor))
 ```
+So, we see there are strong positive and negative correlations when looking at the data on the country level.
 
+Looking just at the United States, we ran a permutation test to test the significance of this result. The null hypothesis is that no correlation exists.
 ```{r}
+USA <- co2_and_pump %>% filter(country == "United States")
+
 perm_test_cor_team <- numeric(1000)
 
 for(i in seq_along(perm_test_cor_team)){
@@ -77,12 +83,20 @@ for(i in seq_along(perm_test_cor_team)){
 }
 USA_cor <- filter(cor_by_country,country == 'United States')$cor
 ggplot(tibble(perm_test_cor_team),aes(perm_test_cor_team))+geom_histogram(bins = 30)+
-  geom_vline(xintercept = USA_cor, color='red')
-```
-```{r}
-sum(perm_test_cor_team > USA_cor)/length(perm_test_cor_team)
+  geom_vline(xintercept = USA_cor, color='red')+
+  ggtitle("Permutation Test for Correlation")+
+  ylab("Number of Tests")+
+  xlab("Correlation Coefficient")
 ```
 
+Our result is at a very low percentile of the test data, so we conclude that our result is significant: in the US, there is a strong negative correlation between gas price and CO2 emissions.
+```{r}
+sum(perm_test_cor_team < USA_cor)/length(perm_test_cor_team)
+```
+
+We found that correlations range across the full spectrum of values: in EU countries and the US, we see a strong negative correlation. As gas prices go down, CO2 emissions rise. In some Asian/African countries, we see the opposite; higher gas prices go along with higher emissions. Additionally, there are countries which have little to no correlation between the two variables as well.
+
+It seems reasonable to conclude that countries with a strong negative correlation have a larger proportion of their co2 emissions from car/truck travel. Countries with a strong positive correlation have some other primary contributor to their co2 emissions.
 
 ## Individual Sections
 
@@ -108,7 +122,7 @@ what conclusion you are drawing from the permutation test (i.e., step 7 in “Pe
 
 A data-based conclusion/answer to your subquestion
 
-### Brian
+### Brian {#Brian}
 
 What is the correlation between gas prices and co2 emissions on a global scale?
 
@@ -139,7 +153,10 @@ for(i in seq_along(perm_test_cor)){
 }
 
 ggplot(tibble(perm_test_cor),aes(perm_test_cor))+geom_histogram(bins = 50)+
-  geom_vline(xintercept = act_cor$cor, color='red')
+  geom_vline(xintercept = act_cor$cor, color='red')+
+  ggtitle("Permutation Test for Correlation")+
+  ylab("Number of Tests")+
+  xlab("Correlation Coefficient")
 ```
 
 The percentile of the actual correlation:
