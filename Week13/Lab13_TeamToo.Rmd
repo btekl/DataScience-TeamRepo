@@ -245,7 +245,8 @@ combined_data <- high_and_low_birth%>% inner_join(high_and_low_mort, by = c('cou
 ```
 
 Map function:
-My use of the map function is to determine the mean birthrate and child mortality rate for all 75 selected countries in the combined dataset.
+Map function:
+My use of the map function is to determine the mean birthrate and child mortality rate for all 75 selected countries in the combined dataset. What this map function is doing is taking the two remaining collumns, which are bothof the type double and getting the mean value of both collumns. In a larger dataset it would still get the means of each collumns
 ```{r}
 combined_data %>% 
   select(`Birthrate (# of Children per woman)`, `Child Mortality (# of Deaths per Thousand Births`)%>%
