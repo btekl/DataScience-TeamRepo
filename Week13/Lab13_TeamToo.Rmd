@@ -201,8 +201,9 @@ A data-based conclusion/answer to your subquestion
 
 ### Clint
 
-What is the subquestion you are addressing?
+Is there a correlation between child mortality rate(# deaths per 1000 births) and fertility (average # of births per woman)?
 
+In order to answer that question I'll be testing to see if the correlation between the 75 countries that ranked in the top 50 or bottom 50 in both birthrate and mortality is statistically significant.
 ```{r}
 child_mort <- read_csv("child_mortality_0_5_year_olds_dying_per_1000_born.csv")
 
@@ -243,34 +244,40 @@ high_and_low_birth <- top_birth %>% full_join(bottom_birth)
 combined_data <- high_and_low_birth%>% inner_join(high_and_low_mort, by = c('country','year'))
 ```
 
+Map function:
+My use of the map function is to determine the mean birthrate and child mortality rate for all 75 selected countries in the combined dataset.
+```{r}
+combined_data %>% 
+  select(`Birthrate (# of Children per woman)`, `Child Mortality (# of Deaths per Thousand Births`)%>%
+  map_dbl(mean)
+```
+Null Hypothesis: There is no correlation between Birthrate and Child Mortality, the correlation coefficient will be zero. 
+Alternate Hypothesis: There will be a statistically significant correlation between Birthrate and Child Mortality, the real correlation will fall in the top 95th percent or bottom 5th percentile of my permutation test. 
 
 ```{r}
-real_cor <- cor(x = combined_data$`Birthrate (# of Children per woman)`,y = combined_data$`Child Mortality (# of Deaths per Thousand Births`) # 0.927
-
 perm_test_clint <- numeric(1000)
 
 for(i in seq_along(perm_test_clint)){
   sam <- sample(combined_data$`Birthrate (# of Children per woman)`)
   perm_test_clint[i] <- cor(combined_data$`Child Mortality (# of Deaths per Thousand Births`,sam)
 }
+```
 
+```{r}
+real_cor <- cor(x = combined_data$`Birthrate (# of Children per woman)`,y = combined_data$`Child Mortality (# of Deaths per Thousand Births`) # 0.927
+```
+
+```{r}
+ggplot(tibble(perm_test_clint),aes(perm_test_clint))+geom_histogram(bins = 50)+
+  geom_vline(xintercept = real_cor, color='yellow')+
+  ggtitle("Correlation test between Birthrate and Child Mortality Rate")
+```
+
+```{r}
 percentiles_cor_test <- ecdf(perm_test_clint)
 percentiles_cor_test(real_cor) #1
 range(perm_test_clint) #-0.337, 0.356 
-
-ggplot(tibble(perm_test_clint),aes(perm_test_clint))+geom_histogram(bins = 50)+
-  geom_vline(xintercept = real_cor, color='yellow')
 ```
-A description of the permutation you performed and its results.
-Your description should contain the following:
-state explicitly the null and alternative hypotheses (i.e., step 1 in “Permutation Test Review”),
+From my perumation test I can determine that the correlation between Child Mortality and birthrate is statistically significant because the actual corrlation was more than double andy observed random correlation and therefore fell in the 100th percentile of the correlation test. 
 
-what test statistic you are using (i.e., step 2 in “Permutation Test Review”),
-
-a histogram of the distribution of the test statistic (i.e., step 5 in “Permutation Test Review”),
-
-the percentile where the real data summary falls in the distribution (i.e., step 6 in “Permutation Test Review”),
-
-what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
-
-A data-based conclusion/answer to your subquestion
+From this we can conlcude that as Child Mortality rise Birthrate also rises, and the opposite is also true. This would make sense logically because if more children are dying before the age of 5 then more children would need to be born to even maintain the similar real Birthrate as other countries.
