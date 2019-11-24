@@ -172,6 +172,8 @@ While our calculated correlation appears to be a significant result, the actual 
 
 Is there any correlation between the sex ratio of populations and the quantity of suicides? My interest is to take countries with 'suicide crises' (specifically Japan) and determine if the populations at the highest risk of suicide are those with a disproportionate amount of men or women. The majority of suicides occur between 15 and 49 years of age, so this is the data I will be taking into consideration.
 
+Because I believe that environmental and cultural factors are different in each country, ill exclusivley be looking at Japans data for Male/Female ratios and suicides. Ill perform a correlation test on these datasets and determine if the factors are linked.
+
 ```{r}
 suicides_100k <- read_csv("suicide_per_100000_people.csv")
 sex_ratio <- read_csv("sex_ratio_15_49_years.csv")
@@ -183,9 +185,7 @@ suicides_100k <- suicides_100k %>%
 sex_ratio <- sex_ratio %>%
   gather(`1950`:`2100`,key='year',value='Male/Female Ratio') %>%
   filter(!is.na(`Male/Female Ratio`) & year < 2016)
-```
 
-```{r}
 suicide_plus_ratio <- sex_ratio %>%
   inner_join(suicides_100k, by = c('country','year'))
 
@@ -201,7 +201,6 @@ suicide_plus_ratio %>% select(`Suicides (per 100k people)`, `Male/Female Ratio`)
 ```
 
 The null hypothesis is that there is no correlation between the Male/Female ratio of a population and the proportion of suicides per 100,000 people.
-
 
 ```{r}
 tests <- numeric(1000)
@@ -228,9 +227,9 @@ percentile(correlation)
 mean(percentile(tests))
 ```
 
-what conclusion you are drawing from the permutation test (i.e., step 7 in “Permutation Test Review”)
+The conclusion we can draw from the data percentiles and correlation tests is that Male/Female gender ratios are not strongly correlated to the amount of suicides per 100k people. Hence, we must accept our null hypothesis.
 
-A data-based conclusion/answer to your subquestion
+This may be for several reasons. For example, it is possible that because those who are suicidal are a fringe group, they are unaffected by these changes in population.
 
 ### Clint
 
