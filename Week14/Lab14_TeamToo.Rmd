@@ -1,0 +1,47 @@
+---
+title: 'Lab 14: Using modeling and iteration to expand a previous lab'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "12/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+```
+
+## Overall question
+
+Gapminder labs? (12/13) Revisit/expand on those questions
+
+Lead with your main overall question, why it’s important (and why those reasons are important),
+
+### Conclusions
+
+ your answer/conclusion, a plot, 
+```{r}
+#plot
+```
+
+### Summary of Modeling Techniques
+and a summary of the new tools you applied. 
+
+## Individual Sections
+
+### Andrew
+
+### Brian
+
+### Charles
+
+### Clint
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:**
+
+**Clint:**
