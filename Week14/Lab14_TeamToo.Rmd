@@ -8,23 +8,108 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE,message=FALSE)
 library(tidyverse)
+library(gapminder)
+library(modelr)
 ```
 
 ## Overall question
 
-Gapminder labs? (12/13) Revisit/expand on those questions
+We chose to revisit Lab 12: Gapminder Permutations, where we answered the following question:
 
-Lead with your main overall question, why it’s important (and why those reasons are important),
+How does life expectancy differ between the richest and poorest countries (in terms of per capita gdp)?
+
+While we might anticipate that richer countries have longer life expectancies than poorer countries, verifying that this is the case can still provide useful insights. The degree to which they differ can inform us of how a country with a low life expectancy would want to improve their citizens health. Low life expectancy could be viewed as both a health infrastructure and economic problem.
 
 ### Conclusions
 
- your answer/conclusion, a plot, 
+First, we split the data into the high and low gdp countries. For each set, we will build and analyze a model for how gdp per capita relates to life expectancy. 
 ```{r}
-#plot
+low_gdp <- gapminder %>%
+  filter(min_rank(gdpPercap)<=500)
+high_gdp <- gapminder %>%
+  filter(min_rank(desc(gdpPercap))<=500)
+```
+We opted to split these datasets further into training and testing groups, building our models with the training datasets then testing their effectiveness with the test datasets. We used 80% of the data for the training dataset in each case.
+```{r}
+# code referenced from https://stackoverflow.com/questions/17200114/how-to-split-data-into-training-testing-sets-using-sample-function
+bound <- floor((nrow(low_gdp))*.8)         #define % of training and test set
+
+low <- low_gdp[sample(nrow(low_gdp)), ]            
+low_train <- low[1:bound, ]              #get training set
+low_test <- low[(bound+1):nrow(low), ]
+
+# high dataset is same size, so we can reuse the same bound
+high <- high_gdp[sample(nrow(high_gdp)), ]           
+high_train <- high[1:bound, ]              
+high_test <- high[(bound+1):nrow(high), ]
 ```
 
+#### Low GDP Model
+
+First, we'll look at the low GDP countries, building our model and then calculating predictions and residuals.
+```{r}
+low_model <- lm(lifeExp ~ gdpPercap, data = low_train)
+low_predict <- low_train %>% add_predictions(low_model)
+low_resid <- low_train %>% add_residuals(low_model)
+low_test_resid <- low_test %>% add_residuals(low_model)
+```
+Our linear model for life expectancy as a function of gdp per capita:
+```{r}
+ggplot()+
+  geom_line(data=low_predict,aes(gdpPercap,pred))
+```
+
+The residuals for the training dataset:
+```{r}
+ggplot(low_resid,aes(gdpPercap,resid))+
+  geom_line()
+```
+
+The residuals for the test dataset:
+```{r}
+ggplot(low_test_resid,aes(gdpPercap,resid))+
+  geom_line()
+```
+
+Our model for low gdp countries appears to have some issues, as we have large residuals in both datasets for the entire range of gdp per capita. There does seem to be relationship between life expectancy and gdp per capita, but other hidden variables are at play.
+
+#### High GDP Model
+
+Again, we build our linear model off the training dataset, then calculate predictions and residuals:
+```{r}
+high_model <- lm(lifeExp ~ gdpPercap, data = high_train)
+high_predict <- high_train %>% add_predictions(high_model)
+high_resid <- high_train %>% add_residuals(high_model)
+high_test_resid <- high_test %>% add_residuals(high_model)
+```
+
+The linear model for high GDP countries:
+```{r}
+ggplot()+
+  geom_line(data=high_predict,aes(gdpPercap,pred))
+```
+
+Residuals for the training data:
+```{r}
+ggplot(high_resid,aes(gdpPercap,resid))+
+  geom_line()
+```
+
+Residuals for the test data:
+```{r}
+ggplot(high_test_resid,aes(gdpPercap,resid))+
+  geom_line()
+```
+
+The model for high GDP has some significant outliers: in the training dataset, there are very rich countries with far lower life expectancies than predicted. The test data doesn't contain countries at that level of wealth, and has lower residuals overall.
+
+So, while we found there is some validity to our original conclusion that life expectancy is related to gdp per capita, our model suggests there is a lot more going on. We have substantial outliers as well as inconsistent accuracy across the entire range of GDP. We will investigate some of the potential sources of our model's error in the individual sections.
+
 ### Summary of Modeling Techniques
-and a summary of the new tools you applied. 
+
+We used the modelr methods for calculating predictions and residuals for our linear models. We also split our data into model building and model validation subsets.
+
+Add some other stuff from individual sections
 
 ## Individual Sections
 
