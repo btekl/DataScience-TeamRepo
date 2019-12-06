@@ -195,14 +195,16 @@ ff <- China %>%
 
 ggplot() +
   geom_point(data = China, aes(pop/1000000,gdpPercap))+
-  geom_line(data = ff, aes(pop/1000000,predictions))+
-  geom_line(data = ff, aes(pop/1000000, residuals))+
-  ggtitle("Japan's GDP Compared to Population")+
-  ylab("Population in Millions")+
-  xlab("GDP per Capita")
-
+  geom_line(data = ff, aes(pop/1000000,predictions, color = 'prediction'))+
+  geom_line(data = ff, aes(pop/1000000, residuals, color = 'residual'))+
+  ggtitle("China's Predicted GDP Compared to Population")+
+  ylab("GDP per Capita")+
+  xlab("Population in Millions")
+#View(popmod)
 ```
-This graph shows the relationship between Population and GDP to be exponential. The risudual line clearly illustrates the distance between each point.
+This graph shows first that the linear model linking population to GDP fails. I hope to emphasize there is a clear increase between population and gdp. The model suggests that the GDP increases for every 4 million citizens, despite the actual population depmonstrating a clear exponential relationship. The risudual line clearly illustrates how the distance between the point and prediction becomes increasingly significant through time.
+
+If this queswtion were to be revisited I would, as Dr. Vance recommended, interpret my prediction as a non-linear model. Unfortunately as we haven't learned this I was unable to do this.
 
 ### Clint
 I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
