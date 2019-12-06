@@ -117,6 +117,55 @@ Add some other stuff from individual sections
 
 ### Brian
 
+What factors are causing our initial life expectancy vs GDP per capita model to be inaccurate? Are we able to manipulate and filter the data to recover a linear (or otherwise) pattern between life expectancy and GDP? 
+
+This question is a natural follow up to our initial team findings. Our initial model fails quite poorly in some cases; by investigating further, we can try to establish if there is a relationship between the variables of interest, or if our model is flawed in some other way.
+
+We discovered that nearly all of the model's worst predictions are on countries in Africa and Asia. (Varies between different models as training data is sampled differently each model, but typically just 1 of the 30 worst predictions by residuals is not from these 2 continents.) So, we'll remove these two continents to see if we can get a more accurate model by excluding the largest outliers.
+```{r}
+g2 <- gapminder %>% 
+  filter(continent != "Africa" & continent != "Asia") %>%
+  mutate(lgdp = log10(gdpPercap))
+
+bounds <- floor((nrow(g2))*.8)         
+b_data <- g2[sample(nrow(g2)), ]            
+b_train <- b_data[1:bounds, ]              
+b_test <- b_data[(bounds+1):nrow(g2), ]
+```
+I opted to convert GDP per capita to lgdp, the base 10 log of GDP per capita in order to help coerce a linear relationship out of the variables. I also opted to include year and country and modeled using the "*" operation as these variables seemed likely to have interactions between each other as well as with life expectancy.
+```{r}
+model1 <- lm(lifeExp ~ lgdp*year*country, data = b_train)
+predict1 <- b_train %>% add_predictions(model1)
+resid1 <- b_train %>% add_residuals(model1)
+test_resid1 <- b_test %>% add_residuals(model1)
+
+ggplot(predict1,aes(lgdp,pred))+
+  geom_line()+
+  geom_smooth(se=FALSE)+
+  ggtitle("Life Expectancy vs GDP (Base 10 Log)")+
+  ylab("Predicted Life Expectancy")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+We find a fairly linear relationship between these variables: increasing GDP by a factor of 10 increases life expectancy by around 20 years, according to this model.
+
+Looking at the residuals:
+```{r}
+ggplot(resid1,aes(lgdp,resid))+
+  geom_line()+geom_smooth(se= FALSE)+
+  ggtitle("Residuals for Training Dataset")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+```{r}
+ggplot(test_resid1,aes(lgdp,resid))+
+  geom_line()+geom_smooth(se = FALSE)+
+  ggtitle("Residuals for Testing Dataset")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+Overall, this model does quite a bit better at producing more accurate predictions than our initial model. The model predicts the test data with similar accuracy to the training data. By introducing both year and country into the model, we run the risk of overfitting; however, the test data suggests we've mostly avoided this issue.
+
 ### Charles
 
 ### Clint
@@ -125,7 +174,7 @@ Add some other stuff from individual sections
 
 **Andrew:**
 
-**Brian:**
+**Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
 **Charles:**
 
