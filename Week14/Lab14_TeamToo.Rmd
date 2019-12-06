@@ -127,6 +127,50 @@ We used the modelr methods for calculating predictions and residuals for our lin
 
 ### Andrew
 
+I want to use a model in order to confirm the claim or even find a different conclusion from the one I had from Lab 13. I want to see if my Lab 13 work was true by modeling it.
+
+```{r}
+ener <- read_csv("energy_production_total.csv")
+
+gdp <- read_csv("gdp_total_yearly_growth.csv")
+
+ener <- ener%>%
+  gather('1960':'2010', key = 'year', value = "Energy Cost")%>%
+  filter(!is.na(`Energy Cost`))
+
+gdp <- gdp%>%
+  gather('1960':'2010', key = 'year', value = "GDP")%>%
+  select('year','GDP','country')
+
+gdp_pos <- gdp %>%
+  filter(`GDP` > 0)
+```
+
+
+```{r}
+combine <- gdp_pos %>% inner_join(ener, by = c('country','year'))
+```
+
+
+```{r}
+andrew_model<- lm(`GDP` ~ `Energy Cost`, data = combine)
+
+andrew_predict <- combine %>% add_predictions(andrew_model)
+
+andrew_resid <- combine %>% add_residuals(andrew_model)
+```
+
+
+```{r}
+ggplot(data = combine) + 
+  geom_jitter(aes(x = `GDP`, y = `Energy Cost`)) 
+ 
+
+ggplot(andrew_resid) +
+  geom_line(aes(x= `GDP`, y= `resid`))
+```
+
+
 ### Brian
 
 What factors are causing our initial life expectancy vs GDP per capita model to be inaccurate? Are we able to manipulate and filter the data to recover a linear (or otherwise) pattern between life expectancy and GDP? 
