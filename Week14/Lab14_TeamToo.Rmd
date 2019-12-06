@@ -179,7 +179,18 @@ ggplot(test_resid1,aes(lgdp,resid))+
 Overall, this model does quite a bit better at producing more accurate predictions than our initial model. The model predicts the test data with similar accuracy to the training data. By introducing both year and country into the model, we run the risk of overfitting; however, the test data suggests we've mostly avoided this issue.
 
 ### Charles
+```{r}
+popmod <- lm(gapminder$gdpPercap~pop,data=gapminder)
+#View(gapminder)
 
+ff <- gapminder %>%
+  data_grid(pop=seq_range(pop, 1704)) %>%
+  add_predictions(popmod,'predictions') %>%
+  add_residuals(popmod, 'residuals')
+
+ggplot() +
+  geom_point(data = gapminder, aes(pop,gdpPercap))
+```
 ### Clint
 I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
 ```{r}
