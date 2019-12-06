@@ -127,6 +127,54 @@ We used the modelr methods for calculating predictions and residuals for our lin
 
 ### Andrew
 
+I want to use a model in order to confirm the claim or even find a different conclusion from the one I had from Lab 13. I want to see if my Lab 13 work was true by modeling it.
+
+```{r}
+ener <- read_csv("energy_production_total.csv")
+
+gdp <- read_csv("gdp_total_yearly_growth.csv")
+
+ener <- ener%>%
+  gather('1960':'2010', key = 'year', value = "Energy Cost")%>%
+  filter(!is.na(`Energy Cost`))
+
+gdp <- gdp%>%
+  gather('1960':'2010', key = 'year', value = "GDP")%>%
+  select('year','GDP','country')
+
+```
+
+
+```{r}
+combine <- gdp %>% inner_join(ener, by = c('country','year'))
+```
+
+
+```{r}
+andrew_model<- lm(`GDP` ~ `Energy Cost`, data = combine)
+
+andrew_predict <- combine %>% add_predictions(andrew_model)
+
+andrew_resid <- combine %>% add_residuals(andrew_model)
+```
+
+
+```{r}
+ggplot(data = combine) + 
+  geom_jitter(aes(x = `GDP`, y = `Energy Cost`)) 
+ 
+
+ggplot(andrew_resid) +
+  geom_jitter(aes(x= `GDP`, y= `resid`))+
+  geom_line(aes(x= `GDP`, y= `resid`, color = 'red'))
+  
+ggplot(andrew_predict) +
+  geom_line(aes(x= `GDP`, y= `pred`, color = 'red'))+
+  geom_jitter(aes(x= `GDP`, y= `pred`))
+```
+
+My model went to seek out to prove if my conclusion was right from Lab 13 and I can not say for sure that our conclusion that there is no correlation is correct. This means that my hypothesis was wrong again that there might be a possible correlation. From this model we can tell that there is more correlation in this trend then we orginally concluded from Lab 13 which is an improvement probably because I decided to include negative GDP.
+
 ### Brian
 
 What factors are causing our initial life expectancy vs GDP per capita model to be inaccurate? Are we able to manipulate and filter the data to recover a linear (or otherwise) pattern between life expectancy and GDP? 
@@ -256,6 +304,7 @@ While the line modeled by the linear model does appear to go through the center 
 ### Individual Contributions
 
 **Andrew:**
+I created a model in order to test my conclusions from Lab 13 and found that my modelk was sucessful. I learned once again that their is no correlation and my hypothesis was wrong again.
 
 **Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
