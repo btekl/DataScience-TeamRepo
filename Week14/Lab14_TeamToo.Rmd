@@ -212,7 +212,8 @@ combined_data_clint <- new_mort%>% inner_join(birth, by = c('country', 'year'))%
 
 ```{r}
 clints_model<- lm(`Birthrate` ~ `Child Mortality`, data = combined_data_clint)
-
+clint_predict <- combined_data_clint %>% add_predictions(clints_model)
+clint_resid <- combined_data_clint %>% add_residuals(clints_model)
 ```
 
 ```{r}
@@ -220,8 +221,12 @@ ggplot(data = combined_data_clint) +
   geom_jitter(aes(x = `Child Mortality`, y = `Birthrate`)) +
   geom_abline(slope = 0.007199, intercept = 3.307237,)
 
+ggplot(clint_resid) +
+  geom_line(aes(x= `Child Mortality`, y= `resid`))
 ```
+
 While the line modeled by the linear model does appear to go through the center of he dataset, there are a lot of data points that are rather far away from the line suggesting that the model isn't doing a especially great job of predicting some of the data. However, the general trend of the data suggests a positive slope and the best fit line produced by the linear model also has a positive slope leading to the conclusion that there is a positive relationship between Child Mortality Rate and Birthrate. 
+
 ### Individual Contributions
 
 **Andrew:**
