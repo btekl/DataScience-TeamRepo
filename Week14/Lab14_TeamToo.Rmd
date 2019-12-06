@@ -56,19 +56,26 @@ low_test_resid <- low_test %>% add_residuals(low_model)
 Our linear model for life expectancy as a function of gdp per capita:
 ```{r}
 ggplot()+
-  geom_line(data=low_predict,aes(gdpPercap,pred))
+  geom_line(data=low_predict,aes(gdpPercap,pred))+
+  ggtitle("Low GDP Linear Model")+
+  ylab("Predicted Life Expectancy")+
+  xlab("GDP per Capita")
 ```
 
 The residuals for the training dataset:
 ```{r}
 ggplot(low_resid,aes(gdpPercap,resid))+
-  geom_line()
+  geom_line()+
+  ggtitle("Low GDP Model Residuals for Training Data")+
+  xlab("GDP per Capita")
 ```
 
 The residuals for the test dataset:
 ```{r}
 ggplot(low_test_resid,aes(gdpPercap,resid))+
-  geom_line()
+  geom_line()+
+  ggtitle("Low GDP Model Residuals for Testing Data")+
+  xlab("GDP per Capita")
 ```
 
 Our model for low gdp countries appears to have some issues, as we have large residuals in both datasets for the entire range of gdp per capita. There does seem to be relationship between life expectancy and gdp per capita, but other hidden variables are at play.
@@ -86,30 +93,35 @@ high_test_resid <- high_test %>% add_residuals(high_model)
 The linear model for high GDP countries:
 ```{r}
 ggplot()+
-  geom_line(data=high_predict,aes(gdpPercap,pred))
+  geom_line(data=high_predict,aes(gdpPercap,pred))+
+  ggtitle("High GDP Linear Model")+
+  ylab("Predicted Life Expectancy")+
+  xlab("GDP per Capita")
 ```
 
 Residuals for the training data:
 ```{r}
 ggplot(high_resid,aes(gdpPercap,resid))+
-  geom_line()
+  geom_line()+
+  ggtitle("High GDP Model Residuals for Training Data")+
+  xlab("GDP per Capita")
 ```
 
 Residuals for the test data:
 ```{r}
 ggplot(high_test_resid,aes(gdpPercap,resid))+
-  geom_line()
+  geom_line()+
+  ggtitle("High GDP Model Residuals for Testing Data")+
+  xlab("GDP per Capita")
 ```
 
-The model for high GDP has some significant outliers: in the training dataset, there are very rich countries with far lower life expectancies than predicted. The test data doesn't contain countries at that level of wealth, and has lower residuals overall.
+The model for high GDP has some significant outliers: there are very rich countries with far lower life expectancies than predicted.
 
 So, while we found there is some validity to our original conclusion that life expectancy is related to gdp per capita, our model suggests there is a lot more going on. We have substantial outliers as well as inconsistent accuracy across the entire range of GDP. We will investigate some of the potential sources of our model's error in the individual sections.
 
 ### Summary of Modeling Techniques
 
-We used the modelr methods for calculating predictions and residuals for our linear models. We also split our data into model building and model validation subsets.
-
-Add some other stuff from individual sections
+We used the modelr methods for calculating predictions and residuals for our linear models. We also split our data into model building and model validation subsets. Additionally, we incorporated variable transformations and more complicated variable interactions in our other models.
 
 ## Individual Sections
 
