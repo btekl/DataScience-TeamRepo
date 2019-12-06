@@ -196,7 +196,10 @@ ff <- China %>%
 ggplot() +
   geom_point(data = China, aes(pop/1000000,gdpPercap))+
   geom_line(data = ff, aes(pop/1000000,predictions))+
-  geom_line(data = ff, aes(pop/1000000, residuals))
+  geom_line(data = ff, aes(pop/1000000, residuals))+
+  ggtitle("Japan's GDP Compared to Population")+
+  ylab("Population in Millions")+
+  xlab("GDP per Capita")
 
 ```
 This graph shows the relationship between Population and GDP to be exponential. The risudual line clearly illustrates the distance between each point.
@@ -255,6 +258,7 @@ While the line modeled by the linear model does appear to go through the center 
 **Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
 **Charles:**
+Created a model once the link between GDP and life expectancy had been determined to link population to GDP. Hence, population can potentially be linked to life expectancy. This is to strengthen the claims made in the original investigation.
 
 **Clint:**
 Created a model for my individual section to test interaction between different variables, primarily using the lm() application of R combined with ggplot. I also helped edit the entire document for errors.
