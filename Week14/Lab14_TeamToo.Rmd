@@ -180,7 +180,78 @@ Overall, this model does quite a bit better at producing more accurate predictio
 
 ### Charles
 
+My goal was to strengthen the claim that Brian made to determine if there is any link between the size of the country and the life expectancy of that very country. Because China has a large population and a high GDP (as well as immense growth in both) I believe it is a good guess to see if population links itself GDP.
+
+```{r}
+China <- gapminder %>%
+  filter(country == 'China')
+popmod <- lm(China$gdpPercap~pop,data=China)
+#View(gapminder)
+
+ff <- China %>%
+  data_grid(pop=seq_range(pop, 12)) %>%
+  add_predictions(popmod,'predictions') %>%
+  add_residuals(popmod, 'residuals')
+
+ggplot() +
+  geom_point(data = China, aes(pop/1000000,gdpPercap))+
+  geom_line(data = ff, aes(pop/1000000,predictions, color = 'prediction'))+
+  geom_line(data = ff, aes(pop/1000000, residuals, color = 'residual'))+
+  ggtitle("China's Predicted GDP Compared to Population")+
+  ylab("GDP per Capita")+
+  xlab("Population in Millions")
+#View(popmod)
+```
+This graph shows first that the linear model linking population to GDP fails. I hope to emphasize there is a clear increase between population and gdp. The model suggests that the GDP increases for every 4 million citizens, despite the actual population depmonstrating a clear exponential relationship. The risudual line clearly illustrates how the distance between the point and prediction becomes increasingly significant through time.
+
+If this queswtion were to be revisited I would, as Dr. Vance recommended, interpret my prediction as a non-linear model. Unfortunately as we haven't learned this I was unable to do this.
+
 ### Clint
+I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
+```{r}
+child_mort <- read_csv("child_mortality_0_5_year_olds_dying_per_1000_born.csv")
+
+birthrate <- read_csv("children_per_woman_total_fertility.csv")
+
+child_mort <- child_mort%>%
+  gather('1800':'2018', key = 'year', value = "Child Mortality")
+
+birthrate <- birthrate%>%
+  gather('1800':'2018', key = 'year', value = "Birthrate")
+
+new_mort <- child_mort%>%
+  filter(!is.na(`Child Mortality`))%>%
+  arrange(desc(`Child Mortality`))%>%
+  group_by(country)
+
+birth <- birthrate%>%
+  filter(!is.na(`Birthrate`))%>%
+  arrange(desc(`Birthrate`))%>%
+  group_by(country)
+```
+
+```{r}
+combined_data_clint <- new_mort%>% inner_join(birth, by = c('country', 'year'))%>%
+  group_by(country)
+```
+
+
+```{r}
+clints_model<- lm(`Birthrate` ~ `Child Mortality`, data = combined_data_clint)
+clint_predict <- combined_data_clint %>% add_predictions(clints_model)
+clint_resid <- combined_data_clint %>% add_residuals(clints_model)
+```
+
+```{r}
+ggplot(data = combined_data_clint) + 
+  geom_jitter(aes(x = `Child Mortality`, y = `Birthrate`)) +
+  geom_abline(slope = 0.007199, intercept = 3.307237,)
+
+ggplot(clint_resid) +
+  geom_line(aes(x= `Child Mortality`, y= `resid`))
+```
+
+While the line modeled by the linear model does appear to go through the center of he dataset, there are a lot of data points that are rather far away from the line suggesting that the model isn't doing a especially great job of predicting some of the data. However, the general trend of the data suggests a positive slope and the best fit line produced by the linear model also has a positive slope leading to the conclusion that there is a positive relationship between Child Mortality Rate and Birthrate. 
 
 ### Individual Contributions
 
@@ -189,5 +260,7 @@ Overall, this model does quite a bit better at producing more accurate predictio
 **Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
 **Charles:**
+Created a model once the link between GDP and life expectancy had been determined to link population to GDP. Hence, population can potentially be linked to life expectancy. This is to strengthen the claims made in the original investigation.
 
 **Clint:**
+Created a model for my individual section to test interaction between different variables, primarily using the lm() application of R combined with ggplot. I also helped edit the entire document for errors.
