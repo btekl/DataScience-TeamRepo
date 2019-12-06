@@ -142,13 +142,11 @@ gdp <- gdp%>%
   gather('1960':'2010', key = 'year', value = "GDP")%>%
   select('year','GDP','country')
 
-gdp_pos <- gdp %>%
-  filter(`GDP` > 0)
 ```
 
 
 ```{r}
-combine <- gdp_pos %>% inner_join(ener, by = c('country','year'))
+combine <- gdp %>% inner_join(ener, by = c('country','year'))
 ```
 
 
@@ -167,9 +165,15 @@ ggplot(data = combine) +
  
 
 ggplot(andrew_resid) +
-  geom_line(aes(x= `GDP`, y= `resid`))
+  geom_jitter(aes(x= `GDP`, y= `resid`))+
+  geom_line(aes(x= `GDP`, y= `resid`, color = 'red'))
+  
+ggplot(andrew_predict) +
+  geom_line(aes(x= `GDP`, y= `pred`, color = 'red'))+
+  geom_jitter(aes(x= `GDP`, y= `pred`))
 ```
 
+My model went to seek out to prove if my conclusion was right from Lab 13 and I can not say for sure that our conclusion that there is no correlation is correct. This means that my hypothesis was wrong again that there might be a possible correlation. From this model we can tell that there is more correlation in this trend then we orginally concluded from Lab 13 which is an improvement probably because I decided to include negative GDP.
 
 ### Brian
 
@@ -300,6 +304,7 @@ While the line modeled by the linear model does appear to go through the center 
 ### Individual Contributions
 
 **Andrew:**
+I created a model in order to test my conclusions from Lab 13 and found that my modelk was sucessful. I learned once again that their is no correlation and my hypothesis was wrong again.
 
 **Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
