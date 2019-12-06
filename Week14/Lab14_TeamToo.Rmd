@@ -181,6 +181,7 @@ Overall, this model does quite a bit better at producing more accurate predictio
 ### Charles
 
 My goal was to strengthen the claim that Brian made to determine if there is any link between the size of the country and the life expectancy of that very country. Because China has a large population and a high GDP (as well as immense growth in both) I believe it is a good guess to see if population links itself GDP.
+
 ```{r}
 China <- gapminder %>%
   filter(country == 'China')
@@ -193,8 +194,13 @@ ff <- China %>%
   add_residuals(popmod, 'residuals')
 
 ggplot() +
-  geom_point(data = China, aes(pop,gdpPercap))
+  geom_point(data = China, aes(pop/1000000,gdpPercap))+
+  geom_line(data = ff, aes(pop/1000000,predictions))+
+  geom_line(data = ff, aes(pop/1000000, residuals))
+
 ```
+This graph shows the relationship between Population and GDP to be exponential. The risudual line clearly illustrates the distance between each point.
+
 ### Clint
 I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
 ```{r}
