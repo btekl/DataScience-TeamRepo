@@ -1,0 +1,79 @@
+---
+title: 'Lab 15: Final Project'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "12/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+# Data from: https://www.kaggle.com/sobhanmoosavi/us-accidents
+# LARGE: do not upload to github
+accidents <- read_csv("US_Accidents_May19.csv")
+
+```
+
+## Main Question
+
+Your team has been hired as data science collaborators by a domain expert to answer an overall question and 4-5 sub-questions. Describe who the domain expert is, what questions you will be answering, why the questions are important/interesting, and what data you will be using. Provide a link or reference to the dataset(s).
+
+**Domain Expert and Dataset:**
+
+**Main Question & it's Importance:**
+Lead with your main overall question, why it’s important (and why those reasons are important), 
+
+**Answer:**
+your answer/conclusion, 
+**Recommendation:**
+```{r}
+
+```
+
+recommendation, and a plot communicating your conclusion or basis for your recommendation. 
+
+## Individual Sections
+
+Each teammate must apply “recently learned” programming tools to answer a subquestion that will help your team answer the overall question. The subquestions must be different from the overall team question. Each subquestion should get its own subsection in the team report and should follow the format for statistical analyses that we have learned in class.
+
+What is the question? Why is it important/interesting?
+
+What new tools did you use?
+
+What is the answer to the question? How does this relate to the overall question?
+
+What are the ethical implications of your findings, conclusions, or recommendations?
+
+### Andrew
+
+### Brian
+
+### Charles
+
+### Clint
+
+## Reflections on Lab 2
+
+As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
+
+### Individual Reflections
+
+Individually, write a paragraph reflecting on: how have your six-month or 5-year goals changed? What did you learn/accomplish in this course? If you could give yourself advice at the beginning of the semester, what would you tell yourself to keep doing, stop doing, and start doing?
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:** 
+
+**Clint:**
+
+### Individual Contributions
+
+**Andrew:**
+
+**Brian:**
+
+**Charles:** 
+
+**Clint:**
