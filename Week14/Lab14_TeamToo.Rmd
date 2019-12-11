@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: 'Lab 14: Using modeling and iteration to expand a previous lab'
 author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
@@ -127,6 +128,54 @@ We used the modelr methods for calculating predictions and residuals for our lin
 
 ### Andrew
 
+I want to use a model in order to confirm the claim or even find a different conclusion from the one I had from Lab 13. I want to see if my Lab 13 work was true by modeling it.
+
+```{r}
+ener <- read_csv("energy_production_total.csv")
+
+gdp <- read_csv("gdp_total_yearly_growth.csv")
+
+ener <- ener%>%
+  gather('1960':'2010', key = 'year', value = "Energy Cost")%>%
+  filter(!is.na(`Energy Cost`))
+
+gdp <- gdp%>%
+  gather('1960':'2010', key = 'year', value = "GDP")%>%
+  select('year','GDP','country')
+
+```
+
+
+```{r}
+combine <- gdp %>% inner_join(ener, by = c('country','year'))
+```
+
+
+```{r}
+andrew_model<- lm(`GDP` ~ `Energy Cost`, data = combine)
+
+andrew_predict <- combine %>% add_predictions(andrew_model)
+
+andrew_resid <- combine %>% add_residuals(andrew_model)
+```
+
+
+```{r}
+ggplot(data = combine) + 
+  geom_jitter(aes(x = `GDP`, y = `Energy Cost`)) 
+ 
+
+ggplot(andrew_resid) +
+  geom_jitter(aes(x= `GDP`, y= `resid`))+
+  geom_line(aes(x= `GDP`, y= `resid`, color = 'red'))
+  
+ggplot(andrew_predict) +
+  geom_line(aes(x= `GDP`, y= `pred`, color = 'red'))+
+  geom_jitter(aes(x= `GDP`, y= `pred`))
+```
+
+My model went to seek out to prove if my conclusion was right from Lab 13 and I can not say for sure that our conclusion that there is no correlation is correct. This means that my hypothesis was wrong again that there might be a possible correlation. From this model we can tell that there is more correlation in this trend then we orginally concluded from Lab 13 which is an improvement probably because I decided to include negative GDP.
+
 ### Brian
 
 What factors are causing our initial life expectancy vs GDP per capita model to be inaccurate? Are we able to manipulate and filter the data to recover a linear (or otherwise) pattern between life expectancy and GDP? 
@@ -195,14 +244,16 @@ ff <- China %>%
 
 ggplot() +
   geom_point(data = China, aes(pop/1000000,gdpPercap))+
-  geom_line(data = ff, aes(pop/1000000,predictions))+
-  geom_line(data = ff, aes(pop/1000000, residuals))+
-  ggtitle("Japan's GDP Compared to Population")+
-  ylab("Population in Millions")+
-  xlab("GDP per Capita")
-
+  geom_line(data = ff, aes(pop/1000000,predictions, color = 'prediction'))+
+  geom_line(data = ff, aes(pop/1000000, residuals, color = 'residual'))+
+  ggtitle("China's Predicted GDP Compared to Population")+
+  ylab("GDP per Capita")+
+  xlab("Population in Millions")
+#View(popmod)
 ```
-This graph shows the relationship between Population and GDP to be exponential. The risudual line clearly illustrates the distance between each point.
+This graph shows first that the linear model linking population to GDP fails. I hope to emphasize there is a clear increase between population and gdp. The model suggests that the GDP increases for every 4 million citizens, despite the actual population depmonstrating a clear exponential relationship. The risudual line clearly illustrates how the distance between the point and prediction becomes increasingly significant through time.
+
+If this queswtion were to be revisited I would, as Dr. Vance recommended, interpret my prediction as a non-linear model. Unfortunately as we haven't learned this I was unable to do this.
 
 ### Clint
 I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
@@ -254,6 +305,7 @@ While the line modeled by the linear model does appear to go through the center 
 ### Individual Contributions
 
 **Andrew:**
+I created a model in order to test my conclusions from Lab 13 and found that my modelk was sucessful. I learned once again that their is no correlation and my hypothesis was wrong again.
 
 **Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
 
@@ -262,3 +314,320 @@ Created a model once the link between GDP and life expectancy had been determine
 
 **Clint:**
 Created a model for my individual section to test interaction between different variables, primarily using the lm() application of R combined with ggplot. I also helped edit the entire document for errors.
+=======
+---
+title: 'Lab 14: Using modeling and iteration to expand a previous lab'
+author: "Brian Teklits, Charles Doremieux, Andrew MacLean, Clint LaBattaglia"
+date: "12/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(tidyverse)
+library(gapminder)
+library(modelr)
+```
+
+## Overall question
+
+We chose to revisit Lab 12: Gapminder Permutations, where we answered the following question:
+
+How does life expectancy differ between the richest and poorest countries (in terms of per capita gdp)?
+
+While we might anticipate that richer countries have longer life expectancies than poorer countries, verifying that this is the case can still provide useful insights. The degree to which they differ can inform us of how a country with a low life expectancy would want to improve their citizens health. Low life expectancy could be viewed as both a health infrastructure and economic problem.
+
+### Conclusions
+
+First, we split the data into the high and low gdp countries. For each set, we will build and analyze a model for how gdp per capita relates to life expectancy. 
+```{r}
+low_gdp <- gapminder %>%
+  filter(min_rank(gdpPercap)<=500)
+high_gdp <- gapminder %>%
+  filter(min_rank(desc(gdpPercap))<=500)
+```
+We opted to split these datasets further into training and testing groups, building our models with the training datasets then testing their effectiveness with the test datasets. We used 80% of the data for the training dataset in each case.
+```{r}
+# code referenced from https://stackoverflow.com/questions/17200114/how-to-split-data-into-training-testing-sets-using-sample-function
+bound <- floor((nrow(low_gdp))*.8)         #define % of training and test set
+
+low <- low_gdp[sample(nrow(low_gdp)), ]            
+low_train <- low[1:bound, ]              #get training set
+low_test <- low[(bound+1):nrow(low), ]
+
+# high dataset is same size, so we can reuse the same bound
+high <- high_gdp[sample(nrow(high_gdp)), ]           
+high_train <- high[1:bound, ]              
+high_test <- high[(bound+1):nrow(high), ]
+```
+
+#### Low GDP Model
+
+First, we'll look at the low GDP countries, building our model and then calculating predictions and residuals.
+```{r}
+low_model <- lm(lifeExp ~ gdpPercap, data = low_train)
+low_predict <- low_train %>% add_predictions(low_model)
+low_resid <- low_train %>% add_residuals(low_model)
+low_test_resid <- low_test %>% add_residuals(low_model)
+```
+Our linear model for life expectancy as a function of gdp per capita:
+```{r}
+ggplot()+
+  geom_line(data=low_predict,aes(gdpPercap,pred))+
+  ggtitle("Low GDP Linear Model")+
+  ylab("Predicted Life Expectancy")+
+  xlab("GDP per Capita")
+```
+
+The residuals for the training dataset:
+```{r}
+ggplot(low_resid,aes(gdpPercap,resid))+
+  geom_line()+
+  ggtitle("Low GDP Model Residuals for Training Data")+
+  xlab("GDP per Capita")
+```
+
+The residuals for the test dataset:
+```{r}
+ggplot(low_test_resid,aes(gdpPercap,resid))+
+  geom_line()+
+  ggtitle("Low GDP Model Residuals for Testing Data")+
+  xlab("GDP per Capita")
+```
+
+Our model for low gdp countries appears to have some issues, as we have large residuals in both datasets for the entire range of gdp per capita. There does seem to be relationship between life expectancy and gdp per capita, but other hidden variables are at play.
+
+#### High GDP Model
+
+Again, we build our linear model off the training dataset, then calculate predictions and residuals:
+```{r}
+high_model <- lm(lifeExp ~ gdpPercap, data = high_train)
+high_predict <- high_train %>% add_predictions(high_model)
+high_resid <- high_train %>% add_residuals(high_model)
+high_test_resid <- high_test %>% add_residuals(high_model)
+```
+
+The linear model for high GDP countries:
+```{r}
+ggplot()+
+  geom_line(data=high_predict,aes(gdpPercap,pred))+
+  ggtitle("High GDP Linear Model")+
+  ylab("Predicted Life Expectancy")+
+  xlab("GDP per Capita")
+```
+
+Residuals for the training data:
+```{r}
+ggplot(high_resid,aes(gdpPercap,resid))+
+  geom_line()+
+  ggtitle("High GDP Model Residuals for Training Data")+
+  xlab("GDP per Capita")
+```
+
+Residuals for the test data:
+```{r}
+ggplot(high_test_resid,aes(gdpPercap,resid))+
+  geom_line()+
+  ggtitle("High GDP Model Residuals for Testing Data")+
+  xlab("GDP per Capita")
+```
+
+The model for high GDP has some significant outliers: there are very rich countries with far lower life expectancies than predicted.
+
+So, while we found there is some validity to our original conclusion that life expectancy is related to gdp per capita, our model suggests there is a lot more going on. We have substantial outliers as well as inconsistent accuracy across the entire range of GDP. We will investigate some of the potential sources of our model's error in the individual sections.
+
+### Summary of Modeling Techniques
+
+We used the modelr methods for calculating predictions and residuals for our linear models. We also split our data into model building and model validation subsets. Additionally, we incorporated variable transformations and more complicated variable interactions in our other models.
+
+## Individual Sections
+
+### Andrew
+
+I want to use a model in order to confirm the claim or even find a different conclusion from the one I had from Lab 13. I want to see if my Lab 13 work was true by modeling it.
+
+```{r}
+ener <- read_csv("energy_production_total.csv")
+
+gdp <- read_csv("gdp_total_yearly_growth.csv")
+
+ener <- ener%>%
+  gather('1960':'2010', key = 'year', value = "Energy Cost")%>%
+  filter(!is.na(`Energy Cost`))
+
+gdp <- gdp%>%
+  gather('1960':'2010', key = 'year', value = "GDP")%>%
+  select('year','GDP','country')
+
+```
+
+
+```{r}
+combine <- gdp %>% inner_join(ener, by = c('country','year'))
+```
+
+
+```{r}
+andrew_model<- lm(`GDP` ~ `Energy Cost`, data = combine)
+
+andrew_predict <- combine %>% add_predictions(andrew_model)
+
+andrew_resid <- combine %>% add_residuals(andrew_model)
+```
+
+
+```{r}
+ggplot(data = combine) + 
+  geom_jitter(aes(x = `GDP`, y = `Energy Cost`)) 
+ 
+
+ggplot(andrew_resid) +
+  geom_jitter(aes(x= `GDP`, y= `resid`))+
+  geom_line(aes(x= `GDP`, y= `resid`, color = 'red'))
+  
+ggplot(andrew_predict) +
+  geom_line(aes(x= `GDP`, y= `pred`, color = 'red'))+
+  geom_jitter(aes(x= `GDP`, y= `pred`))
+```
+
+My model went to seek out to prove if my conclusion was right from Lab 13 and I can not say for sure that our conclusion that there is no correlation is correct. This means that my hypothesis was wrong again that there might be a possible correlation. From this model we can tell that there is more correlation in this trend then we orginally concluded from Lab 13 which is an improvement probably because I decided to include negative GDP.
+
+### Brian
+
+What factors are causing our initial life expectancy vs GDP per capita model to be inaccurate? Are we able to manipulate and filter the data to recover a linear (or otherwise) pattern between life expectancy and GDP? 
+
+This question is a natural follow up to our initial team findings. Our initial model fails quite poorly in some cases; by investigating further, we can try to establish if there is a relationship between the variables of interest, or if our model is flawed in some other way.
+
+We discovered that nearly all of the model's worst predictions are on countries in Africa and Asia. (Varies between different models as training data is sampled differently each model, but typically just 1 of the 30 worst predictions by residuals is not from these 2 continents.) So, we'll remove these two continents to see if we can get a more accurate model by excluding the largest outliers.
+```{r}
+g2 <- gapminder %>% 
+  filter(continent != "Africa" & continent != "Asia") %>%
+  mutate(lgdp = log10(gdpPercap))
+
+bounds <- floor((nrow(g2))*.8)         
+b_data <- g2[sample(nrow(g2)), ]            
+b_train <- b_data[1:bounds, ]              
+b_test <- b_data[(bounds+1):nrow(g2), ]
+```
+I opted to convert GDP per capita to lgdp, the base 10 log of GDP per capita in order to help coerce a linear relationship out of the variables. I also opted to include year and country and modeled using the "*" operation as these variables seemed likely to have interactions between each other as well as with life expectancy.
+```{r}
+model1 <- lm(lifeExp ~ lgdp*year*country, data = b_train)
+predict1 <- b_train %>% add_predictions(model1)
+resid1 <- b_train %>% add_residuals(model1)
+test_resid1 <- b_test %>% add_residuals(model1)
+
+ggplot(predict1,aes(lgdp,pred))+
+  geom_line()+
+  geom_smooth(se=FALSE)+
+  ggtitle("Life Expectancy vs GDP (Base 10 Log)")+
+  ylab("Predicted Life Expectancy")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+We find a fairly linear relationship between these variables: increasing GDP by a factor of 10 increases life expectancy by around 20 years, according to this model.
+
+Looking at the residuals:
+```{r}
+ggplot(resid1,aes(lgdp,resid))+
+  geom_line()+geom_smooth(se= FALSE)+
+  ggtitle("Residuals for Training Dataset")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+```{r}
+ggplot(test_resid1,aes(lgdp,resid))+
+  geom_line()+geom_smooth(se = FALSE)+
+  ggtitle("Residuals for Testing Dataset")+
+  xlab("Logarithm of GDP per Capita")
+```
+
+Overall, this model does quite a bit better at producing more accurate predictions than our initial model. The model predicts the test data with similar accuracy to the training data. By introducing both year and country into the model, we run the risk of overfitting; however, the test data suggests we've mostly avoided this issue.
+
+### Charles
+
+My goal was to strengthen the claim that Brian made to determine if there is any link between the size of the country and the life expectancy of that very country. Because China has a large population and a high GDP (as well as immense growth in both) I believe it is a good guess to see if population links itself GDP.
+
+```{r}
+China <- gapminder %>%
+  filter(country == 'China')
+popmod <- lm(China$gdpPercap~pop,data=China)
+#View(gapminder)
+
+ff <- China %>%
+  data_grid(pop=seq_range(pop, 12)) %>%
+  add_predictions(popmod,'predictions') %>%
+  add_residuals(popmod, 'residuals')
+
+ggplot() +
+  geom_point(data = China, aes(pop/1000000,gdpPercap))+
+  geom_line(data = ff, aes(pop/1000000,predictions, color = 'prediction'))+
+  geom_line(data = ff, aes(pop/1000000, residuals, color = 'residual'))+
+  ggtitle("China's Predicted GDP Compared to Population")+
+  ylab("GDP per Capita")+
+  xlab("Population in Millions")
+#View(popmod)
+```
+This graph shows first that the linear model linking population to GDP fails. I hope to emphasize there is a clear increase between population and gdp. The model suggests that the GDP increases for every 4 million citizens, despite the actual population depmonstrating a clear exponential relationship. The risudual line clearly illustrates how the distance between the point and prediction becomes increasingly significant through time.
+
+If this queswtion were to be revisited I would, as Dr. Vance recommended, interpret my prediction as a non-linear model. Unfortunately as we haven't learned this I was unable to do this.
+
+### Clint
+I wanted to see how Child Mortality was related to birthrate in Lab 13, but didn't have the tools model the data and ascertain the slope of that best fit line. Now I can take a look at the data in a more detailed fashion. I decided to look at the entire dataset for both variables instead of the top and bottom fifty for a specific year in order to search for a global long term trend, despite the large amount of data points. 
+```{r}
+child_mort <- read_csv("child_mortality_0_5_year_olds_dying_per_1000_born.csv")
+
+birthrate <- read_csv("children_per_woman_total_fertility.csv")
+
+child_mort <- child_mort%>%
+  gather('1800':'2018', key = 'year', value = "Child Mortality")
+
+birthrate <- birthrate%>%
+  gather('1800':'2018', key = 'year', value = "Birthrate")
+
+new_mort <- child_mort%>%
+  filter(!is.na(`Child Mortality`))%>%
+  arrange(desc(`Child Mortality`))%>%
+  group_by(country)
+
+birth <- birthrate%>%
+  filter(!is.na(`Birthrate`))%>%
+  arrange(desc(`Birthrate`))%>%
+  group_by(country)
+```
+
+```{r}
+combined_data_clint <- new_mort%>% inner_join(birth, by = c('country', 'year'))%>%
+  group_by(country)
+```
+
+
+```{r}
+clints_model<- lm(`Birthrate` ~ `Child Mortality`, data = combined_data_clint)
+clint_predict <- combined_data_clint %>% add_predictions(clints_model)
+clint_resid <- combined_data_clint %>% add_residuals(clints_model)
+```
+
+```{r}
+ggplot(data = combined_data_clint) + 
+  geom_jitter(aes(x = `Child Mortality`, y = `Birthrate`)) +
+  geom_abline(slope = 0.007199, intercept = 3.307237,)
+
+ggplot(clint_resid) +
+  geom_line(aes(x= `Child Mortality`, y= `resid`))
+```
+
+While the line modeled by the linear model does appear to go through the center of he dataset, there are a lot of data points that are rather far away from the line suggesting that the model isn't doing a especially great job of predicting some of the data. However, the general trend of the data suggests a positive slope and the best fit line produced by the linear model also has a positive slope leading to the conclusion that there is a positive relationship between Child Mortality Rate and Birthrate. 
+
+### Individual Contributions
+
+**Andrew:**
+I created a model in order to test my conclusions from Lab 13 and found that my modelk was sucessful. I learned once again that their is no correlation and my hypothesis was wrong again.
+
+**Brian:** I built a variety of models for both the team and individual sections to test different interactions. In doing so, I used various transformations (logarithmic variables/predictions/residuals), as well as incorporating the training and testing data split methods.
+
+**Charles:**
+Created a model once the link between GDP and life expectancy had been determined to link population to GDP. Hence, population can potentially be linked to life expectancy. This is to strengthen the claims made in the original investigation.
+
+**Clint:**
+Created a model for my individual section to test interaction between different variables, primarily using the lm() application of R combined with ggplot. I also helped edit the entire document for errors.
+>>>>>>> master

@@ -8,6 +8,10 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE,message=FALSE)
 library(tidyverse)
+library(maps)
+library(lubridate)
+# install.packages("openintro")
+library(openintro)
 # Data from: https://www.kaggle.com/sobhanmoosavi/us-accidents
 # LARGE: do not upload to github
 accidents <- read_csv("US_Accidents_May19.csv")
@@ -16,9 +20,11 @@ accidents <- read_csv("US_Accidents_May19.csv")
 
 ## Main Question
 
-Your team has been hired as data science collaborators by a domain expert to answer an overall question and 4-5 sub-questions. Describe who the domain expert is, what questions you will be answering, why the questions are important/interesting, and what data you will be using. Provide a link or reference to the dataset(s).
-
 **Domain Expert and Dataset:**
+
+The domain expert is the NHTSA, the National Highway Traffic Safety Administration.
+
+The dataset we are using can be found [here.](https://www.kaggle.com/sobhanmoosavi/us-accidents) It contains 2.25 million records of accidents from 49 different states, starting in February 2016 until March 2019. It includes data on the severity of the accident, where and when the accident occurred, the weather at the time of the accident, and various information about the nearby surroundings. 
 
 **Main Question & it's Importance:**
 Lead with your main overall question, why it’s important (and why those reasons are important), 
