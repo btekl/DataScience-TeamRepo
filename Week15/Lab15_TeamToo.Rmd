@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE,message=FALSE)
+library(modelr)
 library(tidyverse)
 library(maps)
 library(lubridate)
@@ -61,11 +62,23 @@ cd_data <- accidents %>%
   mutate(a_start = ymd_hms(Start_Time)) %>%
   mutate(a_end = ymd_hms(End_Time)) %>%
   mutate(accident_time = difftime(a_end, a_start, units = "mins")) %>%
+  filter(!is.na(`Humidity(%)`), !is.na(accident_time)) %>%
+  filter(accident_time >= 0 & accident_time <= 4320) %>%
   select(a_start, a_end, accident_time, `Humidity(%)`)
 ```
 
 ```{r}
+humid_time_model <- lm(`Humidity(%)` ~ cd_data$accident_time, data = cd_data)
 
+humid_preds <- cd_data %>%
+  data_grid(`Humidity(%)` = seq_range(`Humidity(%)`, 2178823)) %>%
+  add_predictions(humid_time_model,'predictions') %>%
+  add_residuals(humid_time_model, 'residuals')
+```
+
+```{r}
+ggplot() +
+  geom_point(data = cd_data, aes(`Humidity(%)`,accident_time))
 ```
 
 ### Clint
