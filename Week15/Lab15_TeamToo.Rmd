@@ -56,6 +56,18 @@ What are the ethical implications of your findings, conclusions, or recommendati
 
 ### Charles
 
+```{r}
+cd_data <- accidents %>%
+  mutate(a_start = ymd_hms(Start_Time)) %>%
+  mutate(a_end = ymd_hms(End_Time)) %>%
+  mutate(accident_time = difftime(a_end, a_start, units = "mins")) %>%
+  select(a_start, a_end, accident_time, `Humidity(%)`)
+```
+
+```{r}
+
+```
+
 ### Clint
 
 ## Reflections on Lab 2
