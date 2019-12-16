@@ -173,7 +173,6 @@ The next step was to go though and clean the data.
 andrewsData <- andrewsData%>%
   filter( !is.na(accidenTime),!is.na(`Temperature(F)`)) %>%
   filter(accidenTime >= 0 & accidenTime <= 4400) %>%
-  filter(andrewsData$`Temperature(F)`>= -40 & andrewsData$`Temperature(F)`<= 120)%>%
   select(sTime, eTime, accidenTime, `Temperature(F)`, `Severity`)
 
 ```
@@ -193,7 +192,7 @@ timeModelTemp <- lm(`Temperature(F)` ~ andrewsData$accidenTime, data = andrewsDa
 After, I created predictions which I will later compare to the linear model.
 ```{r}
 predsTemp <- andrewsData %>%
-  data_grid(`Temperature(F)` = seq_range(`Temperature(F)`, 2180995))%>%
+  data_grid(`Temperature(F)` = seq_range(`Temperature(F)`, 2181028))%>%
   add_residuals(timeModelTemp, 'reds')%>%
   add_predictions(timeModelTemp,'preds') 
 ```
