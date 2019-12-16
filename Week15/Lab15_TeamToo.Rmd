@@ -47,7 +47,68 @@ What is the answer to the question? How does this relate to the overall question
 What are the ethical implications of your findings, conclusions, or recommendations?
 
 ### Andrew
+  Questions Ideas: For the final project I decided I wanted to check if temperature played a part in accident duration as well as severity. I wanted to use accident duration  in order to plot my data to get a better understanding of it on a continous scale. In addition, I wanted to check if either of these two factors play a part in severity.
+  My first step was to change the difference between the start and end times into units of minutes. I did this in order to get a better understanding about exactly whats happening.
+```{r}
+andrewsData <- accidents %>%
+  mutate(eTime = ymd_hms(End_Time)) %>%
+  mutate(sTime = ymd_hms(Start_Time)) %>%
+  mutate(accidenTime = difftime(eTime,sTime , units = "mins"))
+```
+The next step was to go though and clean the data.
+```{r}
+andrewsData <- andrewsData%>%
+  filter( !is.na(accidenTime),!is.na(`Temperature(F)`)) %>%
+  filter(accidenTime >= 0 & accidenTime <= 4400) %>%
+  filter(andrewsData$`Temperature(F)`>= -40 & andrewsData$`Temperature(F)`<= 120)%>%
+  select(sTime, eTime, accidenTime, `Temperature(F)`, `Severity`)
 
+```
+Then I wanted to see the number of accidents per severity when there is a known temperature. The reason for this is to give myself a hint for how I think this question will turn out. I know now that a large majority of the accidents are of the lowest severity. The lowest severity is also the majority of the dataset.
+```{r}
+ggplot(data = andrewsData, mapping = aes(x = `Severity`, y = `Temperature(F)` ))+
+  geom_col()+
+  ggtitle("Number of Accidents per Severity Level (w/ Known Temperature)")+
+  xlab("Severity")+
+  ylab("Number of Accidents")+
+  xlim(c(1,5))
+```
+Next, I wanted to create a linear model in order to better understand the data I am looking out.
+```{r}
+timeModelTemp <- lm(`Temperature(F)` ~ andrewsData$accidenTime, data = andrewsData)
+```
+After, I created predictions which I will later compare to the linear model.
+```{r}
+predsTemp <- andrewsData %>%
+  data_grid(`Temperature(F)` = seq_range(`Temperature(F)`, 2180995))%>%
+  add_residuals(timeModelTemp, 'reds')%>%
+  add_predictions(timeModelTemp,'preds') 
+```
+Now that I have all the data I need, it is time to model and find some conclusions.
+```{r}
+ggplot(data = andrewsData, mapping = aes(x = `accidenTime`, y = `Temperature(F)`, color =  `Severity`))+
+  geom_point()+
+  ggtitle("Temperature as a Result of Accident Time")+
+  xlab("Time in Minutes")+
+  ylab("Temparature")
+```
+
+```{r}
+ggplot(data = predsTemp, mapping = aes(x = `preds`, y = `Temperature(F)`))+
+  geom_point()+
+  ggtitle("Predictions of Temperature versus Accident Time")+
+  xlab("Time in Minutes")+
+  ylab("Temperature")
+```
+Although this is a prediction graph, it is interesting to see that it seems when the temperature is higher, there is morw likely chnce that the accident will have a longer duration.
+```{r}
+ggplot(data = predsTemp, mapping = aes(x = `reds`, y = `Temperature(F)`))+
+  geom_line()+
+  ggtitle("Residuals of Temperature versus Accident Time")+
+  xlab("Time in Minutes")+
+  ylab("Residuals")
+```
+After looking at the predictions against the actual residuals, it is interesting to see that both suggest that there are more accidents at higher temperatures. Along with that conclusion, it seems that accidents at higher temperatures also take longer. Now we can conclude that higher temperatures do play a large part in the duration and amount of accidents.
 ### Brian
 
 **Question:** What regions of the country are prone to serious accidents? 
