@@ -59,6 +59,7 @@ What are the ethical implications of your findings, conclusions, or recommendati
 
 My goal is to determine if there is a positive relationship between Humidity and the duration of an accident. My intuition is that the more humidity, the less traction there will be on the road, shortening the length of an accident. The duration of an accident can help suggest the severity of the accident and the effect it will have on the flow of traffic. My expectation is that if I can demonstrate that Humidity is positively or negatively associated with accident duration, I can make a determination on which states are the most likely to have short or long accidents.
 
+First I need to create a model of the time an accident takes and seperate outlier values.
 ```{r}
 cd_data <- accidents %>%
   mutate(a_start = ymd_hms(Start_Time)) %>%
@@ -69,6 +70,7 @@ cd_data <- accidents %>%
   select(a_start, a_end, accident_time, `Humidity(%)`)
 ```
 
+The model needs to include predictions and residuals.
 ```{r}
 humid_time_model <- lm(cd_data$accident_time ~ `Humidity(%)`, data = cd_data)
 
@@ -78,6 +80,7 @@ humid_preds <- cd_data %>%
   add_residuals(humid_time_model, 'residuals')
 ```
 
+The view of the raw data.
 ```{r}
 ggplot() +
   geom_point(data = cd_data, aes(`Humidity(%)`,accident_time))+
@@ -86,6 +89,7 @@ ggplot() +
   ylab("Accident Time (minutes)")
 ```
 
+Predictions of the data.
 ```{r}
 ggplot()+
   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$predictions))+
@@ -94,14 +98,14 @@ ggplot()+
   ylab("Accident Time (minutes)")
 ```
 
-# ```{r}
-# ggplot()+
-#   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
-#   ggtitle("Residuals of Humidities Related to Accident Duration")+
-#   xlab("Humidity (%)")+
-#   ylab("Accident Time (minutes)")
-# ```
-# 
+```{r}
+ggplot()+
+  geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
+  ggtitle("Residuals of Humidities Related to Accident Duration")+
+  xlab("Humidity (%)")+
+  ylab("Accident Time (minutes)")
+```
+
 ```{r}
 # perm_mean <- function(perms = 1000, x, y)
 # {
@@ -205,6 +209,7 @@ Individually, write a paragraph reflecting on: how have your six-month or 5-year
 **Brian:**
 
 **Charles:** 
+  My original 6-month and five-year year plans have not changed, but my attitudde towards them has certainly changed. I still want to study under some of the greatest voices in philosophy (one of my majors) while working towards some meaningful contribution within my fields of interest. I have been working towards those goals and this semester was invited to take PHIL 6380 (Graduate Metaphysics) by a professor. I have set my eyes on my 5 year goal, and I am very nervous about it. I hope I can achieve what I'm setting out for, though I am nervous I'll fail. I learned a lot about project managing mainly because I've failed a lot this semester. I struggled to manage and process my internal stress and translate it to success externally. These are things I would have liked to work on more. Furthermore, I needed to motivate myself to learn outside of the classroom. I was very dependent on the help of my team-mates and I wish I could have been more independent.
 
 **Clint:**
   Since the beginning of the semester my 6-month to five-year goals have changed in that I have less confidence my ability to thrive in a coding driven profession than I had at the beginnning of the semester. This is useful information to know as I have been considering going into a business masters program in which coding and statistics would feature prominently. Now I am wondering if this is the right path after all. In this course I learned what feels like the basics of programming in R, though I am not a proficcient as a I could or should be, and I also feel as though I learned about the basics of statistics in general which has been really interesting. If I could past me advice I would tell myself to do all the exercises when going through the R4DS textbook, experiment when doing the labs instead of doing the bare minimum, communicate more concisely with my teammates, and go to office hours w/ the professor and TAs.
@@ -215,5 +220,7 @@ Individually, write a paragraph reflecting on: how have your six-month or 5-year
 **Brian:**
 
 **Charles:** 
+  I used various modelr methods to calculate several predictions and residuals for our linear models. I also split data into model building and model validation subsets. By incorporating variable transformations I was able to draw a conclusion on the interactions between Humidity and the period for which an accident lasts.
+
 
 **Clint:**
