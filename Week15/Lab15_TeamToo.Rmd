@@ -13,10 +13,11 @@ library(maps)
 library(lubridate)
 # install.packages("openintro")
 library(openintro)
+# install.packages("noncensus")
+library(noncensus)
 # Data from: https://www.kaggle.com/sobhanmoosavi/us-accidents
 # LARGE: do not upload to github
 accidents <- read_csv("US_Accidents_May19.csv")
-
 ```
 
 ## Main Question
@@ -28,23 +29,136 @@ The domain expert is the NHTSA, the National Highway Traffic Safety Administrati
 The dataset we are using can be found [here.](https://www.kaggle.com/sobhanmoosavi/us-accidents) It contains 2.25 million records of accidents from 49 different states, starting in February 2016 until March 2019. It includes data on the severity of the accident, where and when the accident occurred, the weather at the time of the accident, and various information about the nearby surroundings. 
 
 **Main Question & it's Importance:**
-Lead with your main overall question, why it’s important (and why those reasons are important), 
+
+What are the overall demographics of the dataset? Can we identify places which are more prone to severe accidents than others?
+
+These questions help us get a better understanding of the overall trends of the dataset. Then, we can attempt to identify problem areas which warrant action or further investigation as to why they are accident prone.
 
 **Answer:**
-your answer/conclusion, 
 
-**Recommendation:**
+#### Overall Demographics
+
+The dataset contains longitude and latitude data for each accident. The total records of accidents by state:
 ```{r}
+acc_count <- accidents %>%
+  group_by(State) %>%
+  summarize(total_acc = n()) %>%
+  mutate(region = tolower(abbr2state(State)))
 
+united_states <- map_data("state")
+overall <- united_states %>%
+  full_join(acc_count, by = "region")
+
+ggplot(overall, aes(x=long,y=lat,group=group))+
+  geom_polygon(aes(fill=total_acc),color = "black")+
+  scale_fill_gradientn("Accidents",colours=rev(heat.colors(10)),na.value="grey90")+
+  coord_quickmap()+
+  ggtitle("Number of Accidents by State")+
+  xlab("Longitude")+
+  ylab("Latitude")
 ```
 
-recommendation, and a plot communicating your conclusion or basis for your recommendation. 
+The number of accidents seems to follow overall population trends, with California, Texas and Florida, the three largest states by population, producing the most accidents.
+
+The dataset provides a few different ways to measure the severity of accidents. Here, we will focus on the severity measure, which describes the duration of impact of an accident on traffic flow. Severity ranges from 0 to 4, with 0 having no impact on traffic and 4 having a long lasting impact.
+
+The overall breakdown of severity:
+```{r}
+accidents %>%
+  group_by(Severity) %>%
+  count()
+```
+
+We see very few accidents of 0 or 1 severity: less than a thousand out of 2.2 million total. It seems reasonable to conclude that very minor accidents are resolved without the need to report, not that they do not occur often. We'll focus on accidents with a severity of 4, as these represent the top 3% of longest delays: reducing occurances of these accidents will increase road safety and improve overall traffic flows.
+
+#### Severe Accidents
+
+```{r}
+sev_count <- accidents %>%
+  group_by(State) %>%
+  filter(Severity == 4) %>%
+  summarize(total_acc = n()) %>%
+  mutate(region = tolower(abbr2state(State)))
+
+sev_4 <- united_states %>%
+  full_join(sev_count, by = "region")
+
+ggplot(sev_4, aes(x=long,y=lat,group=group))+
+  geom_polygon(aes(fill=total_acc),color = "black")+
+  scale_fill_gradientn("Accidents",colours=rev(heat.colors(10)),na.value="grey90")+
+  coord_quickmap()+
+  ggtitle("Number of Severe Accidents by State")+
+  xlab("Longitude")+
+  ylab("Latitude")
+```
+
+The top 10 in total severe accidents:
+```{r}
+sev_count %>%
+  arrange(desc(total_acc))
+```
+While overall accident occurances generally followed population trends, severe accidents break this trend in a few notable ways. Texas, the second most populous state, has the 10th most severe accidents, while Maryland, the 19th most populous state, ranks 8th. This suggests Maryland is a potential state which can make improvements in road safety.
+
+Looking at the accidents in Maryland in detail:
+```{r}
+md_s <- accidents %>%
+  filter(State == "MD"& Severity == 4)
+md <- map_data("state", region ="maryland")
+bmore <- tibble(lat = 39.2904, long = -76.6122)
+dc <- tibble(lat = 38.9072, long = -77.0369)
+
+ggplot()+
+  geom_polygon(data = md, aes(long,lat,group = group), fill = "white",color = "black")+
+  coord_quickmap()+
+  geom_point(data = md_s, aes(Start_Lng,Start_Lat), alpha=.05)+
+  geom_point(data=bmore, aes(long, lat, color = "Baltimore"), size = 2)+
+  geom_point(data = dc, aes(long,lat, color = 'Washington DC'),size = 2)+
+  scale_color_manual(name = "", values = c("Baltimore" = "red",`Washington DC` = "blue"))+
+  ggtitle("Severe Accidents in Maryland")+
+  xlab("")+
+  ylab("")
+```
+
+Accidents tend to cluster around the two main metropolitan areas and along major highways. 
+
+We've found reason to suggest that population is not the only factor at play when looking at severe accidents. In order to verify this claim, we can build a model to predict the number of severe accidents using population and examine its predictive power. The dataset doesn't contain information about population, so we must add it from another source. We used the noncensus package to get 2010 census population data.
+
+```{r}
+data(states)
+with_pop <- accidents %>%
+  full_join(states,by = c("State" = "state"))
+
+test_data <- with_pop %>%
+  group_by(population,State) %>%
+  filter(Severity == 4) %>%
+  summarize(accident_count = n()) %>%
+  filter(accident_count > 50) # dropping states with very low number of observations
+test_data$population <- as.numeric(test_data$population)
+
+pop_mod <- lm(accident_count ~ population, data = test_data)
+mod_pred <- test_data %>% add_predictions(pop_mod)
+mod_resid <- test_data %>% add_residuals(pop_mod)
+```
+
+Looking at the residuals for our model:
+```{r}
+ggplot(mod_resid,aes(population,resid))+
+  geom_line()
+```
+
+The model does a poor job overall, with large residuals across the full range of population sizes. Looking at the states with the largest (positive) residuals:
+```{r}
+mod_resid %>%
+  arrange(desc(resid))
+```
+
+Most of the states with the largest number of severe accidents are poorly predicted by the model. One notable exception is California, which the model predicts fairly accurately. In particular, the model doesn't predict Maryland accurately, supporting our claim that accident occurances in Maryland are not related to population.
+
+**Recommendation:**
+
+Based on these findings, we recommend additional research into Maryland road conditions and traffic patterns. We're not able to pinpoint why Maryland roads have an elevated rate of severe accidents, but evidence suggests improvements can be made.
 
 ## Individual Sections
-
-What is the answer to the question? How does this relate to the overall question?
-
-What are the ethical implications of your findings, conclusions, or recommendations?
 
 ### Andrew
 
@@ -52,9 +166,7 @@ What are the ethical implications of your findings, conclusions, or recommendati
 
 **Question:** What regions of the country are prone to serious accidents? 
 
-By investigating where serious accidents occur, we can attempt to find roads/regions where efforts to improve road safety should be improved.
-
-NEW TOOLS
+By investigating where serious accidents occur, we can attempt to find roads/regions where efforts to improve road safety should be improved. This question is a followup to the team question, where we attempt to perform a similar analysis using a different metric to measure the severity of an accident.
 
 The dataset contains Traffic Message Codes (TMC) for each recorded accident. There are thousands of codes, which can be viewed [here](https://wiki.openstreetmap.org/wiki/TMC/Event_Code_List); to answer this question, I'll use the following two codes:
 
@@ -74,8 +186,7 @@ count <- accidents %>%
   group_by(State) %>%
   summarize(total_accidents = n())
 
-states <- map_data("state")
-serious_accidents <- states %>%
+serious_accidents <- united_states %>%
   full_join(serious, by = "region") %>%
   full_join(count) %>%
   mutate(prop = n/total_accidents)
@@ -244,6 +355,7 @@ ggplot()+
 The model confirms my suspicion that as the Humidity(%) increases the length of an accident shortens, though the model is not absolute in its certainty. Nevertheless there is a general trend to shorter accidents when Humidity is high. The model suggests Humidity can be used to predict the duration of an accident by: -0.2375825(Humidity) with the intercept 111.0417.
 
 ### Clint
+
 Question Ideas: Explore relationship between severity of accidents and stoplights + percentage of accidents with each of the binary variables. 
 uses map functino to take percentiles if true false sections and graph + permutation test to see if there is correlation between severity of accident and presence of stoplight or just most common accident indicator +
 Question: Which of the true/false variables is the greatest predictor of an accident, and are any of them related to a the probability of a more severe accident? This question is important/interesting because if a majority of accidents occur near specific locations, like a traffic signal or railway crossing then  countermeassures like positioning police vehicles nearby or placing extra warning signs in the area can be put in place which may save lives. Also if some presences are especially indicative of more severe accidents, those area could be targeted for increased safty measures. 
@@ -315,27 +427,28 @@ Conclusions: From my analysis I can see that the most common indicator is no ind
 
 ## Reflections on Lab 2
 
-As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
-
 Our team goals were to do well in the course, gain a greater understanding of the use of R and of data science in general, and not make any enemies. We can say with confidence that we accomplised the first two goals. The third may have been a little less successful. If we could travel back in time, there are three things we would do differently. First, we would meet up more often in order to work on the project in a more collaborative fashion rather than individuals doing their sections on their own. Second, we would make more productive use of our time in class as an oppurtunity to deepen our understanding of the material by asking more questions of the profesor. Third, we would communicate more often about not only the labs but the readings to ensure that everyone is at a similar comfort level with new applications and statistical applications. While this was a successful semester for our group in terms of observed grades, there was still room for improvement in the areas of teamwork, communication, and understanding of the material. 
-### Individual Reflections
 
-Individually, write a paragraph reflecting on: how have your six-month or 5-year goals changed? What did you learn/accomplish in this course? If you could give yourself advice at the beginning of the semester, what would you tell yourself to keep doing, stop doing, and start doing?
+### Individual Reflections
 
 **Andrew:**
 
-**Brian:**
+**Brian:** My overall goals haven't changed throughout the semester. I learned a great deal throughout the semester, in particular, linear modeling/residuals and permutation tests stand out for me. Methods of quantifying the effectiveness of statistics and analysis are particularly interesting, as prior to learning these there is a lot of "hand wavy" justifications without the concrete mathematical basis to test these justifications. 
+
+I found it helpful to first build an outline for each writeup, with sections and notes on what to include in each section. This process ensured a well structured report, as well as a solid understanding of the needed deliverables for each report. My team in particular may have benefitted more had I contributed slightly less to the overall reports. In taking the lead on the writeups, overall quality was consistent, but my teammates would surely have benefitted from working through more of the material on their own (in my opinion). Though I probably received and ignored this advice at the start of the semester, I recommend staying ahead of the readings, particularly early on in the course. Multiple times throughout the semester I struggled through a problem to eventually reach a patchwork solution only to realize my problem was addressed simply and directly in the upcoming readings.
 
 **Charles:** 
   My original 6-month and five-year year plans have not changed, but my attitudde towards them has certainly changed. I still want to study under some of the greatest voices in philosophy (one of my majors) while working towards some meaningful contribution within my fields of interest. I have been working towards those goals and this semester was invited to take PHIL 6380 (Graduate Metaphysics) by a professor. I have set my eyes on my 5 year goal, and I am very nervous about it. I hope I can achieve what I'm setting out for, though I am nervous I'll fail. I learned a lot about project managing mainly because I've failed a lot this semester. I struggled to manage and process my internal stress and translate it to success externally. These are things I would have liked to work on more. Furthermore, I needed to motivate myself to learn outside of the classroom. I was very dependent on the help of my team-mates and I wish I could have been more independent.
 
 **Clint:**
   Since the beginning of the semester my 6-month to five-year goals have changed in that I have less confidence my ability to thrive in a coding driven profession than I had at the beginnning of the semester. This is useful information to know as I have been considering going into a business masters program in which coding and statistics would feature prominently. Now I am wondering if this is the right path after all. In this course I learned what feels like the basics of programming in R, though I am not a proficcient as a I could or should be, and I also feel as though I learned about the basics of statistics in general which has been really interesting. If I could past me advice I would tell myself to do all the exercises when going through the R4DS textbook, experiment when doing the labs instead of doing the bare minimum, communicate more concisely with my teammates, and go to office hours w/ the professor and TAs.
+  
 ### Individual Contributions
 
 **Andrew:**
 
-**Brian:**
+**Brian:** 
+I found the dataset, and used the latitude and longitude data to produce the map plots. I found the brief book section on plotting spatial data interesting, so I wanted to make an attempt at plotting map data.
 
 **Charles:** 
   I used various modelr methods to calculate several predictions and residuals for our linear models. I also split data into model building and model validation subsets. By incorporating variable transformations I was able to draw a conclusion on the interactions between Humidity and the period for which an accident lasts.
