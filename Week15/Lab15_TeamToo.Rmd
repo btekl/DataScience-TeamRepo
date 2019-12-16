@@ -78,7 +78,24 @@ humid_preds <- cd_data %>%
 
 ```{r}
 ggplot() +
-  geom_point(data = cd_data, aes(`Humidity(%)`,accident_time))
+  geom_point(data = cd_data, aes(`Humidity(%)`,accident_time))+
+  ggtitle("View of Humidity as it Relates to Accident Duration")+
+  xlab("Humidity (%)")+
+  ylab("Accident Time (minutes)")
+```
+```{r}
+ggplot()+
+  geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$predictions))+
+  ggtitle("Predictions of Humidities Related to Accident Duration")+
+  xlab("Humidity (%)")+
+  ylab("Accident Time (minutes)")
+```
+```{r}
+ggplot()+
+  geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
+  ggtitle("Residuals of Humidities Related to Accident Duration")+
+  xlab("Humidity (%)")+
+  ylab("Accident Time (minutes)")
 ```
 
 ### Clint
