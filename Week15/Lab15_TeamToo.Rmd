@@ -32,6 +32,7 @@ Lead with your main overall question, why it’s important (and why those reason
 
 **Answer:**
 your answer/conclusion, 
+
 **Recommendation:**
 ```{r}
 
@@ -41,12 +42,6 @@ recommendation, and a plot communicating your conclusion or basis for your recom
 
 ## Individual Sections
 
-Each teammate must apply “recently learned” programming tools to answer a subquestion that will help your team answer the overall question. The subquestions must be different from the overall team question. Each subquestion should get its own subsection in the team report and should follow the format for statistical analyses that we have learned in class.
-
-What is the question? Why is it important/interesting?
-
-What new tools did you use?
-
 What is the answer to the question? How does this relate to the overall question?
 
 What are the ethical implications of your findings, conclusions, or recommendations?
@@ -54,6 +49,128 @@ What are the ethical implications of your findings, conclusions, or recommendati
 ### Andrew
 
 ### Brian
+
+**Question:** What regions of the country are prone to serious accidents? 
+
+By investigating where serious accidents occur, we can attempt to find roads/regions where efforts to improve road safety should be improved.
+
+NEW TOOLS
+
+The dataset contains Traffic Message Codes (TMC) for each recorded accident. There are thousands of codes, which can be viewed [here](https://wiki.openstreetmap.org/wiki/TMC/Event_Code_List); to answer this question, I'll use the following two codes:
+
+* 202	(Q) serious accident(s)		
+* 203	multi-vehicle accident (involving Q vehicles)
+
+The dataset doesn't contain the Q variable referenced, but we can still use these codes to pinpoint accidents which involved multiple vehicles, or were deemed serious.
+
+To get an idea of what regions to focus on, I opted to look at the state level. For each state, we look at what proportion of total accidents were serious. 
+```{r}
+serious <- accidents %>%
+  filter(TMC == 202|TMC == 203) %>%
+  group_by(State) %>%
+  count() %>%
+  mutate(region = tolower(abbr2state(State))) # openintro package function to convert abbreviation names to full state name
+count <- accidents %>%
+  group_by(State) %>%
+  summarize(total_accidents = n())
+
+states <- map_data("state")
+serious_accidents <- states %>%
+  full_join(serious, by = "region") %>%
+  full_join(count) %>%
+  mutate(prop = n/total_accidents)
+```
+
+We can use the longitude and latitude data to plot this on a map:
+```{r}
+ggplot(serious_accidents, aes(x=long,y=lat,group=group))+
+  geom_polygon(aes(fill=prop),color = "black")+
+  scale_fill_gradientn(colours=rev(heat.colors(10)),na.value="grey90")+
+  coord_quickmap()+
+  ggtitle("Proportion of Serious Accidents by State")+
+  xlab("Longitude")+
+  ylab("Latitude")
+```
+
+Massachusetts stands out as an outlier, with almost 6% of accidents being serious. We also note there are 6 states with 0 recorded serious accidents, suggesting the use of TMC codes may be inconsistent across regions.
+
+Looking specifically at Massachusetts:
+```{r}
+ma_s <- accidents %>%
+  filter(State == "MA"& (TMC == 202|TMC == 203))
+ma <- map_data("state", region ="massachusetts")
+boston <- tibble(lat = 42.3601, long = -71.0589)
+
+ggplot()+
+  geom_polygon(data = ma, aes(long,lat,group = group), fill = "white",color = "black")+
+  coord_quickmap()+
+  geom_point(data = ma_s, aes(Start_Lng,Start_Lat), alpha=.05) +
+  geom_point(data = boston, aes(long,lat,color="Boston"), size = 3)+
+  scale_color_manual(name = "", values = c("Boston" = "red"))+
+  ggtitle("Serious Accident Occurances in MA")+
+  xlab("")+
+  ylab("")
+```
+
+We see that serious accidents are clustered around Boston. Before investigating this further, we'll run a permutation test on the proportion of serious accidents in Massachusetts, to get an idea of the significance of our result. 
+
+The null hypothesis is that there is no difference in proportion of serious accidents between the proportion of serious accidents in Massachusetts and the nationwide proportion of serious accidents. The alternate hypothesis is that there is a difference between the two.
+
+First, we'll need the national proportion of serious accidents:
+```{r}
+total_count <- accidents %>%
+  count()
+ser_count <- accidents %>%
+  filter(TMC == 202|TMC == 203) %>%
+  count() 
+ser_count/total_count
+```
+
+Only .8% of accidents nationwide are categorized as serious.
+Our actual proportion of serious accidents in Massachusetts:
+```{r}
+MA_count <- accidents %>%
+  filter(State == "MA") %>%
+  count()
+MA_serious <- accidents %>%
+  filter(TMC == 202|TMC == 203) %>%
+  filter(State == "MA") %>%
+  count() 
+(MA_actual <- MA_serious/MA_count)
+```
+```{r}
+ma_data <- accidents %>%
+  filter(State == "MA") %>%
+  count()
+perm_test <- numeric(1000)
+for(i in seq_along(perm_test))
+{
+  samp <- sample_n((accidents), ma_data$n) # random sample the same size as massachusetts data
+  samp_ser <- samp %>%
+    filter(TMC == 202 | TMC == 203) %>%
+    summarize(serious = n()) %>%
+    mutate(prop = serious/ma_data$n)
+  perm_test[i] <- samp_ser$prop
+}
+
+ggplot(tibble(perm_test),aes(perm_test))+
+  geom_histogram(bins = 50)+
+  geom_vline(xintercept = MA_actual$n, color = "red")+
+  ggtitle("Permutation Test for Proportion of Serious Accidents")+
+  xlab("Proportion")+
+  ylab("Number of Tests")
+```
+
+```{r}
+sum(perm_test > MA_actual)/length(perm_test)
+```
+Our result is in the 99th percentile of results, suggesting we have a significant enough result to reject the null hypothesis, and assert that Massachusetts has a different proportion of serious accidents from the national average.
+
+Since our result is significant, we're left to ask: Why does Boston have a much larger rate of serious accidents compared to other major cities? If there was nothing special about Boston, we might expect to see similar proportions around other major cities.
+
+Answering this question requires additional data, so I have two recommendations. First, investigate the usage of TMC codes across states. We had some evidence to suggest TMC codes are not widely used in some states, so one explanation is that Massachusetts uses TMC codes more than other states, and thus appears to have a higher rate of serious accidents as a result. 
+
+Second, if we can't explain these results with TMC code usage, then additional research should be done. Cities similar to Boston in a variety of ways (layout, demographics) should be determined, and then investigated similarly as we did here. If these cities don't have similar accident rates, then we have a solid basis to recommend changes. Either Boston roads or drivers (or both) are more dangerous than the typical driver. Both road improvements and driver education programs should be considered to reduce the frequency of serious accidents.
 
 ### Charles
 
@@ -159,16 +276,17 @@ ggplot()+ geom_col(aes(x= 1, y = mean3, fill = "Junction")) +
 
 busted function
 ```{r}
-calc_severity <- function(data, var_name1, var_name2){
-new_data <-  filter_(data$var_name1 == "TRUE")
-  mean_severity <- mean(new_data$var_name2)
-  return(mean_severity)
-}
-calc_severity(accidents, accidents$Traffic_Signal, accidents$Severity)
+#calc_severity <- function(data, var_name1, var_name2){
+#new_data <-  filter(data$var_name1 == "TRUE")
+ # mean_severity <- mean(new_data$var_name2)
+  #return(mean_severity)
+#}
+#calc_severity(accidents, accidents$Traffic_Signal, accidents$Severity)
 ```
 
 New Tools: The primary new tool in R that I used was a for loop in order to  gather the percentages of the total observed accidents with for of the True/False variables. I used a for loop because a map function would not work, I needed to produce a new dataframe with a rowcount of one(the percentage of total accidents) whereas map functions preserve the number of rows. 
 Conclusions: From my analysis I can see that the most common indicator is no indicator at all, implying that the majority of accidents either occured in open road not near any features or that the majority of nearby features were not reported in the dataset. However, of the observed indicators, traffic signals, junctions, and crossings accounted for 29.76% of total accidents which is a pretty significant amount. Traffic singals had far and away the highest individual percentage at 15.98%. This leads me to recomend that a public saftey campaign be run that warns people about the dangers of not paying proper attention at traffic signals. Severity is a measure of how impactful the accident was to the flow of traffic, not inherently how destructive a accident is as the name may imply. Consequetially, since Junctions and no observed features had the highest average severity by a fairly large margin I would recommend that machinery and tow trucks used to clear the road after accidents be stored near junctions as this would help to reduce the effect of the accidents on traffic by lowering response time.  
+
 ## Reflections on Lab 2
 
 As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
