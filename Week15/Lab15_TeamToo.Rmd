@@ -68,7 +68,7 @@ cd_data <- accidents %>%
 ```
 
 ```{r}
-humid_time_model <- lm(`Humidity(%)` ~ cd_data$accident_time, data = cd_data)
+humid_time_model <- lm(cd_data$accident_time ~ `Humidity(%)`, data = cd_data)
 
 humid_preds <- cd_data %>%
   data_grid(`Humidity(%)` = seq_range(`Humidity(%)`, 2178823)) %>%
@@ -83,6 +83,7 @@ ggplot() +
   xlab("Humidity (%)")+
   ylab("Accident Time (minutes)")
 ```
+
 ```{r}
 ggplot()+
   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$predictions))+
@@ -90,6 +91,7 @@ ggplot()+
   xlab("Humidity (%)")+
   ylab("Accident Time (minutes)")
 ```
+
 ```{r}
 ggplot()+
   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
