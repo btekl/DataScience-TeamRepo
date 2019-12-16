@@ -57,6 +57,8 @@ What are the ethical implications of your findings, conclusions, or recommendati
 
 ### Charles
 
+My goal is to determine if there is a positive relationship between Humidity and the duration of an accident. My intuition is that the more humidity, the less traction there will be on the road, shortening the length of an accident. The duration of an accident can help suggest the severity of the accident and the effect it will have on the flow of traffic. My expectation is that if I can demonstrate that Humidity is positively or negatively associated with accident duration, I can make a determination on which states are the most likely to have short or long accidents.
+
 ```{r}
 cd_data <- accidents %>%
   mutate(a_start = ymd_hms(Start_Time)) %>%
@@ -92,13 +94,33 @@ ggplot()+
   ylab("Accident Time (minutes)")
 ```
 
+# ```{r}
+# ggplot()+
+#   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
+#   ggtitle("Residuals of Humidities Related to Accident Duration")+
+#   xlab("Humidity (%)")+
+#   ylab("Accident Time (minutes)")
+# ```
+# 
 ```{r}
-ggplot()+
-  geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$residuals))+
-  ggtitle("Residuals of Humidities Related to Accident Duration")+
-  xlab("Humidity (%)")+
-  ylab("Accident Time (minutes)")
+# perm_mean <- function(perms = 1000, x, y)
+# {
+#   perm_mean_diffs2 <- numeric(perms)
+#   
+#   for(i in c(1:perms))
+#   {
+#     rand_order_y <- sample(y)
+#     cor_comp <- cor(x,rand_order_y)
+#     perm_mean_diffs2[i] <- cor_comp
+#   }
+#   return(perm_mean_diffs2)
+# }
+# 
+# cc <- perm_mean(1000, cd_data$`Humidity(%)`, as.numeric(cd_data$accident_time))
+
 ```
+
+The model confirms my suspicion that as the Humidity(%) increases the length of an accident shortens, though the model is not absolute in its certainty. Nevertheless there is a general trend to shorter accidents when Humidity is high. The model suggests Humidity can be used to predict the duration of an accident by: -0.2375825(Humidity) with the intercept 111.0417.
 
 ### Clint
 Question Ideas: Explore relationship between severity of accidents and stoplights + percentage of accidents with each of the binary variables. 
