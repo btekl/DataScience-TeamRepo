@@ -103,7 +103,7 @@ ggplot()+
 ### Clint
 Question Ideas: Explore relationship between severity of accidents and stoplights + percentage of accidents with each of the binary variables. 
 uses map functino to take percentiles if true false sections and graph + permutation test to see if there is correlation between severity of accident and presence of stoplight or just most common accident indicator +
-Question: Which of the true/false variables is the greatest predictor of an accident, and are any of them related to a the probability of a more severe accident?
+Question: Which of the true/false variables is the greatest predictor of an accident, and are any of them related to a the probability of a more severe accident? This question is important/interesting because if a majority of accidents occur near specific locations, like a traffic signal or railway crossing then  countermeassures like positioning police vehicles nearby or placing extra warning signs in the area can be put in place which may save lives. Also if some presences are especially indicative of more severe accidents, those area could be targeted for increased safty measures. 
 
 First I want to examine the percentage of total accidents associated with each of the true/false columns so  created a for loop which calculated the percentage of total accidents which had a true response for each of the columns and stored it in a dataframe called sums_true.
 ```{r}
@@ -128,6 +128,35 @@ ggplot(data = sums_true) + geom_col(aes(x= 1, y = sums_true$n.9, fill = "Traffic
   ylab("Percent of Accidents Present")+
   xlab("Rank")
 ```
+So I now know that the three highest presences by far are traffic signals, junctions, and crossings. Now I'm curious if any of these variables have an effect on the average severity of an accident. 
+```{r}
+traffic_true<- accidents%>%
+  filter(Traffic_Signal == "TRUE")
+Junction_true <-accidents%>%
+  filter(Junction == "TRUE")
+crossing_true <-accidents%>%
+  filter(Crossing == TRUE)
+without_boolean <- accidents%>%
+  filter(Amenity == FALSE, Bump == FALSE, Crossing  == FALSE, Give_Way == FALSE, Junction == FALSE, No_Exit == FALSE, Railway == FALSE, Roundabout == FALSE, Station == FALSE, Stop == FALSE, Traffic_Calming == FALSE, Traffic_Signal == FALSE, Turning_Loop == FALSE)
+
+mean1 <- mean(accidents$Severity)
+mean2 <-mean(traffic_true$Severity)
+mean3 <-mean(Junction_true$Severity)
+mean4 <-mean(crossing_true$Severity)
+mean5 <-mean(without_boolean$Severity)
+```
+
+```{r}
+ggplot()+ geom_col(aes(x= 1, y = mean3, fill = "Junction")) +
+  geom_col(aes(x = 2, y = mean5, fill = "Average severity without True/False"))+
+  geom_col(aes(x= 3, y = mean1, fill = "Unfiltered Average Severity"))+
+  geom_col(aes(x=4, y = mean2, fill = "Traffic Signal" ))+
+  geom_col(aes(x=5, y=mean4, fill = "Crossing"))+
+  ggtitle("Average Severity Across Top Three Acident Presences")+
+  ylab("Mean Severity")+
+  xlab("Rank")
+```
+
 busted function
 ```{r}
 calc_severity <- function(data, var_name1, var_name2){
@@ -137,8 +166,9 @@ new_data <-  filter_(data$var_name1 == "TRUE")
 }
 calc_severity(accidents, accidents$Traffic_Signal, accidents$Severity)
 ```
-I want to write a function that filters the first variable and calculates the mean of the second but it keeps returning the following error message, does anyone have any ideas? 
-Error in UseMethod("filter_") : no applicable method for 'filter_' applied to an object of class "logical"
+
+New Tools: The primary new tool in R that I used was a for loop in order to  gather the percentages of the total observed accidents with for of the True/False variables. I used a for loop because a map function would not work, I needed to produce a new dataframe with a rowcount of one(the percentage of total accidents) whereas map functions preserve the number of rows. 
+Conclusions: From my analysis I can see that the most common indicator is no indicator at all, implying that the majority of accidents either occured in open road not near any features or that the majority of nearby features were not reported in the dataset. However, of the observed indicators, traffic signals, junctions, and crossings accounted for 29.76% of total accidents which is a pretty significant amount. Traffic singals had far and away the highest individual percentage at 15.98%. This leads me to recomend that a public saftey campaign be run that warns people about the dangers of not paying proper attention at traffic signals. Severity is a measure of how impactful the accident was to the flow of traffic, not inherently how destructive a accident is as the name may imply. Consequetially, since Junctions and no observed features had the highest average severity by a fairly large margin I would recommend that machinery and tow trucks used to clear the road after accidents be stored near junctions as this would help to reduce the effect of the accidents on traffic by lowering response time.  
 ## Reflections on Lab 2
 
 As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
