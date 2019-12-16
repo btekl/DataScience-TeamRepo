@@ -99,6 +99,21 @@ ggplot()+
 ```
 
 ### Clint
+Question Ideas: Explore relationship between severity of accidents and stoplights + percentage of accidents with each of the binary variables. 
+uses map functino to take percentiles if true false sections and graph + permutation test to see if there is correlation between severity of accident and presence of stoplight or just most common accident indicator +
+Question: Which of the true/false variables is the greatest predictor of an accident, and are any of them related to a the probability of a more severe accident?
+
+First I want to examine the percentage of total accidents associated with each 
+```{r}
+library(knitr)
+explore <- accidents%>%
+  select(Amenity, Bump, Crossing, Give_Way, Junction, No_Exit, Railway, Roundabout, Station, Stop, Traffic_Calming, Traffic_Signal, Turning_Loop)
+
+sums_true <- data.frame(mode = "double", ncol(explore))
+for (i in seq_along(explore)) {
+  sums_true[[i]] <- (sum(explore[[i]])/tally(accidents))*100
+}
+```
 
 ## Reflections on Lab 2
 
@@ -115,7 +130,7 @@ Individually, write a paragraph reflecting on: how have your six-month or 5-year
 **Charles:** 
 
 **Clint:**
-
+  Since the beginning of the semester my 6-month to five-year goals have changed in that I have less confidence my ability to thrive in a coding driven profession than I had at the beginnning of the semester. This is useful information to know as I have been considering going into a business masters program in which coding and statistics would feature prominently. Now I am wondering if this is the right path after all. In this course I learned what feels like the basics of programming in R, though I am not a proficcient as a I could or should be, and I also feel as though I learned about the basics of statistics in general which has been really interesting. If I could past me advice I would tell myself to do all the exercises when going through the R4DS textbook, experiment when doing the labs instead of doing the bare minimum, communicate more concisely with my teammates, and go to office hours w/ the professor and TAs.
 ### Individual Contributions
 
 **Andrew:**
