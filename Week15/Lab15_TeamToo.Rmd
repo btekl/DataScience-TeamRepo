@@ -128,6 +128,17 @@ ggplot(data = sums_true) + geom_col(aes(x= 1, y = sums_true$n.9, fill = "Traffic
   ylab("Percent of Accidents Present")+
   xlab("Rank")
 ```
+busted function
+```{r}
+calc_severity <- function(data, var_name1, var_name2){
+new_data <-  filter_(data$var_name1 == "TRUE")
+  mean_severity <- mean(new_data$var_name2)
+  return(mean_severity)
+}
+calc_severity(accidents, accidents$Traffic_Signal, accidents$Severity)
+```
+I want to write a function that filters the first variable and calculates the mean of the second but it keeps returning the following error message, does anyone have any ideas? 
+Error in UseMethod("filter_") : no applicable method for 'filter_' applied to an object of class "logical"
 ## Reflections on Lab 2
 
 As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
