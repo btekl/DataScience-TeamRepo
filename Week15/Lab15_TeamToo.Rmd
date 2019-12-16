@@ -174,6 +174,9 @@ Second, if we can't explain these results with TMC code usage, then additional r
 
 ### Charles
 
+My goal is to determine if there is a positive relationship between Humidity and the duration of an accident. My intuition is that the more humidity, the less traction there will be on the road, shortening the length of an accident. The duration of an accident can help suggest the severity of the accident and the effect it will have on the flow of traffic. My expectation is that if I can demonstrate that Humidity is positively or negatively associated with accident duration, I can make a determination on which states are the most likely to have short or long accidents.
+
+First I need to create a model of the time an accident takes and seperate outlier values.
 ```{r}
 cd_data <- accidents %>%
   mutate(a_start = ymd_hms(Start_Time)) %>%
@@ -184,6 +187,7 @@ cd_data <- accidents %>%
   select(a_start, a_end, accident_time, `Humidity(%)`)
 ```
 
+The model needs to include predictions and residuals.
 ```{r}
 humid_time_model <- lm(cd_data$accident_time ~ `Humidity(%)`, data = cd_data)
 
@@ -193,6 +197,7 @@ humid_preds <- cd_data %>%
   add_residuals(humid_time_model, 'residuals')
 ```
 
+The view of the raw data.
 ```{r}
 ggplot() +
   geom_point(data = cd_data, aes(`Humidity(%)`,accident_time))+
@@ -201,6 +206,7 @@ ggplot() +
   ylab("Accident Time (minutes)")
 ```
 
+Predictions of the data.
 ```{r}
 ggplot()+
   geom_line(data = humid_preds, aes(`Humidity(%)`, humid_preds$predictions))+
@@ -216,6 +222,26 @@ ggplot()+
   xlab("Humidity (%)")+
   ylab("Accident Time (minutes)")
 ```
+
+```{r}
+# perm_mean <- function(perms = 1000, x, y)
+# {
+#   perm_mean_diffs2 <- numeric(perms)
+#   
+#   for(i in c(1:perms))
+#   {
+#     rand_order_y <- sample(y)
+#     cor_comp <- cor(x,rand_order_y)
+#     perm_mean_diffs2[i] <- cor_comp
+#   }
+#   return(perm_mean_diffs2)
+# }
+# 
+# cc <- perm_mean(1000, cd_data$`Humidity(%)`, as.numeric(cd_data$accident_time))
+
+```
+
+The model confirms my suspicion that as the Humidity(%) increases the length of an accident shortens, though the model is not absolute in its certainty. Nevertheless there is a general trend to shorter accidents when Humidity is high. The model suggests Humidity can be used to predict the duration of an accident by: -0.2375825(Humidity) with the intercept 111.0417.
 
 ### Clint
 Question Ideas: Explore relationship between severity of accidents and stoplights + percentage of accidents with each of the binary variables. 
@@ -291,6 +317,7 @@ Conclusions: From my analysis I can see that the most common indicator is no ind
 
 As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
 
+Our team goals were to do well in the course, gain a greater understanding of the use of R and of data science in general, and not make any enemies. We can say with confidence that we accomplised the first two goals. The third may have been a little less successful. If we could travel back in time, there are three things we would do differently. First, we would meet up more often in order to work on the project in a more collaborative fashion rather than individuals doing their sections on their own. Second, we would make more productive use of our time in class as an oppurtunity to deepen our understanding of the material by asking more questions of the profesor. Third, we would communicate more often about not only the labs but the readings to ensure that everyone is at a similar comfort level with new applications and statistical applications. While this was a successful semester for our group in terms of observed grades, there was still room for improvement in the areas of teamwork, communication, and understanding of the material. 
 ### Individual Reflections
 
 Individually, write a paragraph reflecting on: how have your six-month or 5-year goals changed? What did you learn/accomplish in this course? If you could give yourself advice at the beginning of the semester, what would you tell yourself to keep doing, stop doing, and start doing?
@@ -300,6 +327,7 @@ Individually, write a paragraph reflecting on: how have your six-month or 5-year
 **Brian:**
 
 **Charles:** 
+  My original 6-month and five-year year plans have not changed, but my attitudde towards them has certainly changed. I still want to study under some of the greatest voices in philosophy (one of my majors) while working towards some meaningful contribution within my fields of interest. I have been working towards those goals and this semester was invited to take PHIL 6380 (Graduate Metaphysics) by a professor. I have set my eyes on my 5 year goal, and I am very nervous about it. I hope I can achieve what I'm setting out for, though I am nervous I'll fail. I learned a lot about project managing mainly because I've failed a lot this semester. I struggled to manage and process my internal stress and translate it to success externally. These are things I would have liked to work on more. Furthermore, I needed to motivate myself to learn outside of the classroom. I was very dependent on the help of my team-mates and I wish I could have been more independent.
 
 **Clint:**
   Since the beginning of the semester my 6-month to five-year goals have changed in that I have less confidence my ability to thrive in a coding driven profession than I had at the beginnning of the semester. This is useful information to know as I have been considering going into a business masters program in which coding and statistics would feature prominently. Now I am wondering if this is the right path after all. In this course I learned what feels like the basics of programming in R, though I am not a proficcient as a I could or should be, and I also feel as though I learned about the basics of statistics in general which has been really interesting. If I could past me advice I would tell myself to do all the exercises when going through the R4DS textbook, experiment when doing the labs instead of doing the bare minimum, communicate more concisely with my teammates, and go to office hours w/ the professor and TAs.
@@ -310,5 +338,7 @@ Individually, write a paragraph reflecting on: how have your six-month or 5-year
 **Brian:**
 
 **Charles:** 
+  I used various modelr methods to calculate several predictions and residuals for our linear models. I also split data into model building and model validation subsets. By incorporating variable transformations I was able to draw a conclusion on the interactions between Humidity and the period for which an accident lasts.
+
 
 **Clint:**
