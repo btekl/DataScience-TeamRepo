@@ -395,7 +395,7 @@ After finishing this semester and returning to my goals, I realized how a short 
 ### Individual Contributions
 
 **Andrew:**
-I created moidels in order to study severity, Temperature, and times between accidents. I came to the conclusion that there is a large chance of accidents happening in hot weather. 
+I created moidels in order to study severity, Temperature, and times between accidents. I came to the conclusion that there is a large chance of accidents happening in hot weather.
 **Brian:**
 
 **Charles:** 
