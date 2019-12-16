@@ -105,7 +105,7 @@ Question Ideas: Explore relationship between severity of accidents and stoplight
 uses map functino to take percentiles if true false sections and graph + permutation test to see if there is correlation between severity of accident and presence of stoplight or just most common accident indicator +
 Question: Which of the true/false variables is the greatest predictor of an accident, and are any of them related to a the probability of a more severe accident?
 
-First I want to examine the percentage of total accidents associated with each 
+First I want to examine the percentage of total accidents associated with each of the true/false columns so  created a for loop which calculated the percentage of total accidents which had a true response for each of the columns and stored it in a dataframe called sums_true.
 ```{r}
 library(knitr)
 explore <- accidents%>%
@@ -113,10 +113,21 @@ explore <- accidents%>%
 
 sums_true <- data.frame(mode = "double", ncol(explore))
 for (i in seq_along(explore)) {
-  sums_true[[i]] <- (sum(explore[[i]])/tally(accidents))*100
+  sums_true[i] <- (sum(explore[[i]])/tally(accidents))*100
 }
 ```
+From there I can see that eight of the thirteen variables are true in less than 1 percent of observed accidents so, while that doesn't make them negligable, I would prefer to focus on the more significant variables. It is also worth noting that the total of all percentages added together is 34.66% which means 65.34% of accidents didn't have any of the true/false variable associated with them.  
 
+```{r}
+ggplot(data = sums_true) + geom_col(aes(x= 1, y = sums_true$n.9, fill = "Traffic Signal"))+
+  geom_col(aes(x= 2, y = sums_true$n.2, fill = "Junction")) +
+  geom_col(aes(x = 3, y = sums_true$n, fill = "Crossing"))+
+  geom_col(aes(x = 4, y = sums_true$n.6, fill = "Station"))+
+  geom_col(aes(x = 5, y = sums_true$mode, fill = "Amenity"))+
+  ggtitle("Top Five Presence at Accident Percentages")+
+  ylab("Percent of Accidents Present")+
+  xlab("Rank")
+```
 ## Reflections on Lab 2
 
 As a team, restate your team’s goal(s) and reflect on how well you achieved it. If you could travel back in time, which is one thing you would tell your team to keep doing? Stop doing? Start doing? Discuss this as a team and add it as a section to your Final Project.
